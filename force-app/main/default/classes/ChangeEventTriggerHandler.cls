@@ -46,9 +46,11 @@ public virtual class ChangeEventTriggerHandler {
         //Loop throught change types and get the record ids for DML selects
         for (String ct : changeTypes ) {
             
+	        System.debug('%%%%%inside RUN: looping through changeTypes: '+ct);
             if ( ct == 'CREATE' && IdsToProcess.get(ct) != null ) {            
                 this.processCreate(IdsToProcess.get(ct));
             } else if ( ct == 'UPDATE' && IdsToProcess.get(ct) != null ) {
+		        System.debug('%%%%%inside RUN: calling UPDATE changeTypes: '+ct);
                 this.processUpdate(IdsToProcess.get(ct));
             } else if ( ct == 'DELETE' && IdsToProcess.get(ct) != null ) {
                 this.processDelete(IdsToProcess.get(ct));
