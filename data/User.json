@@ -1,0 +1,21 @@
+{
+    "records": [
+        {
+            "attributes": {
+                "type": "User",
+                "referenceId": "UserRef2"
+            },
+            "Username": "wsteele@salesforce.com.ad.test",
+            "LastName": "Steele",
+            "FirstName": "William",
+            "Email": "wsteele@salesforce.com",
+            "Alias": "wstee",
+            "IsActive": true,
+            "ProfileId": "00e17000000uNCfAAM",
+            "LanguageLocaleKey": "en_US",
+            "TimeZoneSidKey": "America/Los_Angeles",
+            "LocaleSidKey": "en_US",
+            "EmailEncodingKey": "UTF-8"
+        }
+    ]
+}

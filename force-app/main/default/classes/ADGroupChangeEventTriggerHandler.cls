@@ -55,9 +55,9 @@ public class ADGroupChangeEventTriggerHandler extends ChangeEventTriggerHandler 
         //String job_state_query = 'SELECT Id, Name, RecordTypeId, Parent_AD_Group__r.AD_Group_Name__c, AD_Group_Name__c, Status__c, AD_User__r.AD_First_Name__c, '+
         //                              'AD_User__r.AD_Last_Name__c, AD_User__r.AD_User_Email__c, AD_User__r.AD_Federation_Id__c FROM AD_Group__c';
         //List<sObject> grpTrans = Database.query(job_state_query);
-        List<UserGroupEvent> grpTrans = [SELECT Id, Name, RecordTypeId, Parent_AD_Group__r.AD_Group_Name__c, AD_Group_Name__c, Status__c, AD_User__r.AD_First_Name__c, 
-                                      AD_User__r.AD_Last_Name__c, AD_User__r.AD_User_Email__c, AD_User__r.AD_Federation_Id__c FROM AD_Group__c];
-        System.debug('102.02-$$$$$$--##############ADGroupChangeEventTriggerHandler:processTransactions:transactions: '+grpTrans);
+        //List<UserGroupEvent> grpTrans = [SELECT Id, Name, RecordTypeId, Parent_AD_Group__r.AD_Group_Name__c, AD_Group_Name__c, Status__c, AD_User__r.AD_First_Name__c, 
+        //                              AD_User__r.AD_Last_Name__c, AD_User__r.AD_User_Email__c, AD_User__r.AD_Federation_Id__c FROM AD_Group__c];
+        //System.debug('102.02-$$$$$$--##############ADGroupChangeEventTriggerHandler:processTransactions:transactions: '+grpTrans);
         //for (SObject obj : grpTrans) {
 	    //    System.debug('102.03-$$$$$$--##############ADGroupChangeEventTriggerHandler:processTransactions:transactions: '+obj);
         //}
