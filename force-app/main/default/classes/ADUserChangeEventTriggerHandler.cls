@@ -43,7 +43,7 @@ public class ADUserChangeEventTriggerHandler extends ChangeEventTriggerHandler {
 
         
         List<AD_User__c> ADUsers = [SELECT Id, OwnerId, Name, RecordTypeId, AD_First_Name__c, AD_Last_Name__c, AD_User_Email__c, 
-                                    AD_Federation_Id__c, Status__c FROM AD_User__c];
+                                    AD_Federation_Id__c, Status__c FROM AD_User__c WHERE Id =: IdsToProcess];
         List<AD_User_Inactivation__e> userEvents = new List<AD_User_Inactivation__e>();
         //AD_User_Inactivation__e userEvent = new AD_User_Inactivation__e();
         

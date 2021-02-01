@@ -28,44 +28,64 @@ public class ADGroupChangeEventTriggerHandler extends ChangeEventTriggerHandler 
     
     
     public override void processCreate(List<Id> IdsToProcess) {
-        System.debug('101.01->>>>>>>>>>>>ADGroupChangeEventTriggerHandler:processCreate:inside....');
+        System.debug('101.01->>>>>>>>>>>>ADGroupChangeEventTriggerHandler:processCreate:inside....IdsToProcess: '+IdsToProcess);
         processTransactions(IdsToProcess);
     
     }
      
     public override void processUpdate(List<Id> IdsToProcess) {
-        System.debug('102.01-##############ADGroupChangeEventTriggerHandler:processUpdate:inside....');
+        System.debug('102.01-##############ADGroupChangeEventTriggerHandler:processUpdate:inside....IdsToProcess: '+IdsToProcess);
         
         processTransactions(IdsToProcess);
     }
 
     
     public override void processDelete(List<Id> IdsToProcess) {
-        System.debug('102.01-##############ADGroupChangeEventTriggerHandler:processDelete:inside....');
+        System.debug('102.01-##############ADGroupChangeEventTriggerHandler:processDelete:inside....IdsToProcess: '+IdsToProcess);
         
         processTransactions(IdsToProcess);
     }
     
     private void processTransactions(List<Id> IdsToProcess) {
-        System.debug('102.01-##############ADGroupChangeEventTriggerHandler:processTransactions:Ids: '+IdsToProcess);
+        System.debug('102.05-##############ADGroupChangeEventTriggerHandler:processTransactions:Ids: '+IdsToProcess);
         
-        
-        //List<List<String>> grpTrans = [SELECT Id, Name, RecordTypeId, Parent_AD_Group__r.AD_Group_Name__c, AD_Group_Name__c, Status__c, AD_User__r.AD_First_Name__c, 
-        //                              AD_User__r.AD_Last_Name__c, AD_User__r.AD_User_Email__c, AD_User__r.AD_Federation_Id__c FROM AD_Group__c];
-        //String job_state_query = 'SELECT Id, Name, RecordTypeId, Parent_AD_Group__r.AD_Group_Name__c, AD_Group_Name__c, Status__c, AD_User__r.AD_First_Name__c, '+
-        //                              'AD_User__r.AD_Last_Name__c, AD_User__r.AD_User_Email__c, AD_User__r.AD_Federation_Id__c FROM AD_Group__c';
-        //List<sObject> grpTrans = Database.query(job_state_query);
-        //List<UserGroupEvent> grpTrans = [SELECT Id, Name, RecordTypeId, Parent_AD_Group__r.AD_Group_Name__c, AD_Group_Name__c, Status__c, AD_User__r.AD_First_Name__c, 
-        //                              AD_User__r.AD_Last_Name__c, AD_User__r.AD_User_Email__c, AD_User__r.AD_Federation_Id__c FROM AD_Group__c];
-        //System.debug('102.02-$$$$$$--##############ADGroupChangeEventTriggerHandler:processTransactions:transactions: '+grpTrans);
-        //for (SObject obj : grpTrans) {
-	    //    System.debug('102.03-$$$$$$--##############ADGroupChangeEventTriggerHandler:processTransactions:transactions: '+obj);
-        //}
+        for(AD_Group__c grp: [SELECT Id, Name, RecordTypeId, Parent_AD_Group__c, AD_Group_Name__c, Status__c,AD_User__c FROM AD_Group__c where Id =: IdsToProcess]){
+            System.debug('102.05.100-##############ADGroupChangeEventTriggerHandler:processTransactions:AD_Group_Name__c => '+grp.AD_Group_Name__c+' Parent Group Id: '+grp.Parent_AD_Group__c+
+                        ' user: '+grp.AD_User__c);
+            try {
+                   for(AD_Group__c parentGroup : [SELECT Id, Name, RecordTypeId, Parent_AD_Group__c, AD_Group_Name__c, Status__c FROM AD_Group__c where Id =: grp.Parent_AD_Group__c]){
+                      System.debug('102.05.110-##############ADGroupChangeEventTriggerHandler:processTransactions:AD_Group_Name__c => '+grp.AD_Group_Name__c+' Parent Group Name: '+parentGroup.AD_Group_Name__c);
+                   }
+            } catch (NullPointerException npe) {
+                System.debug('102.05.120-##############ADGroupChangeEventTriggerHandler:processTransactions:AD_Group_Name__c => '+grp.AD_Group_Name__c+' Parent_AD_Group__c: '+grp.Parent_AD_Group__c+' IS NULL!');
 
+            }
+            try {
+                   for(AD_User__c adUser : [SELECT AD_First_Name__c, AD_Last_Name__c, AD_User_Email__c, AD_Federation_Id__c FROM AD_User__c where Id =: grp.AD_User__c]){
+                      System.debug('102.05.130-##############ADGroupChangeEventTriggerHandler:processTransactions:AD_Group_Name__c => '+grp.AD_Group_Name__c+' User: '+adUser.AD_First_Name__c+' '+adUser.AD_Last_Name__c);
+                   }
+            } catch (NullPointerException npe) {
+                System.debug('102.05.140-##############ADGroupChangeEventTriggerHandler:processTransactions:AD_Group_Name__c => '+grp.AD_Group_Name__c+' AD_User__c: '+grp.AD_User__c+' IS NULL!');
+
+            }
+        }
+        System.debug('102.05.190-##############ADGroupChangeEventTriggerHandler:processTransactions:FINISHING UP!');
         /*
+         * 
+         * for(Account objAcc: [select id, Name, (select id, Name, Email from Contacts) from Account where id = '001i000000eJLL4']){
+   for(Contact objCont : objAcc.Contacts){
+      // Access one contact fields at a time, there could be multiple results in this loop
+      System.debug('Email => '+objCont.Email);
+   }
+}
         Map<Id,SObject> grp = [SELECT Id, Name, RecordTypeId, Parent_AD_Group__r.AD_Group_Name__c, AD_Group_Name__c, Status__c, AD_User__r.AD_First_Name__c, 
                                       AD_User__r.AD_Last_Name__c, AD_User__r.AD_User_Email__c, AD_User__r.AD_Federation_Id__c FROM AD_Group__c];
 		*/
+        /*
+       //List<UserGroupEvent> userTrans = new UserGroupEvent();
+       UserGroupEvent userTrans = new UserGroupEvent();
+        userTrans.transactionsList = [SELECT Id, Name, RecordTypeId, Parent_AD_Group__r.AD_Group_Name__c, AD_Group_Name__c, Status__c, AD_User__r.AD_First_Name__c, 
+                                      AD_User__r.AD_Last_Name__c, AD_User__r.AD_User_Email__c, AD_User__r.AD_Federation_Id__c FROM AD_Group__c];
         /*
        for (SObject grp : [SELECT Id, Name, RecordTypeId, Parent_AD_Group__r.AD_Group_Name__c, AD_Group_Name__c, Status__c, AD_User__r.AD_First_Name__c, 
                                       AD_User__r.AD_Last_Name__c, AD_User__r.AD_User_Email__c, AD_User__r.AD_Federation_Id__c FROM AD_Group__c]) {
@@ -83,8 +103,8 @@ public class ADGroupChangeEventTriggerHandler extends ChangeEventTriggerHandler 
             //                                       .AD_Federation_Id__c, 
             //                                       Status__c=user.Status__c));
         }
-        */
-        List<AD_Group_Update__e> groupEvents = new List<AD_Group_Update__e>();
+        /**/
+        //List<AD_Group_Update__e> groupEvents = new List<AD_Group_Update__e>();
         //AD_Group_Update__e groupEvent = new AD_Group_Update__e();
         
         /*
@@ -196,45 +216,5 @@ public class ADGroupChangeEventTriggerHandler extends ChangeEventTriggerHandler 
         System.debug('104.10->>>>>>>>>>>>ADGroupChangeEventTriggerHandler:getChangeEventIds:return recordIds: '+recordIds);
         return recordIds;
     }
-
-    public class UserGroupEvent 
-    {
-		//Id, Name, RecordTypeId, Parent_AD_Group__r.AD_Group_Name__c, AD_Group_Name__c, Status__c, AD_User__r.AD_First_Name__c, 
-        //                              AD_User__r.AD_Last_Name__c, AD_User__r.AD_User_Email__c, AD_User__r.AD_Federation_Id__c
-        
-        public Id Id {get; private set;}
-        public String Name {get; private set;}
-        public Id RecordTypeId {get; private set;}
-        public String ParentGroupName {get; private set;}
-        public String GroupName {get; private set;}
-        public string Status {get; private set;}
-        public String UserFirstName {get; private set;}
-        public String UserLastName {get; private set;}
-        public String UserEmail {get; private set;}
-        public String UserFederationId {get; private set;}
-
-        public List<UserGroupEvent> transactionsList{get;set;}
-        
-    }
-    /*
-    //Wrapper Classes    
-    public class QuestionErrorWrapper
-    {
-        public VBA_QMS_ClaimReviewQuestionResponse__c questionResponse{get;set;}
-        public List<ErrorResponseWrapper> erWrapper{get;set;}
-        
-        public QuestionErrorWrapper(VBA_QMS_ClaimReviewQuestionResponse__c questionResponse)
-        {
-            this.questionResponse = questionResponse;
-        }
-    }
-    
-    public class ErrorResponseWrapper {
-        public VBA_QMS_ClaimReviewErrorResponse__c errorResponse{get;set;}
-        public List<VBA_QMS_Error_Response_Diagnostic_Code__c> diagnosticCodes {get;set;}
-        public List<VBA_QMS_Error_Response_Transaction__c> transactionsList{get;set;}
-        public List<VBA_QMS_Error_Response_Claim_Contention__c> contentionsList{get;set;}
-    }
-	*/
     
 }

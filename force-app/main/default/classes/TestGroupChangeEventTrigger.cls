@@ -26,23 +26,32 @@ public class TestGroupChangeEventTrigger {
         List<AD_Group__c> newADGroups_2 = new List<AD_Group__c>();
         ID pGroupId;// = new ID();
         Integer cnt = 0;
-        AD_User__c newADUser = newADUsers[0];
-	    for (String grp: groupNames ) {
-            
-            newADGroups_1.add(new AD_Group__c(AD_Group_Name__c=grp,
-                               AD_User__c=newADUser.Id,
-                               RecordTypeId=groupRecTypeId,
-                               Status__c='New'));
-            
+        for (AD_User__c newUser: newADUsers) {
+            for (String grp: groupNames ) {
+                
+                newADGroups_1.add(new AD_Group__c(AD_Group_Name__c=grp,
+                                   AD_User__c=newUser.Id,
+                                   RecordTypeId=groupRecTypeId,
+                                   Status__c='New'));
+                
+            }
         }
         insert newADGroups_1;
+
+        // Call deliver to fire the trigger and deliver the test change event.
+        Test.getEventBus().deliver();
+
         for (AD_Group__c grp: newADGroups_1) {
 	        grp.Status__c = 'Active';
             if ( (cnt++) > 0 ) {
                 grp.Parent_AD_Group__c = pGroupId;
+            } 
+            if ( cnt > 3 ) {
+                cnt=0;
+                pGroupId = null;
             }
             pGroupId = grp.Id;
-            System.debug('Newly inserted group: '+ grp);
+            System.debug('Updated group: '+ grp);
             newADGroups_2.add(grp);
         }
         update newADGroups_2;
@@ -52,7 +61,7 @@ public class TestGroupChangeEventTrigger {
         // Check that the change event trigger created a task.
         // SELECT Id, Name, RecordTypeId, Parent_AD_Group__c, AD_Group_Name__c, Status__c, AD_User__c FROM AD_Group__c
         AD_Group__c[] groupRecords = [SELECT Id, Name, RecordTypeId, Parent_AD_Group__c, AD_Group_Name__c, Status__c, AD_User__c FROM AD_Group__c];
-        System.assertEquals(3, groupRecords.size(),
+        System.assertEquals(15, groupRecords.size(),
                             'The change event trigger did not create the expected groups.');
         for (AD_Group__c grp: groupRecords) {
             System.debug('Validating group Id: '+grp);
