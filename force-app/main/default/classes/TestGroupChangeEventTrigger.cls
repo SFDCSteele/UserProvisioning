@@ -57,6 +57,10 @@ public class TestGroupChangeEventTrigger {
         update newADGroups_2;
         // Call deliver to fire the trigger and deliver the test change event.
         Test.getEventBus().deliver();
+        List<EventBusSubscriber> groupEvents = [select Topic, Type, Name, Position, Retries, LastError FROM EventBusSubscriber WHERE Topic='AD_Group__ChangeEvent' AND Type='ApexTrigger'];
+        System.debug('9999999.01--%%%%%%%%%%%%%%%EventBusSubscriber:groupEvents PASS 1: '+groupEvents);
+        System.assertEquals(1, groupEvents.size(),
+                            'Platform event records did not created.');
         // VERIFICATIONS
         // Check that the change event trigger created a task.
         // SELECT Id, Name, RecordTypeId, Parent_AD_Group__c, AD_Group_Name__c, Status__c, AD_User__c FROM AD_Group__c
@@ -66,23 +70,23 @@ public class TestGroupChangeEventTrigger {
         for (AD_Group__c grp: groupRecords) {
             System.debug('Validating group Id: '+grp);
         }
-        System.debug('9999999.01--%%%%%%%%%%%%%%%testCreateAndUpdateGroup:updated group: groupRecords: '+groupRecords);
+        System.debug('9999999.02--%%%%%%%%%%%%%%%testCreateAndUpdateGroup:updated group: groupRecords: '+groupRecords);
         // Update group record
         // Test update with the first record
         AD_Group__c grp = groupRecords[0];
-        System.debug('9999999.02--%%%%%%%%%%%%%%%testCreateAndUpdateGroup:updated group: group: '+grp);
+        System.debug('9999999.03--%%%%%%%%%%%%%%%testCreateAndUpdateGroup:updated group: group: '+grp);
         // Debug
         System.debug('Retrieved AD_Group__c record: ' + grp);
         // Update one field and empty another
         grp.Status__c = 'Inactive';
-        System.debug('9999999.03--%%%%%%%%%%%%%%%testCreateAndUpdateGroup:updated group: group: '+grp);
-        update grp;
         System.debug('9999999.04--%%%%%%%%%%%%%%%testCreateAndUpdateGroup:updated group: group: '+grp);
+        update grp;
+        System.debug('9999999.05--%%%%%%%%%%%%%%%testCreateAndUpdateGroup:updated group: group: '+grp);
         
         // Call deliver to fire the trigger for the update operation.
         Test.getEventBus().deliver();
-        List<EventBusSubscriber> groupEvents = [select Topic, Type, Name, Position, Retries, LastError FROM EventBusSubscriber WHERE Topic='AD_Group__ChangeEvent' AND Type='ApexTrigger'];
-        System.debug('9999999.09--%%%%%%%%%%%%%%%EventBusSubscriber:groupEvents: '+groupEvents);
+        groupEvents = [select Topic, Type, Name, Position, Retries, LastError FROM EventBusSubscriber WHERE Topic='AD_Group__ChangeEvent' AND Type='ApexTrigger'];
+        System.debug('9999999.09--%%%%%%%%%%%%%%%EventBusSubscriber:groupEvents PASS 2: '+groupEvents);
         System.assertEquals(1, groupEvents.size(),
                             'Platform event records did not created.');
         //14:09:52:421 group_DEBUG [48]|DEBUG|EventBusSubscriber:groupEvents: (EventBusSubscriber:{Topic=AD_Group__ChangeEvent, Type=ApexTrigger, Name=ADGroupChangeEventTrigger, Position=0, Retries=0, Id=000000000000000AAA, ExternalId=01q1F000000zbDh}, 

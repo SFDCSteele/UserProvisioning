@@ -30,15 +30,15 @@ public class ADGroupChangeEventTriggerHandler extends ChangeEventTriggerHandler 
     public override void processCreate(List<Id> IdsToProcess) {
         System.debug('101.01->>>>>>>>>>>>ADGroupChangeEventTriggerHandler:processCreate:inside....IdsToProcess: '+IdsToProcess);
         processTransactions(IdsToProcess);
-    
+        
     }
-     
+    
     public override void processUpdate(List<Id> IdsToProcess) {
         System.debug('102.01-##############ADGroupChangeEventTriggerHandler:processUpdate:inside....IdsToProcess: '+IdsToProcess);
         
         processTransactions(IdsToProcess);
     }
-
+    
     
     public override void processDelete(List<Id> IdsToProcess) {
         System.debug('102.01-##############ADGroupChangeEventTriggerHandler:processDelete:inside....IdsToProcess: '+IdsToProcess);
@@ -49,93 +49,37 @@ public class ADGroupChangeEventTriggerHandler extends ChangeEventTriggerHandler 
     private void processTransactions(List<Id> IdsToProcess) {
         System.debug('102.05-##############ADGroupChangeEventTriggerHandler:processTransactions:Ids: '+IdsToProcess);
         
+        List<AD_Group_Update__e> groupEvents = new List<AD_Group_Update__e>();
+        
+        String parentGroupName = '';
         for(AD_Group__c grp: [SELECT Id, Name, RecordTypeId, Parent_AD_Group__c, AD_Group_Name__c, Status__c,AD_User__c FROM AD_Group__c where Id =: IdsToProcess]){
             System.debug('102.05.100-##############ADGroupChangeEventTriggerHandler:processTransactions:AD_Group_Name__c => '+grp.AD_Group_Name__c+' Parent Group Id: '+grp.Parent_AD_Group__c+
-                        ' user: '+grp.AD_User__c);
+                         ' user: '+grp.AD_User__c);
+            parentGroupName = '';
             try {
-                   for(AD_Group__c parentGroup : [SELECT Id, Name, RecordTypeId, Parent_AD_Group__c, AD_Group_Name__c, Status__c FROM AD_Group__c where Id =: grp.Parent_AD_Group__c]){
-                      System.debug('102.05.110-##############ADGroupChangeEventTriggerHandler:processTransactions:AD_Group_Name__c => '+grp.AD_Group_Name__c+' Parent Group Name: '+parentGroup.AD_Group_Name__c);
-                   }
+                for(AD_Group__c parentGroup : [SELECT Id, Name, RecordTypeId, Parent_AD_Group__c, AD_Group_Name__c, Status__c FROM AD_Group__c where Id =: grp.Parent_AD_Group__c]){
+                    parentGroupName = parentGroup.AD_Group_Name__c;
+                    System.debug('102.05.110-##############ADGroupChangeEventTriggerHandler:processTransactions:AD_Group_Name__c => '+grp.AD_Group_Name__c+' Parent Group Name: '+parentGroup.AD_Group_Name__c);
+                }
             } catch (NullPointerException npe) {
                 System.debug('102.05.120-##############ADGroupChangeEventTriggerHandler:processTransactions:AD_Group_Name__c => '+grp.AD_Group_Name__c+' Parent_AD_Group__c: '+grp.Parent_AD_Group__c+' IS NULL!');
-
+                
             }
             try {
-                   for(AD_User__c adUser : [SELECT AD_First_Name__c, AD_Last_Name__c, AD_User_Email__c, AD_Federation_Id__c FROM AD_User__c where Id =: grp.AD_User__c]){
-                      System.debug('102.05.130-##############ADGroupChangeEventTriggerHandler:processTransactions:AD_Group_Name__c => '+grp.AD_Group_Name__c+' User: '+adUser.AD_First_Name__c+' '+adUser.AD_Last_Name__c);
-                   }
+                for(AD_User__c adUser : [SELECT AD_First_Name__c, AD_Last_Name__c, AD_User_Email__c, AD_Federation_Id__c FROM AD_User__c where Id =: grp.AD_User__c]){
+                    System.debug('102.05.130-##############ADGroupChangeEventTriggerHandler:processTransactions:AD_Group_Name__c => '+grp.AD_Group_Name__c+' User: '+adUser.AD_First_Name__c+' '+adUser.AD_Last_Name__c);
+                    groupEvents.add(new AD_Group_Update__e(
+                        Group_Name__c=grp.AD_Group_Name__c,
+                        Email_Address__c=adUser.AD_User_Email__c,
+                        Federation_Id__c=adUser.AD_Federation_Id__c,
+                        FirstName__c=adUser.AD_First_Name__c,
+                        LastName__c=adUser.AD_Last_Name__c,
+                        Parent_AD_Group__c=parentGroupName,
+                        Status__c=grp.Status__c));                    
+                }
             } catch (NullPointerException npe) {
                 System.debug('102.05.140-##############ADGroupChangeEventTriggerHandler:processTransactions:AD_Group_Name__c => '+grp.AD_Group_Name__c+' AD_User__c: '+grp.AD_User__c+' IS NULL!');
-
-            }
-        }
-        System.debug('102.05.190-##############ADGroupChangeEventTriggerHandler:processTransactions:FINISHING UP!');
-        /*
-         * 
-         * for(Account objAcc: [select id, Name, (select id, Name, Email from Contacts) from Account where id = '001i000000eJLL4']){
-   for(Contact objCont : objAcc.Contacts){
-      // Access one contact fields at a time, there could be multiple results in this loop
-      System.debug('Email => '+objCont.Email);
-   }
-}
-        Map<Id,SObject> grp = [SELECT Id, Name, RecordTypeId, Parent_AD_Group__r.AD_Group_Name__c, AD_Group_Name__c, Status__c, AD_User__r.AD_First_Name__c, 
-                                      AD_User__r.AD_Last_Name__c, AD_User__r.AD_User_Email__c, AD_User__r.AD_Federation_Id__c FROM AD_Group__c];
-		*/
-        /*
-       //List<UserGroupEvent> userTrans = new UserGroupEvent();
-       UserGroupEvent userTrans = new UserGroupEvent();
-        userTrans.transactionsList = [SELECT Id, Name, RecordTypeId, Parent_AD_Group__r.AD_Group_Name__c, AD_Group_Name__c, Status__c, AD_User__r.AD_First_Name__c, 
-                                      AD_User__r.AD_Last_Name__c, AD_User__r.AD_User_Email__c, AD_User__r.AD_Federation_Id__c FROM AD_Group__c];
-        /*
-       for (SObject grp : [SELECT Id, Name, RecordTypeId, Parent_AD_Group__r.AD_Group_Name__c, AD_Group_Name__c, Status__c, AD_User__r.AD_First_Name__c, 
-                                      AD_User__r.AD_Last_Name__c, AD_User__r.AD_User_Email__c, AD_User__r.AD_Federation_Id__c FROM AD_Group__c]) {
-	        System.debug('102.02-$$$$$$--##############ADGroupChangeEventTriggerHandler:processTransactions:transactions: '+grp);
-            //15:22:23:422 USER_DEBUG [58]|DEBUG|102.02-$$$$$$--##############ADGroupChangeEventTriggerHandler:processTransactions:transactions: 
-            //AD_Group__c:{Id=a011F00000EN5h7QAD, 
-            //Name=AG-100004, 
-            //RecordTypeId=0121F000002lA1FQAU, 
-            //Parent_AD_Group__c=a011F00000EN5h6QAD, 
-            //AD_Group_Name__c=OHRS-VHA, 
-            //Status__c=Active, 
-            //AD_User__c=a001F000009BK0yQAG}
-            //
-            //groupEvents.add(new AD_Group_Update__e(AD_Federation_Id__c=grp.AD_Federation_Id__c,
-            //                                       .AD_Federation_Id__c, 
-            //                                       Status__c=user.Status__c));
-        }
-        /**/
-        //List<AD_Group_Update__e> groupEvents = new List<AD_Group_Update__e>();
-        //AD_Group_Update__e groupEvent = new AD_Group_Update__e();
-        
-        /*
-         * 
-         * 12:19:31:492 USER_DEBUG [55]|DEBUG|102.02-##############ADGroupChangeEventTriggerHandler:processTransactions:transactions: 
-         * (AD_Group__c:{Id=a011F00000EN5B1QAL, Name=AG-100003, RecordTypeId=0121F000002lA1FQAU, AD_Group_Name__c=Salesforce, Status__c=Inactive, AD_User__c=a001F000009BJ32QAG}, 
-         * AD_Group__c:{Id=a011F00000EN5B2QAL, Name=AG-100004, RecordTypeId=0121F000002lA1FQAU, Parent_AD_Group__c=a011F00000EN5B1QAL, AD_Group_Name__c=OHRS-VHA, Status__c=Active, 
-         * AD_User__c=a001F000009BJ32QAG}, AD_Group__c:{Id=a011F00000EN5B3QAL, Name=AG-1
-         * 
-         * 
-        for (SObject grp : ADGroups) {
-            groupEvents.add(new AD_Group_Update__e(AD_Federation_Id__c=grp.AD_Federation_Id__c,
-                                                   .AD_Federation_Id__c, 
-                                                   Status__c=user.Status__c));
-        }
-        // Create an instance of the event and store it in the newsEvent variable
-        Cloud_News__e newsEvent = new Cloud_News__e(
-                   Location__c='Mountain City',
-                   Urgent__c=true,
-                   News_Content__c='Lake Road is closed due to mudslides.');
-        // Call method to publish events
-        Database.SaveResult sr = EventBus.publish(newsEvent);
-        // Inspect publishing result
-        if (sr.isSuccess()) {
-            System.debug('Successfully published event.');
-        } else {
-            for(Database.Error err : sr.getErrors()) {
-                System.debug('Error returned: ' +
-                             err.getStatusCode() +
-                             ' - ' +
-                             err.getMessage());
+                
             }
         }
         // Call method to publish events
@@ -143,7 +87,7 @@ public class ADGroupChangeEventTriggerHandler extends ChangeEventTriggerHandler 
         // Inspect publishing result
         for (Database.SaveResult sr: srs ) {
             if (sr.isSuccess()) {
-                System.debug('102.01-##############ADGroupChangeEventTriggerHandler:processUpdate:Successfully published event: '+sr);
+                System.debug('102.01-##############ADGroupChangeEventTriggerHandler:processTransactions:Successfully published event: '+sr);
             } else {
                 for(Database.Error err : sr.getErrors()) {
                     System.debug('Error returned: ' +
@@ -153,11 +97,10 @@ public class ADGroupChangeEventTriggerHandler extends ChangeEventTriggerHandler 
                 }
             }
         }
-        //insert groupEvents;
-        //
-        */
-    }
+        System.debug('102.05.190-##############ADGroupChangeEventTriggerHandler:processTransactions:FINISHING UP!');
         
+    }
+    
     //This method takes all of the events in Trigger.new and maps the record Ids based on change type
     //***this can't be in the Virtual handler as events are typed based on which object it is
     //-----it may be required required to pull in the object based on new critera where the field in question did not actually change
@@ -169,14 +112,14 @@ public class ADGroupChangeEventTriggerHandler extends ChangeEventTriggerHandler 
         Id recordId;
         List<Id> recordArr = new List<Id>();
         List<String> changedFields = new List<String>();
-    	//Set<String> caseIds = new Set<String>();
+        //Set<String> caseIds = new Set<String>();
         
         for(AD_Group__ChangeEvent event : (List<AD_Group__ChangeEvent>) Trigger.new) {
             EventBus.ChangeEventHeader header = event.ChangeEventHeader;
             changedFields = header.getChangedFields();
-	        System.debug('104.02->>>>>>>>>>>>ADGroupChangeEventTriggerHandler:getChangeEventIds:header: '+header+' changeType: '+header.changetype);
-	        System.debug('104.02.01->>>>>>>>>>>>ADGroupChangeEventTriggerHandler:getChangeEventIds:changeType: '+header.changetype);
-	        System.debug('104.02.02->>>>>>>>>>>>ADGroupChangeEventTriggerHandler:getChangeEventIds:changedFields: '+changedFields);
+            System.debug('104.02->>>>>>>>>>>>ADGroupChangeEventTriggerHandler:getChangeEventIds:header: '+header+' changeType: '+header.changetype);
+            System.debug('104.02.01->>>>>>>>>>>>ADGroupChangeEventTriggerHandler:getChangeEventIds:changeType: '+header.changetype);
+            System.debug('104.02.02->>>>>>>>>>>>ADGroupChangeEventTriggerHandler:getChangeEventIds:changedFields: '+changedFields);
             
             if (recordIds.isEmpty() || recordIds.get(header.changetype) == null ) {
                 // Get all Record Ids for this change and add to the set
@@ -185,8 +128,8 @@ public class ADGroupChangeEventTriggerHandler extends ChangeEventTriggerHandler 
                     recordArr.add(rId);
                 }
                 if ( changedFields.contains('Status__c') && event.get('Status__c') != 'New' ) {
-			        System.debug('104.02.03->>>>>>>>>>>>ADGroupChangeEventTriggerHandler:getChangeEventIds:STATUS has changed: '+changedFields);
-	                recordIds.put(header.changetype,recordArr); 
+                    System.debug('104.02.03->>>>>>>>>>>>ADGroupChangeEventTriggerHandler:getChangeEventIds:STATUS has changed: '+changedFields);
+                    recordIds.put(header.changetype,recordArr); 
                 }
             } else {
                 recordArr = recordIds.get(header.changetype);
@@ -194,8 +137,8 @@ public class ADGroupChangeEventTriggerHandler extends ChangeEventTriggerHandler 
                     recordArr.add(rId);
                 }
                 if ( changedFields.contains('Status__c') && event.get('Status__c') != 'New' ) {
-			        System.debug('104.02.04->>>>>>>>>>>>ADGroupChangeEventTriggerHandler:getChangeEventIds:STATUS has changed: '+changedFields);
-	                recordIds.put(header.changetype,recordArr); 
+                    System.debug('104.02.04->>>>>>>>>>>>ADGroupChangeEventTriggerHandler:getChangeEventIds:STATUS has changed: '+changedFields);
+                    recordIds.put(header.changetype,recordArr); 
                 }
             }
             //now put them in an 'ALL' type
