@@ -3,9 +3,9 @@
         {
             "attributes": {
                 "type": "User",
-                "referenceId": "UserRef2"
+                "referenceId": "UserRef1"
             },
-            "Username": "wsteele@salesforce.com.ad.test",
+            "Username": "wsteele@salesforce.com.ad",
             "LastName": "Steele",
             "FirstName": "William",
             "Email": "wsteele@salesforce.com",
