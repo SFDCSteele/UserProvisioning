@@ -165,6 +165,7 @@
         <type>AutoNumber</type>
     </nameField>
     <pluralLabel>AD Users</pluralLabel>
+    <recordTypeTrackHistory>false</recordTypeTrackHistory>
     <searchLayouts/>
     <sharingModel>ReadWrite</sharingModel>
     <visibility>Public</visibility>
