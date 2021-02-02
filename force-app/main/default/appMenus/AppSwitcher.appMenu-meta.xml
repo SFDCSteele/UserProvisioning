@@ -65,7 +65,7 @@
         <type>CustomApplication</type>
     </appMenuItems>
     <appMenuItems>
-        <name>Active_Directory_Manager</name>
-        <type>CustomApplication</type>
+        <name>AD_Subscribe_Event_App</name>
+        <type>ConnectedApp</type>
     </appMenuItems>
 </AppMenu>
