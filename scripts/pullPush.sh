@@ -1,8 +1,8 @@
 #!/bin/bash
 
-export dxOrg=""
-export dxUser=""
-export gitBranch=""
+export dxOrg="ActiveDirectoryAppScratch"
+export dxUser="test-p9yeswr0dvzw@example.com"
+export gitBranch="ActiveDirectory"
 
 echo "==========================================================================="
 echo "Pulling changes from $dxOrg as user $dxUser and pushing to branch $gitBranch with the comment $1"
