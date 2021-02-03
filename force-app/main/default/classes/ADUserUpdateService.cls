@@ -1,12 +1,27 @@
 @RestResource(urlMapping='/v1/adupdateuserservice/*')
 global with sharing class ADUserUpdateService {
-    public class PackageTypes {
-		public String packageType;
-		public List<String> packageMembers;
+    
+    public class UserEventType {
+        public String GroupName;
+        public String EmailAddress;
+        public String FederationId;
+        public String FirstName;
+        public String LastName;
+        public String ParentADGroup;
+        public String Status;
 	}
+    
+    public String GroupName;
+    public String EmailAddress;
+    public String FederationId;
+    public String FirstName;
+    public String LastName;
+    public String ParentADGroup;
+    public String Status;
+    
+	//public String packageName;
 
-	public String packageName;
-	public List<PackageTypes> packageTypes;
+    //public List<PackageTypes> packageTypes;
 
 	
 	public static ADUserUpdateService parse(String json) {
@@ -28,42 +43,46 @@ global with sharing class ADUserUpdateService {
             ADUserUpdateService adUserPlatformEvent = ADUserUpdateService.parse(req.requestBody.toString());
             
             System.debug('ADUserUpdateService:postADUserEvent:adUserPlatformEvent: '+adUserPlatformEvent);
-            /*
-            Application_Request__c mer = new Application_Request__c();
-            mer = [select Id,Name from Application_Request__c where Deploy_Package_Name__c = :packageXML.packageName];
-        
-	        //Before adding the current package, ensure it doesn't already exist
-	        List<CICD_Package_Content__c> pcks = new List<CICD_Package_Content__c>();
-            try { 
-                pcks = [select Id,Name from CICD_Package_Content__c where Module_Enhancement_Request__c = :mer.Id];
-                delete pcks;
-            } catch (Exception dme) {
-                System.debug('savePackageXML: there wasnt package.xml already on this exception request: '+dme.getMessage());
-            }
-
-            List<CICD_Package_Content__c> contents = new List<CICD_Package_Content__c>();
-            CICD_Package_Content__c content = new CICD_Package_Content__c();
-
-            for (PackageTypes pck: packageXML.packageTypes) {
-
-                for (String pckMember: pck.packageMembers) {
-                    content = new CICD_Package_Content__c();
-                    content.Package_xml_Name__c = packageXML.packageName;
-                    content.MetaData_Type__c = pck.packageType;
-                    content.MetaData_Element__c = pckMember;
-                    if ( mer != null ) {
-                        content.Name = mer.Name+':'+packageXML.packageName;//+':'+pck.packageType+':'+pckMember;
-                        content.Module_Enhancement_Request__c = mer.Id;
+            //Email Address	50
+            //Federation Id	50
+            //FirstName		80
+            //LastName		80
+            //Group Name		80
+            //Parent AD Group	80
+            //Status			50
+            //[46]|DEBUG|ADUserUpdateService:postADUserEvent:adUserPlatformEvent: ADUserUpdateService:[
+            //EmailAddress=wsteele@salesforce.com, 
+            //FederationId=wsteele@salesforce.com, 
+            //FirstName=William, 
+            //GroupName=OHRS-Supervisor, 
+            //LastName=Steele, 
+            //ParentADGroup=Salesforce, 
+            //Status=Active]
+            AD_Group_Update__e groupEvent = new AD_Group_Update__e( 
+                Group_Name__c=adUserPlatformEvent.GroupName,
+                Email_Address__c=adUserPlatformEvent.EmailAddress,
+                Federation_Id__c=adUserPlatformEvent.FederationId,
+                FirstName__c=adUserPlatformEvent.FirstName,
+                LastName__c=adUserPlatformEvent.LastName,
+                Parent_AD_Group__c=adUserPlatformEvent.ParentADGroup,
+                Status__c=adUserPlatformEvent.Status);                    
+    
+            
+            // Call method to publish events
+            Database.SaveResult srs = EventBus.publish(groupEvent);
+            // Inspect publishing result
+                if (srs.isSuccess()) {
+                    System.debug('ADUserUpdateService:postADUserEvent:processTransactions:Successfully published event: '+srs);
+                } else {
+                    for(Database.Error err : srs.getErrors()) {
+                        System.debug('Error returned: ' +
+                                     err.getStatusCode() +
+                                     ' - ' +
+                                     err.getMessage());
                     }
-                    System.debug('savePackageXML: package: '+content.Package_xml_Name__c+
-                                 ' enhancement request: '+mer.Name+
-                                 ' package type: '+content.MetaData_Type__c+
-                                 ' metadata element: '+content.MetaData_Element__c);
-                    contents.add(content);
                 }
-            }
-            insert contents;
-		*/
+            System.debug('ADUserUpdateService:postADUserEvent:processTransactions:FINISHING UP!');
+            
         } catch (Exception dme) {
 			returnMessase = 'Failure: '+dme.getMessage();
         }
