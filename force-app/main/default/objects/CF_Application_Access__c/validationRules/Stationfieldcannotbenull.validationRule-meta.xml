@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Stationfieldcannotbenull</fullName>
+    <active>true</active>
+    <errorConditionFormula>ISPICKVAL(Station__c , &apos;Null&apos;)</errorConditionFormula>
+    <errorDisplayField>Station__c</errorDisplayField>
+    <errorMessage>Please select valid station</errorMessage>
+</ValidationRule>
