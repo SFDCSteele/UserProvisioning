@@ -6,6 +6,10 @@
         <name>CompactLayout</name>
     </types>
     <types>
+        <members>Account.CF_Group_ID__c</members>
+        <members>Account.CF_Nested_Group_ID__c</members>
+        <members>Account.CF_Queue_ID__c</members>
+        <members>Account.VIEWS_SpringCM_Group_Href__c</members>
         <members>CF_Application_Access__c.Account__c</members>
         <members>CF_Application_Access__c.Application_Level__c</members>
         <members>CF_Application_Access__c.Application_Name__c</members>
@@ -57,6 +61,9 @@
         <members>CF_Permission_Mapping__c.DTC_Application__c</members>
         <members>CF_Permission_Mapping__c.Permission_Set_API_Name__c</members>
         <members>CF_Permission_Mapping__c.Permission_Set_ID__c</members>
+        <members>Contact.Account_Record_Type__c</members>
+        <members>Contact.CF_VIEWS_Contact__c</members>
+        <members>Contact.Inactive_Contact__c</members>
         <members>DTC_Application_Level__c.DTC_Application__c</members>
         <members>DTC_Application_Level__c.Elevated_Access__c</members>
         <members>DTC_Application_Level__c.Is_Active__c</members>
@@ -125,6 +132,7 @@
         <members>DTC_Application__c.Secondary_DTC_End_User_Support_Lead__c</members>
         <members>DTC_Application__c.Size__c</members>
         <members>DTC_Application__c.UI_Format__c</members>
+        <members>DTC_User_Setup_Instructions__c.DTC_Application__c</members>
         <members>User.Account_Id__c</members>
         <name>CustomField</name>
     </types>
@@ -209,6 +217,7 @@
     <types>
         <members>CF_Application_Access__c.Approve</members>
         <members>CF_Application_Access__c.Reject</members>
+        <members>FeedItem.NewTaskFromFeedItem</members>
         <name>QuickAction</name>
     </types>
     <types>
