@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Process_Manually__c</fullName>
+    <defaultValue>false</defaultValue>
+    <description>Flag to indicate if the request should be handled manually due to errors</description>
+    <externalId>false</externalId>
+    <label>Process Manually</label>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

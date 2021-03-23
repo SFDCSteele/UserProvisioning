@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Focus_Area__c</fullName>
+    <externalId>false</externalId>
+    <label>Focus Area</label>
+    <required>false</required>
+    <trackFeedHistory>true</trackFeedHistory>
+    <trackTrending>false</trackTrending>
+    <type>MultiselectPicklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>DMC</fullName>
+                <default>false</default>
+                <label>DMC</label>
+            </value>
+            <value>
+                <fullName>NCA</fullName>
+                <default>false</default>
+                <label>NCA</label>
+            </value>
+            <value>
+                <fullName>Other</fullName>
+                <default>false</default>
+                <label>Other</label>
+            </value>
+            <value>
+                <fullName>VACO</fullName>
+                <default>false</default>
+                <label>VACO</label>
+            </value>
+            <value>
+                <fullName>VBA</fullName>
+                <default>false</default>
+                <label>VBA</label>
+            </value>
+            <value>
+                <fullName>VHA</fullName>
+                <default>false</default>
+                <label>VHA</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+    <visibleLines>4</visibleLines>
+</CustomField>
