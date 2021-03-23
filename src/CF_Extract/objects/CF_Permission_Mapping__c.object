@@ -143,200 +143,93 @@
     <allowInChatterGroups>false</allowInChatterGroups>
     <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
     <deploymentStatus>Deployed</deploymentStatus>
+    <description>This Permission Set is provided for Regional Application Administrators in order for them to have elevated rights.  This enables them to create VA Organization (Office) Accounts, VA Organization (Staff) Contacts and access the wizard in order to grant Applications to users.</description>
     <enableActivities>false</enableActivities>
     <enableBulkApi>true</enableBulkApi>
     <enableFeeds>false</enableFeeds>
-    <enableHistory>true</enableHistory>
+    <enableHistory>false</enableHistory>
     <enableLicensing>false</enableLicensing>
-    <enableReports>true</enableReports>
+    <enableReports>false</enableReports>
     <enableSearch>true</enableSearch>
     <enableSharing>true</enableSharing>
     <enableStreamingApi>true</enableStreamingApi>
     <externalSharingModel>ControlledByParent</externalSharingModel>
     <fields>
+        <fullName>Application_Role__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <externalId>false</externalId>
+        <label>Application Level</label>
+        <referenceTo>CF_Application_Level__c</referenceTo>
+        <relationshipName>Permission_Sets</relationshipName>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
         <fullName>DTC_Application__c</fullName>
+        <description>To associate the DTC Application to the Permission Sets.</description>
         <externalId>false</externalId>
         <label>DTC Application</label>
         <referenceTo>DTC_Application__c</referenceTo>
-        <relationshipLabel>User Setup Instructions</relationshipLabel>
-        <relationshipName>User_Setup_Instructions</relationshipName>
+        <relationshipName>VIEWS_Permission_Sets</relationshipName>
         <relationshipOrder>0</relationshipOrder>
         <reparentableMasterDetail>false</reparentableMasterDetail>
-        <trackHistory>false</trackHistory>
         <trackTrending>false</trackTrending>
         <type>MasterDetail</type>
         <writeRequiresMasterRead>false</writeRequiresMasterRead>
     </fields>
     <fields>
-        <fullName>ID__c</fullName>
-        <description>Unique ID</description>
-        <externalId>false</externalId>
-        <label>ID</label>
-        <trackHistory>false</trackHistory>
-        <trackTrending>false</trackTrending>
-        <type>AutoNumber</type>
-    </fields>
-    <fields>
-        <fullName>Installed_Package_License__c</fullName>
+        <fullName>Permission_Set_API_Name__c</fullName>
+        <description>Holds the API name of the Permission Set</description>
         <encryptionScheme>None</encryptionScheme>
         <externalId>false</externalId>
-        <label>Installed Package License</label>
+        <label>Permission Set API Name</label>
         <length>100</length>
         <required>false</required>
-        <trackHistory>false</trackHistory>
         <trackTrending>false</trackTrending>
         <type>Text</type>
         <unique>false</unique>
     </fields>
     <fields>
-        <fullName>License__c</fullName>
+        <fullName>Permission_Set_ID__c</fullName>
         <encryptionScheme>None</encryptionScheme>
         <externalId>false</externalId>
-        <label>License Type</label>
-        <length>100</length>
+        <label>Permission Set ID</label>
+        <length>20</length>
         <required>false</required>
-        <trackHistory>false</trackHistory>
         <trackTrending>false</trackTrending>
         <type>Text</type>
         <unique>false</unique>
     </fields>
-    <fields>
-        <fullName>Need_Related_Contact_Record__c</fullName>
-        <defaultValue>false</defaultValue>
-        <externalId>false</externalId>
-        <label>Need Related Contact Record?</label>
-        <trackHistory>false</trackHistory>
-        <trackTrending>false</trackTrending>
-        <type>Checkbox</type>
-    </fields>
-    <fields>
-        <fullName>Other_Contact_Information__c</fullName>
-        <encryptionScheme>None</encryptionScheme>
-        <externalId>false</externalId>
-        <label>Other Contact Information</label>
-        <length>32768</length>
-        <trackHistory>false</trackHistory>
-        <trackTrending>false</trackTrending>
-        <type>Html</type>
-        <visibleLines>25</visibleLines>
-    </fields>
-    <fields>
-        <fullName>Other_Instructions__c</fullName>
-        <encryptionScheme>None</encryptionScheme>
-        <externalId>false</externalId>
-        <label>Other Instructions</label>
-        <length>32768</length>
-        <trackHistory>false</trackHistory>
-        <trackTrending>false</trackTrending>
-        <type>Html</type>
-        <visibleLines>25</visibleLines>
-    </fields>
-    <fields>
-        <fullName>Permission_Sets__c</fullName>
-        <encryptionScheme>None</encryptionScheme>
-        <externalId>false</externalId>
-        <label>Permission Sets</label>
-        <length>32768</length>
-        <trackHistory>false</trackHistory>
-        <trackTrending>false</trackTrending>
-        <type>LongTextArea</type>
-        <visibleLines>5</visibleLines>
-    </fields>
-    <fields>
-        <fullName>Profile__c</fullName>
-        <encryptionScheme>None</encryptionScheme>
-        <externalId>false</externalId>
-        <label>Profile</label>
-        <length>100</length>
-        <required>false</required>
-        <trackHistory>false</trackHistory>
-        <trackTrending>false</trackTrending>
-        <type>Text</type>
-        <unique>false</unique>
-    </fields>
-    <fields>
-        <fullName>Public_Groups__c</fullName>
-        <encryptionScheme>None</encryptionScheme>
-        <externalId>false</externalId>
-        <label>Public Groups</label>
-        <length>32768</length>
-        <trackHistory>false</trackHistory>
-        <trackTrending>false</trackTrending>
-        <type>LongTextArea</type>
-        <visibleLines>3</visibleLines>
-    </fields>
-    <fields>
-        <fullName>Queues__c</fullName>
-        <encryptionScheme>None</encryptionScheme>
-        <externalId>false</externalId>
-        <label>Queues</label>
-        <length>32768</length>
-        <trackHistory>false</trackHistory>
-        <trackTrending>false</trackTrending>
-        <type>LongTextArea</type>
-        <visibleLines>3</visibleLines>
-    </fields>
-    <fields>
-        <fullName>Required_Fields_On_Contact__c</fullName>
-        <encryptionScheme>None</encryptionScheme>
-        <externalId>false</externalId>
-        <label>Required Fields On Contact Record</label>
-        <length>1000</length>
-        <trackHistory>false</trackHistory>
-        <trackTrending>false</trackTrending>
-        <type>LongTextArea</type>
-        <visibleLines>3</visibleLines>
-    </fields>
-    <fields>
-        <fullName>Required_Fields_on_User_Record__c</fullName>
-        <encryptionScheme>None</encryptionScheme>
-        <externalId>false</externalId>
-        <label>Required Fields on User Record</label>
-        <length>1000</length>
-        <trackHistory>false</trackHistory>
-        <trackTrending>false</trackTrending>
-        <type>LongTextArea</type>
-        <visibleLines>3</visibleLines>
-    </fields>
-    <fields>
-        <fullName>Requires_ePAS__c</fullName>
-        <defaultValue>false</defaultValue>
-        <externalId>false</externalId>
-        <label>Requires ePAS?</label>
-        <trackHistory>false</trackHistory>
-        <trackTrending>false</trackTrending>
-        <type>Checkbox</type>
-    </fields>
-    <fields>
-        <fullName>Role__c</fullName>
-        <encryptionScheme>None</encryptionScheme>
-        <externalId>false</externalId>
-        <label>Role</label>
-        <length>100</length>
-        <required>false</required>
-        <trackHistory>false</trackHistory>
-        <trackTrending>false</trackTrending>
-        <type>Text</type>
-        <unique>false</unique>
-    </fields>
-    <label>User Setup Instructions</label>
-    <listViews>
-        <fullName>All</fullName>
-        <filterScope>Everything</filterScope>
-        <label>All</label>
-    </listViews>
+    <label>Permission Mapping</label>
     <nameField>
         <encryptionScheme>None</encryptionScheme>
-        <label>User Type</label>
-        <trackHistory>false</trackHistory>
+        <label>Permission Sets Name</label>
         <type>Text</type>
     </nameField>
-    <pluralLabel>User Setup Instructions</pluralLabel>
-    <recordTypeTrackHistory>false</recordTypeTrackHistory>
+    <pluralLabel>Permission Mappings</pluralLabel>
     <recordTypes>
-        <fullName>DTC</fullName>
+        <fullName>Package_License</fullName>
         <active>true</active>
-        <label>DTC</label>
+        <label>Package License</label>
+    </recordTypes>
+    <recordTypes>
+        <fullName>Permission_Sets_License</fullName>
+        <active>true</active>
+        <description>Permission Sets License needed for the user</description>
+        <label>Permission Sets License</label>
+    </recordTypes>
+    <recordTypes>
+        <fullName>VALERI_Groups</fullName>
+        <active>true</active>
+        <description>Give names of the groups to be assigned to the user</description>
+        <label>Groups</label>
+    </recordTypes>
+    <recordTypes>
+        <fullName>VALERI_Permission_Sets</fullName>
+        <active>true</active>
+        <description>Permission Sets to be associated to the user</description>
+        <label>Permission Sets</label>
     </recordTypes>
     <searchLayouts/>
     <sharingModel>ControlledByParent</sharingModel>

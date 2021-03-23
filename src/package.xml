@@ -1,14 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
     <types>
+        <members>Views_CF_PBAddPublicGroupFromFlow</members>
+        <members>Views_CF_PBRemovePublicGroupFromFlow</members>
+        <name>ApexClass</name>
+    </types>
+    <types>
         <members>DTC_Application_Level__c.Compact_Layout</members>
         <members>DTC_Application__c.Compact_Layout</members>
         <name>CompactLayout</name>
     </types>
     <types>
+        <members>Account.CF_ContactCount__c</members>
         <members>Account.CF_Group_ID__c</members>
+        <members>Account.CF_Group_Name__c</members>
+        <members>Account.CF_Mail_Code__c</members>
         <members>Account.CF_Nested_Group_ID__c</members>
+        <members>Account.CF_Office_Inactive__c</members>
         <members>Account.CF_Queue_ID__c</members>
+        <members>Account.CF_VIEWS_Account__c</members>
+        <members>Account.VA_Organization_Acronym__c</members>
         <members>Account.VIEWS_SpringCM_Group_Href__c</members>
         <members>CF_Application_Access__c.Account__c</members>
         <members>CF_Application_Access__c.Application_Level__c</members>
@@ -63,7 +74,9 @@
         <members>CF_Permission_Mapping__c.Permission_Set_ID__c</members>
         <members>Contact.Account_Record_Type__c</members>
         <members>Contact.CF_VIEWS_Contact__c</members>
+        <members>Contact.Federation_Id__c</members>
         <members>Contact.Inactive_Contact__c</members>
+        <members>Contact.User_ID__c</members>
         <members>DTC_Application_Level__c.DTC_Application__c</members>
         <members>DTC_Application_Level__c.Elevated_Access__c</members>
         <members>DTC_Application_Level__c.Is_Active__c</members>
@@ -133,7 +146,23 @@
         <members>DTC_Application__c.Size__c</members>
         <members>DTC_Application__c.UI_Format__c</members>
         <members>DTC_User_Setup_Instructions__c.DTC_Application__c</members>
+        <members>DTC_User_Setup_Instructions__c.ID__c</members>
+        <members>DTC_User_Setup_Instructions__c.Installed_Package_License__c</members>
+        <members>DTC_User_Setup_Instructions__c.License__c</members>
+        <members>DTC_User_Setup_Instructions__c.Need_Related_Contact_Record__c</members>
+        <members>DTC_User_Setup_Instructions__c.Other_Contact_Information__c</members>
+        <members>DTC_User_Setup_Instructions__c.Other_Instructions__c</members>
+        <members>DTC_User_Setup_Instructions__c.Permission_Sets__c</members>
+        <members>DTC_User_Setup_Instructions__c.Profile__c</members>
+        <members>DTC_User_Setup_Instructions__c.Public_Groups__c</members>
+        <members>DTC_User_Setup_Instructions__c.Queues__c</members>
+        <members>DTC_User_Setup_Instructions__c.Required_Fields_On_Contact__c</members>
+        <members>DTC_User_Setup_Instructions__c.Required_Fields_on_User_Record__c</members>
+        <members>DTC_User_Setup_Instructions__c.Requires_ePAS__c</members>
+        <members>DTC_User_Setup_Instructions__c.Role__c</members>
         <members>User.Account_Id__c</members>
+        <members>User.CF_User_Office__c</members>
+        <members>User.License_Name__c</members>
         <name>CustomField</name>
     </types>
     <types>
@@ -142,7 +171,12 @@
         <members>CF_Permission_Mapping__c</members>
         <members>DTC_Application_Level__c</members>
         <members>DTC_Application__c</members>
+        <members>DTC_User_Setup_Instructions__c</members>
         <name>CustomObject</name>
+    </types>
+    <types>
+        <members>DisableTriggersFlag</members>
+        <name>CustomPermission</name>
     </types>
     <types>
         <members>Application_Access_Record_Page1</members>
@@ -183,6 +217,11 @@
         <name>GlobalValueSet</name>
     </types>
     <types>
+        <members>FAST_Application_Access_Approvers</members>
+        <members>Squares_Super_Admin</members>
+        <name>Group</name>
+    </types>
+    <types>
         <members>CF_Application_Access__c-Application Access Layout</members>
         <members>CF_Application_Access__c-FAST</members>
         <members>CF_Application_Access__c-FAST POC</members>
@@ -193,14 +232,11 @@
         <members>CF_Permission_Mapping__c-Permission Set Layout</members>
         <members>DTC_Application_Level__c-DTC Application Level Layout</members>
         <members>DTC_Application__c-DTC Application Layout</members>
+        <members>DTC_User_Setup_Instructions__c-User Setup Instructions Layout</members>
         <name>Layout</name>
     </types>
     <types>
         <members>CF_Application_Access__c.All</members>
-        <members>CF_Application_Access__c.All_Fast</members>
-        <members>CF_Application_Access__c.All_KErry</members>
-        <members>CF_Application_Access__c.All_SQUARES_Users</members>
-        <members>CF_Application_Access__c.All_WHH</members>
         <members>CF_Application_Access__c.FAST_Application_User_Request_Queue</members>
         <members>CF_Application_Access__c.FEP_My_Pending_Fiduciary_Approvals</members>
         <members>CF_Application_Access__c.Orphan_SQUARES_Applications</members>
@@ -212,7 +248,15 @@
         <members>DTC_Application__c.Citizen_Developed_In_Progress</members>
         <members>DTC_Application__c.VA_app_Not_Retired</members>
         <members>DTC_Application__c.VA_app_View_All</members>
+        <members>DTC_User_Setup_Instructions__c.All</members>
         <name>ListView</name>
+    </types>
+    <types>
+        <members>HRM_Help_Desk</members>
+        <members>NVSPSE_Approval_Queue</members>
+        <members>VALERI_Approval_Queue</members>
+        <members>VALERI_User_Request_Queue</members>
+        <name>Queue</name>
     </types>
     <types>
         <members>CF_Application_Access__c.Approve</members>
@@ -230,6 +274,7 @@
         <members>CF_Permission_Mapping__c.Permission_Sets_License</members>
         <members>CF_Permission_Mapping__c.VALERI_Groups</members>
         <members>CF_Permission_Mapping__c.VALERI_Permission_Sets</members>
+        <members>DTC_User_Setup_Instructions__c.DTC</members>
         <name>RecordType</name>
     </types>
     <types>

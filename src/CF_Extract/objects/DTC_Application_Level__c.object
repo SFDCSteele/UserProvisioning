@@ -128,11 +128,14 @@
     </actionOverrides>
     <actionOverrides>
         <actionName>View</actionName>
-        <type>Default</type>
+        <comment>Action override created by Lightning App Builder during activation.</comment>
+        <content>DTC_Application_Level</content>
+        <formFactor>Large</formFactor>
+        <skipRecordTypeSelect>false</skipRecordTypeSelect>
+        <type>Flexipage</type>
     </actionOverrides>
     <actionOverrides>
         <actionName>View</actionName>
-        <formFactor>Large</formFactor>
         <type>Default</type>
     </actionOverrides>
     <actionOverrides>
@@ -141,11 +144,20 @@
         <type>Default</type>
     </actionOverrides>
     <allowInChatterGroups>false</allowInChatterGroups>
-    <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
+    <compactLayoutAssignment>Compact_Layout</compactLayoutAssignment>
+    <compactLayouts>
+        <fullName>Compact_Layout</fullName>
+        <fields>Name</fields>
+        <fields>DTC_Application__c</fields>
+        <fields>Profile_Name__c</fields>
+        <fields>Is_Active__c</fields>
+        <fields>Elevated_Access__c</fields>
+        <label>Compact Layout</label>
+    </compactLayouts>
     <deploymentStatus>Deployed</deploymentStatus>
-    <enableActivities>false</enableActivities>
+    <enableActivities>true</enableActivities>
     <enableBulkApi>true</enableBulkApi>
-    <enableFeeds>false</enableFeeds>
+    <enableFeeds>true</enableFeeds>
     <enableHistory>true</enableHistory>
     <enableLicensing>false</enableLicensing>
     <enableReports>true</enableReports>
@@ -158,187 +170,120 @@
         <externalId>false</externalId>
         <label>DTC Application</label>
         <referenceTo>DTC_Application__c</referenceTo>
-        <relationshipLabel>User Setup Instructions</relationshipLabel>
-        <relationshipName>User_Setup_Instructions</relationshipName>
+        <relationshipLabel>DTC Application Levels</relationshipLabel>
+        <relationshipName>DTC_Application_Levels</relationshipName>
         <relationshipOrder>0</relationshipOrder>
         <reparentableMasterDetail>false</reparentableMasterDetail>
+        <trackFeedHistory>false</trackFeedHistory>
         <trackHistory>false</trackHistory>
         <trackTrending>false</trackTrending>
         <type>MasterDetail</type>
         <writeRequiresMasterRead>false</writeRequiresMasterRead>
     </fields>
     <fields>
-        <fullName>ID__c</fullName>
-        <description>Unique ID</description>
-        <externalId>false</externalId>
-        <label>ID</label>
-        <trackHistory>false</trackHistory>
-        <trackTrending>false</trackTrending>
-        <type>AutoNumber</type>
-    </fields>
-    <fields>
-        <fullName>Installed_Package_License__c</fullName>
-        <encryptionScheme>None</encryptionScheme>
-        <externalId>false</externalId>
-        <label>Installed Package License</label>
-        <length>100</length>
-        <required>false</required>
-        <trackHistory>false</trackHistory>
-        <trackTrending>false</trackTrending>
-        <type>Text</type>
-        <unique>false</unique>
-    </fields>
-    <fields>
-        <fullName>License__c</fullName>
-        <encryptionScheme>None</encryptionScheme>
-        <externalId>false</externalId>
-        <label>License Type</label>
-        <length>100</length>
-        <required>false</required>
-        <trackHistory>false</trackHistory>
-        <trackTrending>false</trackTrending>
-        <type>Text</type>
-        <unique>false</unique>
-    </fields>
-    <fields>
-        <fullName>Need_Related_Contact_Record__c</fullName>
+        <fullName>Elevated_Access__c</fullName>
         <defaultValue>false</defaultValue>
         <externalId>false</externalId>
-        <label>Need Related Contact Record?</label>
+        <inlineHelpText>Determines whether this role requires an ePas request to obtain</inlineHelpText>
+        <label>Elevated Access?</label>
+        <trackFeedHistory>false</trackFeedHistory>
         <trackHistory>false</trackHistory>
         <trackTrending>false</trackTrending>
         <type>Checkbox</type>
     </fields>
     <fields>
-        <fullName>Other_Contact_Information__c</fullName>
-        <encryptionScheme>None</encryptionScheme>
+        <fullName>Is_Active__c</fullName>
+        <defaultValue>true</defaultValue>
         <externalId>false</externalId>
-        <label>Other Contact Information</label>
-        <length>32768</length>
-        <trackHistory>false</trackHistory>
-        <trackTrending>false</trackTrending>
-        <type>Html</type>
-        <visibleLines>25</visibleLines>
-    </fields>
-    <fields>
-        <fullName>Other_Instructions__c</fullName>
-        <encryptionScheme>None</encryptionScheme>
-        <externalId>false</externalId>
-        <label>Other Instructions</label>
-        <length>32768</length>
-        <trackHistory>false</trackHistory>
-        <trackTrending>false</trackTrending>
-        <type>Html</type>
-        <visibleLines>25</visibleLines>
-    </fields>
-    <fields>
-        <fullName>Permission_Sets__c</fullName>
-        <encryptionScheme>None</encryptionScheme>
-        <externalId>false</externalId>
-        <label>Permission Sets</label>
-        <length>32768</length>
-        <trackHistory>false</trackHistory>
-        <trackTrending>false</trackTrending>
-        <type>LongTextArea</type>
-        <visibleLines>5</visibleLines>
-    </fields>
-    <fields>
-        <fullName>Profile__c</fullName>
-        <encryptionScheme>None</encryptionScheme>
-        <externalId>false</externalId>
-        <label>Profile</label>
-        <length>100</length>
-        <required>false</required>
-        <trackHistory>false</trackHistory>
-        <trackTrending>false</trackTrending>
-        <type>Text</type>
-        <unique>false</unique>
-    </fields>
-    <fields>
-        <fullName>Public_Groups__c</fullName>
-        <encryptionScheme>None</encryptionScheme>
-        <externalId>false</externalId>
-        <label>Public Groups</label>
-        <length>32768</length>
-        <trackHistory>false</trackHistory>
-        <trackTrending>false</trackTrending>
-        <type>LongTextArea</type>
-        <visibleLines>3</visibleLines>
-    </fields>
-    <fields>
-        <fullName>Queues__c</fullName>
-        <encryptionScheme>None</encryptionScheme>
-        <externalId>false</externalId>
-        <label>Queues</label>
-        <length>32768</length>
-        <trackHistory>false</trackHistory>
-        <trackTrending>false</trackTrending>
-        <type>LongTextArea</type>
-        <visibleLines>3</visibleLines>
-    </fields>
-    <fields>
-        <fullName>Required_Fields_On_Contact__c</fullName>
-        <encryptionScheme>None</encryptionScheme>
-        <externalId>false</externalId>
-        <label>Required Fields On Contact Record</label>
-        <length>1000</length>
-        <trackHistory>false</trackHistory>
-        <trackTrending>false</trackTrending>
-        <type>LongTextArea</type>
-        <visibleLines>3</visibleLines>
-    </fields>
-    <fields>
-        <fullName>Required_Fields_on_User_Record__c</fullName>
-        <encryptionScheme>None</encryptionScheme>
-        <externalId>false</externalId>
-        <label>Required Fields on User Record</label>
-        <length>1000</length>
-        <trackHistory>false</trackHistory>
-        <trackTrending>false</trackTrending>
-        <type>LongTextArea</type>
-        <visibleLines>3</visibleLines>
-    </fields>
-    <fields>
-        <fullName>Requires_ePAS__c</fullName>
-        <defaultValue>false</defaultValue>
-        <externalId>false</externalId>
-        <label>Requires ePAS?</label>
+        <label>Is Active?</label>
+        <trackFeedHistory>false</trackFeedHistory>
         <trackHistory>false</trackHistory>
         <trackTrending>false</trackTrending>
         <type>Checkbox</type>
     </fields>
     <fields>
-        <fullName>Role__c</fullName>
+        <fullName>Other_Setup_Info__c</fullName>
         <encryptionScheme>None</encryptionScheme>
         <externalId>false</externalId>
-        <label>Role</label>
-        <length>100</length>
-        <required>false</required>
-        <trackHistory>false</trackHistory>
+        <label>Other Setup Info</label>
+        <length>32768</length>
+        <trackFeedHistory>true</trackFeedHistory>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Html</type>
+        <visibleLines>25</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Permission_Set_s__c</fullName>
+        <encryptionScheme>None</encryptionScheme>
+        <externalId>false</externalId>
+        <label>Permission Set(s)</label>
+        <length>32768</length>
+        <trackFeedHistory>true</trackFeedHistory>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>LongTextArea</type>
+        <visibleLines>3</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Profile_Name__c</fullName>
+        <encryptionScheme>None</encryptionScheme>
+        <externalId>false</externalId>
+        <label>Profile Name</label>
+        <length>255</length>
+        <required>true</required>
+        <trackFeedHistory>true</trackFeedHistory>
+        <trackHistory>true</trackHistory>
         <trackTrending>false</trackTrending>
         <type>Text</type>
         <unique>false</unique>
     </fields>
-    <label>User Setup Instructions</label>
-    <listViews>
-        <fullName>All</fullName>
-        <filterScope>Everything</filterScope>
-        <label>All</label>
-    </listViews>
+    <fields>
+        <fullName>Public_Group_s__c</fullName>
+        <encryptionScheme>None</encryptionScheme>
+        <externalId>false</externalId>
+        <label>Public Group(s)</label>
+        <length>32768</length>
+        <trackFeedHistory>true</trackFeedHistory>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>LongTextArea</type>
+        <visibleLines>3</visibleLines>
+    </fields>
+    <label>DTC Application Level</label>
     <nameField>
         <encryptionScheme>None</encryptionScheme>
-        <label>User Type</label>
-        <trackHistory>false</trackHistory>
+        <label>DTC Application Level Name</label>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>true</trackHistory>
         <type>Text</type>
     </nameField>
-    <pluralLabel>User Setup Instructions</pluralLabel>
-    <recordTypeTrackHistory>false</recordTypeTrackHistory>
-    <recordTypes>
-        <fullName>DTC</fullName>
-        <active>true</active>
-        <label>DTC</label>
-    </recordTypes>
-    <searchLayouts/>
+    <pluralLabel>DTC Application Levels</pluralLabel>
+    <searchLayouts>
+        <excludedStandardButtons>OpenListInQuip</excludedStandardButtons>
+        <excludedStandardButtons>Accept</excludedStandardButtons>
+        <excludedStandardButtons>ChangeOwner</excludedStandardButtons>
+        <excludedStandardButtons>MassChangeOwner</excludedStandardButtons>
+        <lookupDialogsAdditionalFields>DTC_Application__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Profile_Name__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Permission_Set_s__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Public_Group_s__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Other_Setup_Info__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Elevated_Access__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Is_Active__c</lookupDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>DTC_Application__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Profile_Name__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Permission_Set_s__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Public_Group_s__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Other_Setup_Info__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Elevated_Access__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Is_Active__c</lookupPhoneDialogsAdditionalFields>
+        <searchFilterFields>NAME</searchFilterFields>
+        <searchFilterFields>DTC_Application__c</searchFilterFields>
+        <searchFilterFields>Profile_Name__c</searchFilterFields>
+        <searchFilterFields>Elevated_Access__c</searchFilterFields>
+        <searchFilterFields>Is_Active__c</searchFilterFields>
+    </searchLayouts>
     <sharingModel>ControlledByParent</sharingModel>
     <visibility>Public</visibility>
 </CustomObject>
