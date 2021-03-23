@@ -10,8 +10,4 @@
     <columns>DTC_Application__c</columns>
     <filterScope>Queue</filterScope>
     <label>VALERI Approval Queue</label>
-    <queue>VALERI_Approval_Queue</queue>
-    <sharedTo>
-        <allInternalUsers/>
-    </sharedTo>
 </ListView>

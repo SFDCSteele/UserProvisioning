@@ -4,8 +4,4 @@
     <columns>NAME</columns>
     <filterScope>Queue</filterScope>
     <label>GPD</label>
-    <queue>Views_Squares_GPD</queue>
-    <sharedTo>
-        <group>Squares_Super_Admin</group>
-    </sharedTo>
 </ListView>

@@ -29,7 +29,4 @@
         <value>SquaresLogin Site Guest User</value>
     </filters>
     <label>Orphan SQUARES Applications</label>
-    <sharedTo>
-        <group>Squares_Super_Admin</group>
-    </sharedTo>
 </ListView>

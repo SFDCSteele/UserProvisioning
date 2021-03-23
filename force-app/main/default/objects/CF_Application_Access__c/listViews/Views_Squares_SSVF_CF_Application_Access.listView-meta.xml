@@ -5,7 +5,4 @@
     <filterScope>Queue</filterScope>
     <label>SSVF</label>
     <queue>Views_Squares_SSVF</queue>
-    <sharedTo>
-        <group>Squares_Super_Admin</group>
-    </sharedTo>
-</ListView>
+ </ListView>

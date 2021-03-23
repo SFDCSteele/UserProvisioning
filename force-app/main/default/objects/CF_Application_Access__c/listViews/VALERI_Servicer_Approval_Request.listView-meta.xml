@@ -26,7 +26,4 @@
         <value>VALERI Application</value>
     </filters>
     <label>VALERI Servicer Approval Request</label>
-    <sharedTo>
-        <group>VALERI_Super_Users</group>
-    </sharedTo>
 </ListView>

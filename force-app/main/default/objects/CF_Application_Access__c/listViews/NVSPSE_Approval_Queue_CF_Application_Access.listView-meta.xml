@@ -3,8 +3,4 @@
     <fullName>NVSPSE_Approval_Queue_CF_Application_Access</fullName>
     <filterScope>Queue</filterScope>
     <label>NVSPSE Approval Queue</label>
-    <queue>NVSPSE_Approval_Queue</queue>
-    <sharedTo>
-        <allInternalUsers/>
-    </sharedTo>
-</ListView>
+ </ListView>

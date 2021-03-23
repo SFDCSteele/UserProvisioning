@@ -4,8 +4,4 @@
     <columns>NAME</columns>
     <filterScope>Queue</filterScope>
     <label>Other</label>
-    <queue>Views_Squares_Other</queue>
-    <sharedTo>
-        <group>Squares_Super_Admin</group>
-    </sharedTo>
 </ListView>

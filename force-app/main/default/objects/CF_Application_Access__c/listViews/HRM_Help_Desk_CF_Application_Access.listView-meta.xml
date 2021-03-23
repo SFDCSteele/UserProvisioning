@@ -4,7 +4,4 @@
     <filterScope>Queue</filterScope>
     <label>HRM Help Desk</label>
     <queue>HRM_Help_Desk</queue>
-    <sharedTo>
-        <allInternalUsers/>
-    </sharedTo>
 </ListView>

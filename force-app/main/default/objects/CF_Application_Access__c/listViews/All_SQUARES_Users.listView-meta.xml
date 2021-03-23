@@ -21,7 +21,4 @@
         <value>TEST</value>
     </filters>
     <label>All SQUARES Users</label>
-    <sharedTo>
-        <group>Squares_Super_Admin</group>
-    </sharedTo>
 </ListView>

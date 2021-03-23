@@ -22,7 +22,4 @@
         <value>FAST</value>
     </filters>
     <label>All Kerry</label>
-    <sharedTo>
-        <group>DTC_Helpdesk_ONLY</group>
-    </sharedTo>
 </ListView>

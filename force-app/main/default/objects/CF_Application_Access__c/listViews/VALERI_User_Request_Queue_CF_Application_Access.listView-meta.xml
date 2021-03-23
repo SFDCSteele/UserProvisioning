@@ -3,8 +3,4 @@
     <fullName>VALERI_User_Request_Queue_CF_Application_Access</fullName>
     <filterScope>Queue</filterScope>
     <label>VALERI User Request Queue</label>
-    <queue>VALERI_User_Request_Queue</queue>
-    <sharedTo>
-        <allInternalUsers/>
-    </sharedTo>
 </ListView>

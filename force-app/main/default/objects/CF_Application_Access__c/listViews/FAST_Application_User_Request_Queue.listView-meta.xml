@@ -37,7 +37,4 @@
         <value>1</value>
     </filters>
     <label>FAST Application User Request Queue</label>
-    <sharedTo>
-        <group>FAST_Application_Access_Approvers</group>
-    </sharedTo>
 </ListView>
