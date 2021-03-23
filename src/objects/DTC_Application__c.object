@@ -760,9 +760,29 @@
                     <label>VA</label>
                 </value>
                 <value>
+                    <fullName>VAEMCC</fullName>
+                    <default>false</default>
+                    <label>VAEMCC</label>
+                </value>
+                <value>
+                    <fullName>VAEMPL</fullName>
+                    <default>false</default>
+                    <label>VAEMPL</label>
+                </value>
+                <value>
+                    <fullName>VALOB</fullName>
+                    <default>false</default>
+                    <label>VALOB</label>
+                </value>
+                <value>
                     <fullName>VAPM</fullName>
                     <default>false</default>
                     <label>VAPM</label>
+                </value>
+                <value>
+                    <fullName>VAVET</fullName>
+                    <default>false</default>
+                    <label>VAVET</label>
                 </value>
                 <value>
                     <fullName>VHA-GOV</fullName>

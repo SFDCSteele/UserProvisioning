@@ -3020,7 +3020,7 @@ ISPICKVAL(Approval_Status__c, &apos;Approved&apos;),
     <validationRules>
         <fullName>Stationfieldcannotbenull</fullName>
         <active>true</active>
-        <errorConditionFormula>ISPICKVAL(Station__c , &apos;Null&apos;)</errorConditionFormula>
+        <errorConditionFormula>AND(Application_Level__r.Name= &apos;Firm POC Fiduciary Access&apos; || Application_Level__r.Name= &apos;Individual Fiduciary Access&apos; , ISPICKVAL(Station__c ,&apos;Null&apos;))</errorConditionFormula>
         <errorDisplayField>Station__c</errorDisplayField>
         <errorMessage>Please select valid station</errorMessage>
     </validationRules>
