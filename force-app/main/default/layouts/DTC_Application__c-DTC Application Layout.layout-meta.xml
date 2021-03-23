@@ -113,10 +113,6 @@
         <style>CustomLinks</style>
     </layoutSections>
     <relatedLists>
-        <fields>NAME</fields>
-        <relatedList>DTC_User_Setup_Instructions__c.DTC_Application__c</relatedList>
-    </relatedLists>
-    <relatedLists>
         <fields>Managed_Package_Tracking__c.NAME</fields>
         <fields>NAME</fields>
         <relatedList>DTC_Applications_Managed_Package__c.DTC_Application__c</relatedList>
