@@ -1,0 +1,59 @@
+{
+    "serverMaxRevisionCounter": 26,
+    "sourceMembers": {
+        "Group__FAST_Application_Access_Approvers": {
+            "serverRevisionCounter": 7,
+            "lastRetrievedFromServer": null,
+            "memberType": "Group",
+            "isNameObsolete": false
+        },
+        "Group__DTC_Helpdesk_ONLY": {
+            "serverRevisionCounter": 8,
+            "lastRetrievedFromServer": null,
+            "memberType": "Group",
+            "isNameObsolete": false
+        },
+        "Group__Squares_Super_Admin": {
+            "serverRevisionCounter": 9,
+            "lastRetrievedFromServer": null,
+            "memberType": "Group",
+            "isNameObsolete": false
+        },
+        "Group__HRM_Help_Desk": {
+            "serverRevisionCounter": 10,
+            "lastRetrievedFromServer": null,
+            "memberType": "Group",
+            "isNameObsolete": false
+        },
+        "Queue__Views_Squares_GPD": {
+            "serverRevisionCounter": 22,
+            "lastRetrievedFromServer": null,
+            "memberType": "Queue",
+            "isNameObsolete": false
+        },
+        "Queue__Views_Squares_SSVF": {
+            "serverRevisionCounter": 25,
+            "lastRetrievedFromServer": null,
+            "memberType": "Queue",
+            "isNameObsolete": false
+        },
+        "Queue__Views_Squares_Other": {
+            "serverRevisionCounter": 23,
+            "lastRetrievedFromServer": null,
+            "memberType": "Queue",
+            "isNameObsolete": false
+        },
+        "Queue__Views_Squares_CERS": {
+            "serverRevisionCounter": 24,
+            "lastRetrievedFromServer": null,
+            "memberType": "Queue",
+            "isNameObsolete": false
+        },
+        "Queue__HRM_Help_Desk": {
+            "serverRevisionCounter": 26,
+            "lastRetrievedFromServer": null,
+            "memberType": "Queue",
+            "isNameObsolete": false
+        }
+    }
+}
