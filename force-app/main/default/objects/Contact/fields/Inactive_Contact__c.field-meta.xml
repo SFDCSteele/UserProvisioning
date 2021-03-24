@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Inactive_Contact__c</fullName>
+    <defaultValue>false</defaultValue>
+    <description>Inactive Contact</description>
+    <externalId>false</externalId>
+    <inlineHelpText>If the individual has left their current organization then check the box and create a new contact for the new organization. Do not delete the contact or change the organization as this could delete their history.</inlineHelpText>
+    <label>Inactive Contact</label>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>Checkbox</type>
+</CustomField>
