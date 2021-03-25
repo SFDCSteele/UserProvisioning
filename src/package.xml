@@ -257,6 +257,12 @@
         <members>NVSPSE_Approval_Queue</members>
         <members>VALERI_Approval_Queue</members>
         <members>VALERI_User_Request_Queue</members>
+        <members>DTC_Helpdesk_ONLY</members>
+        <members>VALERI_Super_Users</members>
+        <members>Views_Squares_CERS</members>
+        <members>Views_Squares_GPD</members>
+        <members>Views_Squares_Other</members>
+        <members>Views_Squares_SSVF</members>
         <name>Queue</name>
     </types>
     <types>
@@ -266,6 +272,7 @@
         <name>QuickAction</name>
     </types>
     <types>
+        <members>Account.FAST</members>
         <members>CF_Application_Access__c.FAST</members>
         <members>CF_Application_Access__c.NVSPSE</members>
         <members>CF_Application_Access__c.ORH</members>
