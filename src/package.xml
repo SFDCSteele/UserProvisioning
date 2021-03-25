@@ -220,6 +220,7 @@
     <types>
         <members>FAST_Application_Access_Approvers</members>
         <members>Squares_Super_Admin</members>
+        <members>VALERI_SME_Group</members>
         <name>Group</name>
     </types>
     <types>
@@ -253,12 +254,12 @@
         <name>ListView</name>
     </types>
     <types>
+        <members>DTC_Helpdesk_ONLY</members>
         <members>HRM_Help_Desk</members>
         <members>NVSPSE_Approval_Queue</members>
         <members>VALERI_Approval_Queue</members>
-        <members>VALERI_User_Request_Queue</members>
-        <members>DTC_Helpdesk_ONLY</members>
         <members>VALERI_Super_Users</members>
+        <members>VALERI_User_Request_Queue</members>
         <members>Views_Squares_CERS</members>
         <members>Views_Squares_GPD</members>
         <members>Views_Squares_Other</members>
@@ -272,7 +273,6 @@
         <name>QuickAction</name>
     </types>
     <types>
-        <members>Account.FAST</members>
         <members>CF_Application_Access__c.FAST</members>
         <members>CF_Application_Access__c.NVSPSE</members>
         <members>CF_Application_Access__c.ORH</members>
