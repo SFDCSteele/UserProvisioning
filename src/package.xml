@@ -106,6 +106,7 @@
         <members>DTC_Application__c.Business_Line__c</members>
         <members>DTC_Application__c.CF_Profile__c</members>
         <members>DTC_Application__c.ContractIntegrator__c</members>
+        <members>DTC_Application__c.DTC_Applications_Managed_Package__c</members>
         <members>DTC_Application__c.Deploy_Merge_Branch__c</members>
         <members>DTC_Application__c.Deploy_Symbol__c</members>
         <members>DTC_Application__c.Focus_Area__c</members>
@@ -145,7 +146,6 @@
         <members>DTC_Application__c.Secondary_DTC_End_User_Support_Lead__c</members>
         <members>DTC_Application__c.Size__c</members>
         <members>DTC_Application__c.UI_Format__c</members>
-        <members>DTC_Application__c.DTC_Applications_Managed_Package__c</members>
         <members>DTC_User_Setup_Instructions__c.DTC_Application__c</members>
         <members>DTC_User_Setup_Instructions__c.ID__c</members>
         <members>DTC_User_Setup_Instructions__c.Installed_Package_License__c</members>
