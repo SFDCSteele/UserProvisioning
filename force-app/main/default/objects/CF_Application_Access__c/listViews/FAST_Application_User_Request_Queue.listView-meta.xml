@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>FAST_Application_User_Request_Queue</fullName>
+    <booleanFilter>1 AND ((2 AND 3) OR (2 AND 5) OR (2 AND 4))</booleanFilter>
+    <columns>NAME</columns>
+    <columns>Firm_Name__c</columns>
+    <columns>First_Name__c</columns>
+    <columns>Last_Name__c</columns>
+    <columns>Tax_Id__c</columns>
+    <columns>Station__c</columns>
+    <columns>State__c</columns>
+    <columns>Approval_Status__c</columns>
+    <columns>CREATED_DATE</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>RECORDTYPE</field>
+        <operation>equals</operation>
+        <value>CF_Application_Access__c.FAST</value>
+    </filters>
+    <filters>
+        <field>Approval_Status__c</field>
+        <operation>equals</operation>
+        <value>In Process</value>
+    </filters>
+    <filters>
+        <field>Firm_Name__c</field>
+        <operation>equals</operation>
+    </filters>
+    <filters>
+        <field>Stale__c</field>
+        <operation>equals</operation>
+        <value>1</value>
+    </filters>
+    <filters>
+        <field>POC_Firm__c</field>
+        <operation>equals</operation>
+        <value>1</value>
+    </filters>
+    <label>FAST Application User Request Queue</label>
+    <sharedTo>
+        <group>FAST_Application_Access_Approvers</group>
+    </sharedTo>
+</ListView>
