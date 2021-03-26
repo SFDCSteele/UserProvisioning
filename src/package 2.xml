@@ -106,6 +106,7 @@
         <members>DTC_Application__c.Business_Line__c</members>
         <members>DTC_Application__c.CF_Profile__c</members>
         <members>DTC_Application__c.ContractIntegrator__c</members>
+        <members>DTC_Application__c.DTC_Applications_Managed_Package__c</members>
         <members>DTC_Application__c.Deploy_Merge_Branch__c</members>
         <members>DTC_Application__c.Deploy_Symbol__c</members>
         <members>DTC_Application__c.Focus_Area__c</members>
@@ -219,6 +220,7 @@
     <types>
         <members>FAST_Application_Access_Approvers</members>
         <members>Squares_Super_Admin</members>
+        <members>VALERI_SME_Group</members>
         <name>Group</name>
     </types>
     <types>
@@ -252,10 +254,16 @@
         <name>ListView</name>
     </types>
     <types>
+        <members>DTC_Helpdesk_ONLY</members>
         <members>HRM_Help_Desk</members>
         <members>NVSPSE_Approval_Queue</members>
         <members>VALERI_Approval_Queue</members>
+        <members>VALERI_Super_Users</members>
         <members>VALERI_User_Request_Queue</members>
+        <members>Views_Squares_CERS</members>
+        <members>Views_Squares_GPD</members>
+        <members>Views_Squares_Other</members>
+        <members>Views_Squares_SSVF</members>
         <name>Queue</name>
     </types>
     <types>
