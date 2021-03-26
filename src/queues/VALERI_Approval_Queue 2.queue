@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Queue xmlns="http://soap.sforce.com/2006/04/metadata">
+    <doesSendEmailToMembers>false</doesSendEmailToMembers>
+    <name>VALERI Approval Queue</name>
+    <queueMembers>
+        <publicGroups>
+            <publicGroup>Admin</publicGroup>
+            <publicGroup>VA_Salesforce_Admin_Team</publicGroup>
+            <publicGroup>VALERI_LAO_GROUP</publicGroup>
+            <publicGroup>VALERI_SLT_GROUP</publicGroup>
+            <publicGroup>Valeri_SO_GROUP</publicGroup>
+        </publicGroups>
+    </queueMembers>
+    <queueSobject>
+        <sobjectType>CF_Application_Access__c</sobjectType>
+    </queueSobject>
+    <queueSobject>
+        <sobjectType>Process_Step__c</sobjectType>
+    </queueSobject>
+</Queue>
