@@ -167,6 +167,16 @@
         <sortOrder>Desc</sortOrder>
     </relatedLists>
     <relatedLists>
+        <fields>NAME</fields>
+        <fields>VA_User_Account_Request__c.Application_Requested__c</fields>
+        <fields>VA_User_Account_Request__c.Applications_Requested__c</fields>
+        <fields>Approval_Status__c</fields>
+        <fields>CREATEDBY_USER</fields>
+        <fields>CREATED_DATE</fields>
+        <fields>User_Name__c</fields>
+        <relatedList>DTC_Requested_Application__c.Requested_Application__c</relatedList>
+    </relatedLists>
+    <relatedLists>
         <excludeButtons>MassChangeOwner</excludeButtons>
         <fields>NAME</fields>
         <fields>Title__c</fields>
@@ -223,6 +233,9 @@
         <fields>Contact.Full_Name__c</fields>
         <fields>Contact.User_ID__c</fields>
         <relatedList>CF_Module_Usage__c.CF_DTC_Application__c</relatedList>
+    </relatedLists>
+    <relatedLists>
+        <relatedList>RelatedFileList</relatedList>
     </relatedLists>
     <showEmailCheckbox>false</showEmailCheckbox>
     <showHighlightsPanel>false</showHighlightsPanel>

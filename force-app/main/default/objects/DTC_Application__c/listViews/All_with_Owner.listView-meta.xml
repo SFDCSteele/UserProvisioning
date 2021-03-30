@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ListView xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>All_with_Owner</fullName>
-    <columns>NAME</columns>
     <columns>Business_Line__c</columns>
+    <columns>NAME</columns>
     <columns>Business_Line_POC__c</columns>
     <columns>ContractIntegrator__c</columns>
     <columns>OI_T_PM_Email__c</columns>
