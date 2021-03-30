@@ -1043,6 +1043,22 @@ FLOOR((NOW() -  CreatedDate )*24) &gt; 48, TRUE, FALSE)</formula>
         </sharedTo>
     </listViews>
     <listViews>
+        <fullName>NVSPSE_All</fullName>
+        <columns>NAME</columns>
+        <columns>Account__c</columns>
+        <columns>Approval_Status__c</columns>
+        <columns>Contact__c</columns>
+        <columns>CREATED_DATE</columns>
+        <columns>LAST_UPDATE</columns>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>Application_Name__c</field>
+            <operation>contains</operation>
+            <value>NVSPSE</value>
+        </filters>
+        <label>NVSPSE- All</label>
+    </listViews>
+    <listViews>
         <fullName>NVSPSE_Approval_Queue_CF_Application_Access</fullName>
         <filterScope>Queue</filterScope>
         <label>NVSPSE Approval Queue</label>

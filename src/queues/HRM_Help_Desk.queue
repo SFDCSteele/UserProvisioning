@@ -4,6 +4,8 @@
     <name>HRM Help Desk</name>
     <queueMembers>
         <users>
+            <user>amanda.dowless@va.gov</user>
+            <user>aziza.matthias@va.gov</user>
             <user>dyanna.merrick@va.gov</user>
             <user>manny.ceja@va.gov</user>
             <user>ilana.justice@va.gov</user>

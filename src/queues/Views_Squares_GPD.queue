@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Queue xmlns="http://soap.sforce.com/2006/04/metadata">
+    <doesSendEmailToMembers>true</doesSendEmailToMembers>
+    <email>jaya.dabbara@va.gov</email>
+    <name>GPD</name>
+    <queueMembers>
+        <users>
+            <user>dekevias.atkinson@va.gov</user>
+            <user>desiree.fraser@va.gov</user>
+            <user>donald.palmer@va.gov</user>
+            <user>gurkirat.kainth@va.gov</user>
+            <user>heather.monroe@va.gov</user>
+            <user>jayasree.dabbara@va.gov</user>
+            <user>leisa.davis@va.gov</user>
+            <user>nadeem.chini@va.gov</user>
+            <user>raymond.ivaska@va.gov</user>
+        </users>
+    </queueMembers>
+    <queueSobject>
+        <sobjectType>CF_Application_Access__c</sobjectType>
+    </queueSobject>
+</Queue>
