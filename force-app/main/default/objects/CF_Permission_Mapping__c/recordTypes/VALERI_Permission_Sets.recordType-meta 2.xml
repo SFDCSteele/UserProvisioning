@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RecordType xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>VALERI_Permission_Sets</fullName>
+    <active>true</active>
+    <description>Permission Sets to be associated to the user</description>
+    <label>Permission Sets</label>
+</RecordType>

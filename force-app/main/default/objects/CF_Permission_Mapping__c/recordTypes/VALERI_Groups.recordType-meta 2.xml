@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RecordType xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>VALERI_Groups</fullName>
+    <active>true</active>
+    <description>Give names of the groups to be assigned to the user</description>
+    <label>Groups</label>
+</RecordType>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>HRM_Help_Desk_DTC_Application</fullName>
+    <filterScope>Queue</filterScope>
+    <label>HRM Help Desk</label>
+    <queue>HRM_Help_Desk</queue>
+    <sharedTo>
+        <allInternalUsers/>
+    </sharedTo>
+</ListView>
