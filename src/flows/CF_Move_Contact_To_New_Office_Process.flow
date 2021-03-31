@@ -865,7 +865,7 @@ ISCHANGED({!myVariable_current.AccountId} ))
         <object>User</object>
     </recordUpdates>
     <startElementReference>myPreWaitDecision_myWait_myRule_8</startElementReference>
-    <status>Obsolete</status>
+    <status>Active</status>
     <variables>
         <name>cancelWaits</name>
         <dataType>String</dataType>

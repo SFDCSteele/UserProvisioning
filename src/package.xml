@@ -184,6 +184,7 @@
         <members>DTC_Application__c</members>
         <members>DTC_Applications_Managed_Package__c</members>
         <members>DTC_User_Setup_Instructions__c</members>
+        <members>Managed_Package_Tracking__c</members>
         <name>CustomObject</name>
     </types>
     <types>
@@ -237,9 +238,6 @@
     </types>
     <types>
         <members>CF_Application_Access__c-Application Access Layout</members>
-        <members>CF_Application_Access__c-NVSPSE Application Access Page Layout</members>
-        <members>CF_Application_Access__c-ORH</members>
-        <members>CF_Application_Access__c-Squares</members>
         <members>CF_Application_Level__c-Application Level Layout</members>
         <members>CF_Permission_Mapping__c-Permission Set Layout</members>
         <members>DTC_Application_Level__c-DTC Application Level Layout</members>
@@ -249,9 +247,6 @@
     </types>
     <types>
         <members>CF_Application_Access__c.All</members>
-        <members>CF_Application_Access__c.FEP_My_Pending_Fiduciary_Approvals</members>
-        <members>CF_Application_Access__c.Orphan_SQUARES_Applications</members>
-        <members>CF_Application_Access__c.VALERI_In_Process</members>
         <members>DTC_Application__c.All_App_Owners</members>
         <members>DTC_Application__c.All_with_Owner</members>
         <members>DTC_Application__c.All_with_Sustainment</members>
@@ -276,15 +271,12 @@
         <members>CF_Application_Access__c.VALERI</members>
         <members>CF_Permission_Mapping__c.Package_License</members>
         <members>CF_Permission_Mapping__c.Permission_Sets_License</members>
-        <members>CF_Permission_Mapping__c.VALERI_Groups</members>
-        <members>CF_Permission_Mapping__c.VALERI_Permission_Sets</members>
         <members>DTC_User_Setup_Instructions__c.DTC</members>
         <name>RecordType</name>
     </types>
     <types>
         <members>CF_Application_Access__c.FEP_Disable_Approval_of_Cancelled_record</members>
         <members>CF_Application_Access__c.Stationfieldcannotbenull</members>
-        <members>CF_Application_Access__c.VALERI_Servicer_Admin</members>
         <name>ValidationRule</name>
     </types>
     <types>
