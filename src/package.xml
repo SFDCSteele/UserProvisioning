@@ -145,6 +145,9 @@
         <members>DTC_Application__c.Secondary_DTC_End_User_Support_Lead__c</members>
         <members>DTC_Application__c.Size__c</members>
         <members>DTC_Application__c.UI_Format__c</members>
+        <members>DTC_Applications_Managed_Package__c.DTC_Application__c</members>
+        <members>DTC_Applications_Managed_Package__c.Managed_Package__c</members>
+        <members>DTC_Applications_Managed_Package__c.Name</members>
         <members>DTC_User_Setup_Instructions__c.DTC_Application__c</members>
         <members>DTC_User_Setup_Instructions__c.ID__c</members>
         <members>DTC_User_Setup_Instructions__c.Installed_Package_License__c</members>
@@ -160,6 +163,9 @@
         <members>DTC_User_Setup_Instructions__c.Required_Fields_on_User_Record__c</members>
         <members>DTC_User_Setup_Instructions__c.Requires_ePAS__c</members>
         <members>DTC_User_Setup_Instructions__c.Role__c</members>
+        <members>Staffing_Request__c.Assigned_Organization__c</members>
+        <members>Staffing_Request__c.Name</members>
+        <members>Staffing_Request__c.RecordTypeId</members>
         <members>User.Account_Id__c</members>
         <members>User.CF_User_Office__c</members>
         <members>User.License_Name__c</members>
@@ -171,7 +177,9 @@
         <members>CF_Permission_Mapping__c</members>
         <members>DTC_Application_Level__c</members>
         <members>DTC_Application__c</members>
+        <members>DTC_Applications_Managed_Package__c</members>
         <members>DTC_User_Setup_Instructions__c</members>
+        <members>Staffing_Request__c</members>
         <name>CustomObject</name>
     </types>
     <types>
