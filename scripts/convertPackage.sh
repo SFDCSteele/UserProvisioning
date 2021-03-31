@@ -14,6 +14,7 @@ echo "==========================================================================
 
 rm -rf CF_Extract
 #mkdir CF_Extract
+rm -rf ./src
 cp -vR ../../work/repo-CoreFunctionality/src ./
 rm -rf ./src/CF_EXTRACT
 
@@ -24,7 +25,11 @@ rm -rf ./src/CF_EXTRACT
 #ls -al ./
 #echo "Listing ./src"
 #ls -al ./src
-#read inpt
+echo "src has been copied for converting...."
+read inpt
+
+#git fetch origin
+#git reset --hard origin/CoreFunctionality
 
 rm -rf force-app/main/default
 rm -rf ./src/build
