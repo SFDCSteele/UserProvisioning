@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Days_Hire_Valid_to_Formal_Offer__c</fullName>
+    <externalId>false</externalId>
+    <formula>IF(IF(Send_Formal_Offer_Date__c - Hiring_Need_Validated_Date__c &lt;0, NULL, Send_Formal_Offer_Date__c - Hiring_Need_Validated_Date__c)&gt;999,NULL,IF(Send_Formal_Offer_Date__c - Hiring_Need_Validated_Date__c &lt;0, NULL, Send_Formal_Offer_Date__c - Hiring_Need_Validated_Date__c))</formula>
+    <label># Days Hire Valid to Formal Offer</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>0</scale>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

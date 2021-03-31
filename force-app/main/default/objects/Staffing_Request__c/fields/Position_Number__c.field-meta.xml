@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Position_Number__c</fullName>
+    <deleteConstraint>Restrict</deleteConstraint>
+    <externalId>false</externalId>
+    <inlineHelpText>Select the HRSmart position number associated with this request to see all position details. Position number can be searched by entering position number, vice, POID, station number, or position title.</inlineHelpText>
+    <label>Position Number</label>
+    <referenceTo>Position_Number__c</referenceTo>
+    <relationshipLabel>Staffing Requests</relationshipLabel>
+    <relationshipName>Staffing_Requests</relationshipName>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>true</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Lookup</type>
+</CustomField>

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Hiring_Stage__c</fullName>
+    <externalId>false</externalId>
+    <label>Hiring Stage</label>
+    <required>false</required>
+    <trackFeedHistory>true</trackFeedHistory>
+    <trackHistory>true</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Hiring Need Validation</fullName>
+                <default>true</default>
+                <label>Hiring Need Validation</label>
+            </value>
+            <value>
+                <fullName>Request Personnel Action</fullName>
+                <default>false</default>
+                <label>Request Personnel Action</label>
+            </value>
+            <value>
+                <fullName>Complete Assessment Package</fullName>
+                <default>false</default>
+                <label>Complete Assessment Package</label>
+            </value>
+            <value>
+                <fullName>Announcement Open</fullName>
+                <default>false</default>
+                <label>Announcement Open</label>
+            </value>
+            <value>
+                <fullName>Announcement Close</fullName>
+                <default>false</default>
+                <label>Announcement Close</label>
+            </value>
+            <value>
+                <fullName>Certificate Issue</fullName>
+                <default>false</default>
+                <label>Certificate Issue</label>
+            </value>
+            <value>
+                <fullName>Certificate Review Returned</fullName>
+                <default>false</default>
+                <label>Certificate Review Returned</label>
+            </value>
+            <value>
+                <fullName>Send Tentative Offer</fullName>
+                <default>false</default>
+                <label>Send Tentative Offer</label>
+            </value>
+            <value>
+                <fullName>Tentative Offer Accepted</fullName>
+                <default>false</default>
+                <label>Tentative Offer Accepted</label>
+            </value>
+            <value>
+                <fullName>Initiate Background Investigation</fullName>
+                <default>false</default>
+                <label>Initiate Background Investigation</label>
+            </value>
+            <value>
+                <fullName>Send Formal Offer</fullName>
+                <default>false</default>
+                <label>Send Formal Offer</label>
+            </value>
+            <value>
+                <fullName>New Hire Actual Start</fullName>
+                <default>false</default>
+                <label>New Hire Actual Start</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

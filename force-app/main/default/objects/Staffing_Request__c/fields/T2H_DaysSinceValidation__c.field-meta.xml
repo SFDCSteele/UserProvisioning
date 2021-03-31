@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>T2H_DaysSinceValidation__c</fullName>
+    <externalId>false</externalId>
+    <formula>IF( IF(ISNULL(New_Hire_Actual_Start__c ), TODAY() -  Hiring_Need_Validated_Date__c,  Days_T2H__c ) &lt;0, null, IF(ISNULL(New_Hire_Actual_Start__c ), TODAY() -  Hiring_Need_Validated_Date__c,  Days_T2H__c ) )</formula>
+    <label># T2H Days Since Validation</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>0</scale>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

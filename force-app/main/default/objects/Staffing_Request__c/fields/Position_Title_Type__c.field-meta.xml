@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Position_Title_Type__c</fullName>
+    <description>Identifies the position as T5, T38, or HT38 based on the occupational series. Series which contain multiple position types will default to the position type which typically contains the most employees.</description>
+    <externalId>false</externalId>
+    <label>Position Title Type</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>true</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>T5</fullName>
+                <default>true</default>
+                <label>T5</label>
+            </value>
+            <value>
+                <fullName>T38</fullName>
+                <default>false</default>
+                <label>T38</label>
+            </value>
+            <value>
+                <fullName>HT38</fullName>
+                <default>false</default>
+                <label>HT38</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RecordType xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>HRsuite_StaffingRequest</fullName>
+    <active>true</active>
+    <label>HRsuite Staffing Request</label>
+    <picklistValues>
+        <picklist>Hiring_Stage__c</picklist>
+        <values>
+            <fullName>Announcement Close</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Announcement Open</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Certificate Issue</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Certificate Review Returned</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Complete Assessment Package</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Hiring Need Validation</fullName>
+            <default>true</default>
+        </values>
+        <values>
+            <fullName>Initiate Background Investigation</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>New Hire Actual Start</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Request Personnel Action</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Send Formal Offer</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Send Tentative Offer</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tentative Offer Accepted</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Position_Title_Type__c</picklist>
+        <values>
+            <fullName>HT38</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>T38</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>T5</fullName>
+            <default>true</default>
+        </values>
+    </picklistValues>
+</RecordType>

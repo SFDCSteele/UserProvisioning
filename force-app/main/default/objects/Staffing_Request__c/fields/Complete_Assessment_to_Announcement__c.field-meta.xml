@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Complete_Assessment_to_Announcement__c</fullName>
+    <externalId>false</externalId>
+    <formula>IF(IF( Announcement_Open_Date__c - Complete_Assessment_Package__c &lt;0, null,Announcement_Open_Date__c - Complete_Assessment_Package__c)&gt;999,NULL,IF( Announcement_Open_Date__c - Complete_Assessment_Package__c &lt;0, null,Announcement_Open_Date__c - Complete_Assessment_Package__c))</formula>
+    <label># Days Complete Assessment to Annc</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>0</scale>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

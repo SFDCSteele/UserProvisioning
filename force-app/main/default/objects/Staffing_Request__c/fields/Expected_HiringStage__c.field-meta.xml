@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Expected_HiringStage__c</fullName>
+    <externalId>false</externalId>
+    <formula>IF(ISBLANK(Hiring_Need_Validated_Date__c), &quot;Hiring Need Validated Date not found. USA Staffing Action required&quot;,IF(Occupational_Series__c  &lt;&gt; &quot;0602&quot; &amp;&amp; Occupational_Series__c  &lt;&gt; &quot;0603&quot; &amp;&amp; Occupational_Series__c  &lt;&gt; &quot;0604&quot; &amp;&amp; Occupational_Series__c  &lt;&gt; &quot;0605&quot; &amp;&amp; Occupational_Series__c  &lt;&gt; &quot;0610&quot; &amp;&amp; Occupational_Series__c  &lt;&gt; &quot;0662&quot; &amp;&amp; Occupational_Series__c  &lt;&gt; &quot;0668&quot; , Calculate_EHG__c,
+IF((TODAY() - Hiring_Need_Validated_Date__c)  &lt;  3, &quot;Target: Request Personnel Action&quot;, 
+IF((TODAY() - Hiring_Need_Validated_Date__c)  &lt;  9, &quot;Target: Complete Assessment Package&quot;, 
+IF((TODAY() - Hiring_Need_Validated_Date__c)  &lt;  12, &quot;Target: Announcement Open&quot;, 
+IF((TODAY() - Hiring_Need_Validated_Date__c)  &lt;  22, &quot;Target: Announcement Close&quot;, 
+IF((TODAY() - Hiring_Need_Validated_Date__c)  &lt;  38, &quot;Target: Certificate Issue&quot;, 
+IF((TODAY() - Hiring_Need_Validated_Date__c)  &lt;  53, &quot;Target: Certificate Review Returned&quot;, 
+IF((TODAY() - Hiring_Need_Validated_Date__c)  &lt;  56, &quot;Target: Send Tentative Offer&quot;, 
+IF((TODAY() - Hiring_Need_Validated_Date__c)  &lt;  58, &quot;Target: Initiate Background Investigation&quot;, 
+IF((TODAY() - Hiring_Need_Validated_Date__c)  &lt;  87, &quot;Target: Send Official Offer&quot;, 
+&quot;Target: New Hire Actual Start Date&quot;
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)</formula>
+    <inlineHelpText>This field requires that the associated USA Staffing Request Number be entered in the &quot;USA Staffing Request Number&quot; section below.  If time to hire milestones are not populating, check to ensure that the USA Staffing Request number is correctly entered.</inlineHelpText>
+    <label>Expected Hiring Stage</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

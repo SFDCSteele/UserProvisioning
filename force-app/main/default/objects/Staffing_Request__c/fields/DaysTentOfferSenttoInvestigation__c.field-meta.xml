@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>DaysTentOfferSenttoInvestigation__c</fullName>
+    <externalId>false</externalId>
+    <formula>IF(ISNULL(Initiate_Background_Investigation_Date__c), Null, IF(ISNULL(Send_Tentative_Offer_Date__c), Null, Initiate_Background_Investigation_Date__c - Send_Tentative_Offer_Date__c))</formula>
+    <label>* Days Tent Offer Sent to Investigation</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>0</scale>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

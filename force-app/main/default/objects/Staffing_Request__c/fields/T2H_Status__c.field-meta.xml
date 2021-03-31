@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>T2H_Status__c</fullName>
+    <externalId>false</externalId>
+    <formula>IF(ISBLANK(New_Hire_Actual_Start__c),&quot;Pending&quot;, IF(ISBLANK(Days_T2H__c),&quot;Pending&quot;,
+IF((Time_to_Hire_Goal__c) &gt;= (Days_T2H__c), &quot;T2H Met&quot;, &quot;T2H Not Met&quot;)))</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>T2H Status</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

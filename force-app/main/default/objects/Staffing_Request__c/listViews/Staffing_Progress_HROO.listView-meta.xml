@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Staffing_Progress_HROO</fullName>
+    <booleanFilter>1 AND 2 AND (3 OR 4)</booleanFilter>
+    <columns>NAME</columns>
+    <columns>Official_Position_Title_V2__c</columns>
+    <columns>Hiring_Need_Validated_Date__c</columns>
+    <columns>T2H_DaysSinceValidation__c</columns>
+    <columns>Staffing_Team__c</columns>
+    <columns>USAS_Request_Number__c</columns>
+    <columns>Staffing_Specialist_USAS_Name__c</columns>
+    <columns>Region__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>Hiring_Stage__c</field>
+        <operation>notEqual</operation>
+        <value>New Hire Actual Start</value>
+    </filters>
+    <filters>
+        <field>Request_Cancel_Date__c</field>
+        <operation>equals</operation>
+    </filters>
+    <filters>
+        <field>Region__c</field>
+        <operation>contains</operation>
+        <value>1005,1009,1010,1132,1250,3269</value>
+    </filters>
+    <filters>
+        <field>VISN_Org__c</field>
+        <operation>contains</operation>
+        <value>HROO</value>
+    </filters>
+    <label>Staffing Progress (HROO)</label>
+    <sharedTo>
+        <group>HRRT_HROO_Admin</group>
+        <group>HRRT_HROO_RW_All</group>
+    </sharedTo>
+</ListView>
