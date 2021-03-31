@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Staffing_Tasks_with_Path</fullName>
+    <columns>NAME</columns>
+    <columns>Official_Position_Title_V2__c</columns>
+    <columns>T2H_DaysSinceValidation__c</columns>
+    <columns>Expected_HiringStage__c</columns>
+    <filterScope>Mine</filterScope>
+    <filters>
+        <field>Hiring_Stage__c</field>
+        <operation>notEqual</operation>
+        <value>New Hire Actual Start</value>
+    </filters>
+    <filters>
+        <field>Request_Cancel_Date__c</field>
+        <operation>equals</operation>
+    </filters>
+    <label>My Staffing Progress by Stage</label>
+    <sharedTo>
+        <group>HRsuite_All_Users</group>
+    </sharedTo>
+</ListView>

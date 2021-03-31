@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>DaysOnboardingTime__c</fullName>
+    <externalId>false</externalId>
+    <formula>IF(ISNULL(Send_Formal_Offer_Date__c), Null, IF(ISNULL(Send_Tentative_Offer_Date__c), Null, Send_Formal_Offer_Date__c - Send_Tentative_Offer_Date__c))</formula>
+    <label>* Days Onboarding Time</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>0</scale>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

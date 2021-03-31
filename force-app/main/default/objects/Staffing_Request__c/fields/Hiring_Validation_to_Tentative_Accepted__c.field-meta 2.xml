@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Hiring_Validation_to_Tentative_Accepted__c</fullName>
+    <description>Days between the Hiring Need Validated Date through the Tentative Offer Accepted Date. Zero if negative or missing dates.</description>
+    <externalId>false</externalId>
+    <formula>IF(IF (Tentative_Offer_Accepted__c - Hiring_Need_Validated_Date__c &lt;0,NULL,Tentative_Offer_Accepted__c - Hiring_Need_Validated_Date__c)&gt;999,NULL,IF (Tentative_Offer_Accepted__c - Hiring_Need_Validated_Date__c &lt;0,NULL,Tentative_Offer_Accepted__c - Hiring_Need_Validated_Date__c))</formula>
+    <label># Days Hire Valid to Tentative Accepted</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>0</scale>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

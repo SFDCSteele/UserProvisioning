@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Belongs_to_my_Firm__c</fullName>
+    <description>Checks to see whether the professional fiduciary attempting to gain access to FAST belongs to the Firm Account of the current user.</description>
+    <externalId>false</externalId>
+    <formula>IF(   Account__r.Id =   $User.Account_Id__c , TRUE, FALSE)</formula>
+    <label>Belongs to my Firm?</label>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

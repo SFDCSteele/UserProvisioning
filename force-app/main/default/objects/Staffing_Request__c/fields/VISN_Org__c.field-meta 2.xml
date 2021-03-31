@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>VISN_Org__c</fullName>
+    <description>VISN or VA Organization such as VHA HROO</description>
+    <externalId>false</externalId>
+    <formula>if(CONTAINS(Staffing_Office__c,&quot;Corp Senior&quot;),&quot;VACO CSEMO&quot;, if(CONTAINS(Region__c,&quot;VISN&quot;), Region__c, if(CONTAINS(Region__c, &quot;VACO&quot;), Region__c, &quot;VHA HROO&quot;)))</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>VISN/Org</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

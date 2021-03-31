@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Station__c</fullName>
+    <description>VBA Fiduciary Hubs</description>
+    <externalId>false</externalId>
+    <label>VA Fiduciary Hub</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Null</fullName>
+                <default>true</default>
+                <label>Select Station From List</label>
+            </value>
+            <value>
+                <fullName>Columbia 319</fullName>
+                <default>false</default>
+                <label>Columbia 319</label>
+            </value>
+            <value>
+                <fullName>Indianapolis 326</fullName>
+                <default>false</default>
+                <label>Indianapolis 326</label>
+            </value>
+            <value>
+                <fullName>Louisville 327</fullName>
+                <default>false</default>
+                <label>Louisville 327</label>
+            </value>
+            <value>
+                <fullName>Milwaukee 330</fullName>
+                <default>false</default>
+                <label>Milwaukee 330</label>
+            </value>
+            <value>
+                <fullName>Lincoln 334</fullName>
+                <default>false</default>
+                <label>Lincoln 334</label>
+            </value>
+            <value>
+                <fullName>Salt Lake City 341</fullName>
+                <default>false</default>
+                <label>Salt Lake City 341</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

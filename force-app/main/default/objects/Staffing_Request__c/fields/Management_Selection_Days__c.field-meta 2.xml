@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Management_Selection_Days__c</fullName>
+    <description>Number of days between the Cert Issued Date and the Cert Returned Date. Zero if negative or missing dates.</description>
+    <externalId>false</externalId>
+    <formula>IF(IF( Certificate_Review_Return_Date__c - Certificate_Issue_Date__c &lt;0,NULL,Certificate_Review_Return_Date__c - Certificate_Issue_Date__c)&gt;999,NULL,IF( Certificate_Review_Return_Date__c - Certificate_Issue_Date__c &lt;0,NULL,Certificate_Review_Return_Date__c - Certificate_Issue_Date__c))</formula>
+    <label># Days Management Selection</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>0</scale>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

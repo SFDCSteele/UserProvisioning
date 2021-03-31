@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>All_with_Sustainment</fullName>
+    <columns>NAME</columns>
+    <columns>Product_Owner__c</columns>
+    <columns>How_to_Create_User_to_give_Access__c</columns>
+    <columns>Application_Description__c</columns>
+    <columns>Business_Line__c</columns>
+    <columns>Business_Line_POC__c</columns>
+    <columns>ContractIntegrator__c</columns>
+    <columns>Go_Live_Date__c</columns>
+    <columns>Go_Live_Date_Projected__c</columns>
+    <columns>Has_PII_PHI__c</columns>
+    <columns>Live_Status__c</columns>
+    <columns>Org__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>Live_Status__c</field>
+        <operation>equals</operation>
+        <value>Live - In Sustainment</value>
+    </filters>
+    <label>All with Sustainment</label>
+</ListView>
