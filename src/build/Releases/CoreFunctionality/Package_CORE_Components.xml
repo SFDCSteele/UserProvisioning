@@ -149,6 +149,14 @@
         <members>DTC_Applications_Managed_Package__c.DTC_Application__c</members>
         <members>DTC_Applications_Managed_Package__c.Name</members>
         <members>DTC_Applications_Managed_Package__c.Managed_Package__c</members>
+        <members>Managed_Package_Tracking__c.Free_Licenses__c</members>
+        <members>Managed_Package_Tracking__c.Licenses_Assigned_in_Sandboxes__c</members>
+        <members>Managed_Package_Tracking__c.Name</members>
+        <members>Managed_Package_Tracking__c.Special_Installation_Instructions__c</members>
+        <members>Managed_Package_Tracking__c.Status__c</members>
+        <members>Managed_Package_Tracking__c.Vendor_Name__c</members>
+        <members>Managed_Package_Tracking__c.Vendor_Support_POC__c</members>
+        <members>Managed_Package_Tracking__c.Vendor_Support_POC_Email__c</members>
         <members>DTC_User_Setup_Instructions__c.DTC_Application__c</members>
         <members>DTC_User_Setup_Instructions__c.ID__c</members>
         <members>DTC_User_Setup_Instructions__c.Installed_Package_License__c</members>
@@ -230,8 +238,6 @@
     </types>
     <types>
         <members>CF_Application_Access__c-Application Access Layout</members>
-        <members>CF_Application_Access__c-FAST</members>
-        <members>CF_Application_Access__c-FAST POC</members>
         <members>CF_Application_Access__c-NVSPSE Application Access Page Layout</members>
         <members>CF_Application_Access__c-ORH</members>
         <members>CF_Application_Access__c-Squares</members>
@@ -244,7 +250,6 @@
     </types>
     <types>
         <members>CF_Application_Access__c.All</members>
-        <members>CF_Application_Access__c.FAST_Application_User_Request_Queue</members>
         <members>CF_Application_Access__c.FEP_My_Pending_Fiduciary_Approvals</members>
         <members>CF_Application_Access__c.Orphan_SQUARES_Applications</members>
         <members>CF_Application_Access__c.VALERI_In_Process</members>
@@ -258,7 +263,7 @@
         <members>DTC_User_Setup_Instructions__c.All</members>
         <name>ListView</name>
     </types>
-    <types>
+    <!--types>
         <members>HRM_Help_Desk</members>
         <members>NVSPSE_Approval_Queue</members>
         <members>VALERI_Approval_Queue</members>
@@ -268,7 +273,7 @@
         <members>Views_Squares_Other</members>
         <members>Views_Squares_SSVF</members>
         <name>Queue</name>
-    </types>
+    </types-->
     <types>
         <members>CF_Application_Access__c.Approve</members>
         <members>CF_Application_Access__c.Reject</members>
