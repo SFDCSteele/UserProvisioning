@@ -200,7 +200,7 @@
         <members>Managed_Package_Tracking__c</members>
         <members>DTC_User_Setup_Instructions__c</members>
         <members>DTC_Point_of_Contact__c</members>
-        <members>Application_Request__c</members>
+        <!--members>Application_Request__c</members-->
         <name>CustomObject</name>
     </types>
     <types>
@@ -215,14 +215,14 @@
     </types>
     <types>
         <!--members>CF_Application_Access_For_User</members>
+        <members>CF_Account_Related_Functionality_Add_Account</members>
+        <members>CF_Account_Related_Functionality_Add_Account_Flow</members>
         <members>CF_Account_Related_Functionality_Edit_Account</members>
         <members>CF_Account_Related_Functionality_Edit_Account_Flow</members>
         <members>CF_Move_Contact_To_New_Office</members>
         <members>CF_Move_Contact_To_New_Office_Process</members>
         <members>CF_Update_Contact_Count</members>
         <members>CF_Update_Contact_Count_in_Account</members-->
-        <members>CF_Account_Related_Functionality_Add_Account</members>
-        <members>CF_Account_Related_Functionality_Add_Account_Flow</members>
         <members>CF_Account_Related_Functionality_Deactivate_Account</members>
         <members>CF_Account_Related_Functionality_Deactivate_Account_Process</members>
         <members>CF_Add_Parent_Public_Group_as_a_member_of_Child_Public_Group</members>

@@ -190,7 +190,6 @@
         <name>CustomField</name>
     </types>
     <types>
-        <members>Application_Request__c</members>
         <members>CF_Application_Access__c</members>
         <members>CF_Application_Level__c</members>
         <members>CF_Permission_Mapping__c</members>
@@ -213,8 +212,6 @@
         <name>FlexiPage</name>
     </types>
     <types>
-        <members>CF_Account_Related_Functionality_Add_Account</members>
-        <members>CF_Account_Related_Functionality_Add_Account_Flow</members>
         <members>CF_Account_Related_Functionality_Deactivate_Account</members>
         <members>CF_Account_Related_Functionality_Deactivate_Account_Process</members>
         <members>CF_Add_Parent_Public_Group_as_a_member_of_Child_Public_Group</members>
