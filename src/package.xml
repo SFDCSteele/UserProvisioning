@@ -21,6 +21,12 @@
         <members>Account.CF_VIEWS_Account__c</members>
         <members>Account.VA_Organization_Acronym__c</members>
         <members>Account.VIEWS_SpringCM_Group_Href__c</members>
+        <members>Application_Request__c.App_Enhancement_Description__c</members>
+        <members>Application_Request__c.Existing_Application__c</members>
+        <members>Application_Request__c.NAME</members>
+        <members>Application_Request__c.New_Application_Name__c</members>
+        <members>Application_Request__c.Release_Date__c</members>
+        <members>Application_Request__c.Status__c</members>
         <members>CF_Application_Access__c.Account__c</members>
         <members>CF_Application_Access__c.Application_Level__c</members>
         <members>CF_Application_Access__c.Application_Name__c</members>
@@ -184,6 +190,7 @@
         <name>CustomField</name>
     </types>
     <types>
+        <members>Application_Request__c</members>
         <members>CF_Application_Access__c</members>
         <members>CF_Application_Level__c</members>
         <members>CF_Permission_Mapping__c</members>

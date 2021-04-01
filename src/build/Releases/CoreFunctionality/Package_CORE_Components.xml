@@ -179,6 +179,12 @@
         <members>DTC_Point_of_Contact__c.Name</members>
         <members>DTC_Point_of_Contact__c.RecordTypeId</members>
         <members>DTC_Point_of_Contact__c.Type__c</members>
+        <members>Application_Request__c.Existing_Application__c</members>
+        <members>Application_Request__c.NAME</members>
+        <members>Application_Request__c.New_Application_Name__c</members>
+        <members>Application_Request__c.App_Enhancement_Description__c</members>
+        <members>Application_Request__c.Status__c</members>
+        <members>Application_Request__c.Release_Date__c</members>
         <members>User.Account_Id__c</members>
         <members>User.CF_User_Office__c</members>
         <members>User.License_Name__c</members>
@@ -194,6 +200,7 @@
         <members>Managed_Package_Tracking__c</members>
         <members>DTC_User_Setup_Instructions__c</members>
         <members>DTC_Point_of_Contact__c</members>
+        <members>Application_Request__c</members>
         <name>CustomObject</name>
     </types>
     <types>
