@@ -1,0 +1,11 @@
+{
+    "records": [
+        {
+            "attributes": {
+                "type": "Profile",
+                "referenceId": "ProfileRef1"
+            },
+            "Name": "System Administrator"
+        }
+    ]
+}
