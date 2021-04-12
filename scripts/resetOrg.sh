@@ -11,11 +11,13 @@ echo "==========================================================================
 #sfdx auth:web:login -d -a DevHub
 #echo "Once DevHub is authorized, hit return to continue..."
 #read inpt
+
 if [ "$1" = "Y" ]
 then
     sfdx force:org:create -s -f config/project-scratch-def.json -a $dxOrg --durationdays 30
+    sfdx force:user:password:generate
+    force:org:describe
 fi
-
 
 git pull origin $gitBranch
 sfdx force:source:push -u $dxUser
