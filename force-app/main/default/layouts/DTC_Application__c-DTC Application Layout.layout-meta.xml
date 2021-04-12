@@ -23,6 +23,14 @@
                 <behavior>Edit</behavior>
                 <field>UI_Format__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Overall_User_Creation_Flow__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Overall_User_Creation_Apex__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>
