@@ -1,0 +1,277 @@
+{
+    "records": [
+        {
+            "attributes": {
+                "type": "Profile",
+                "referenceId": "ProfileRef1"
+            },
+            "Name": "System Administrator"
+        },
+        {
+            "attributes": {
+                "type": "Profile",
+                "referenceId": "ProfileRef2"
+            },
+            "Name": "Analytics Cloud Integration User"
+        },
+        {
+            "attributes": {
+                "type": "Profile",
+                "referenceId": "ProfileRef3"
+            },
+            "Name": "Analytics Cloud Security User"
+        },
+        {
+            "attributes": {
+                "type": "Profile",
+                "referenceId": "ProfileRef4"
+            },
+            "Name": "Chatter Free User"
+        },
+        {
+            "attributes": {
+                "type": "Profile",
+                "referenceId": "ProfileRef5"
+            },
+            "Name": "Authenticated Website"
+        },
+        {
+            "attributes": {
+                "type": "Profile",
+                "referenceId": "ProfileRef6"
+            },
+            "Name": "Company Communities User"
+        },
+        {
+            "attributes": {
+                "type": "Profile",
+                "referenceId": "ProfileRef7"
+            },
+            "Name": "Standard Platform User"
+        },
+        {
+            "attributes": {
+                "type": "Profile",
+                "referenceId": "ProfileRef8"
+            },
+            "Name": "Customer Community Login User"
+        },
+        {
+            "attributes": {
+                "type": "Profile",
+                "referenceId": "ProfileRef9"
+            },
+            "Name": "Cross Org Data Proxy User"
+        },
+        {
+            "attributes": {
+                "type": "Profile",
+                "referenceId": "ProfileRef10"
+            },
+            "Name": "Authenticated Website"
+        },
+        {
+            "attributes": {
+                "type": "Profile",
+                "referenceId": "ProfileRef11"
+            },
+            "Name": "Work.com Only User"
+        },
+        {
+            "attributes": {
+                "type": "Profile",
+                "referenceId": "ProfileRef12"
+            },
+            "Name": "Customer Portal Manager Custom"
+        },
+        {
+            "attributes": {
+                "type": "Profile",
+                "referenceId": "ProfileRef13"
+            },
+            "Name": "Identity User"
+        },
+        {
+            "attributes": {
+                "type": "Profile",
+                "referenceId": "ProfileRef14"
+            },
+            "Name": "Customer Community Plus User"
+        },
+        {
+            "attributes": {
+                "type": "Profile",
+                "referenceId": "ProfileRef15"
+            },
+            "Name": "Silver Partner User"
+        },
+        {
+            "attributes": {
+                "type": "Profile",
+                "referenceId": "ProfileRef16"
+            },
+            "Name": "High Volume Customer Portal"
+        },
+        {
+            "attributes": {
+                "type": "Profile",
+                "referenceId": "ProfileRef17"
+            },
+            "Name": "Gold Partner User"
+        },
+        {
+            "attributes": {
+                "type": "Profile",
+                "referenceId": "ProfileRef18"
+            },
+            "Name": "Customer Portal Manager Standard"
+        },
+        {
+            "attributes": {
+                "type": "Profile",
+                "referenceId": "ProfileRef19"
+            },
+            "Name": "Force.com - App Subscription User"
+        },
+        {
+            "attributes": {
+                "type": "Profile",
+                "referenceId": "ProfileRef20"
+            },
+            "Name": "Customer Community Plus Login User"
+        },
+        {
+            "attributes": {
+                "type": "Profile",
+                "referenceId": "ProfileRef21"
+            },
+            "Name": "Partner App Subscription User"
+        },
+        {
+            "attributes": {
+                "type": "Profile",
+                "referenceId": "ProfileRef22"
+            },
+            "Name": "External Identity User"
+        },
+        {
+            "attributes": {
+                "type": "Profile",
+                "referenceId": "ProfileRef23"
+            },
+            "Name": "Partner Community User"
+        },
+        {
+            "attributes": {
+                "type": "Profile",
+                "referenceId": "ProfileRef24"
+            },
+            "Name": "Partner Community Login User"
+        },
+        {
+            "attributes": {
+                "type": "Profile",
+                "referenceId": "ProfileRef25"
+            },
+            "Name": "Customer Community User"
+        },
+        {
+            "attributes": {
+                "type": "Profile",
+                "referenceId": "ProfileRef26"
+            },
+            "Name": "Force.com - Free User"
+        },
+        {
+            "attributes": {
+                "type": "Profile",
+                "referenceId": "ProfileRef27"
+            },
+            "Name": "Chatter Moderator User"
+        },
+        {
+            "attributes": {
+                "type": "Profile",
+                "referenceId": "ProfileRef28"
+            },
+            "Name": "Chatter External User"
+        },
+        {
+            "attributes": {
+                "type": "Profile",
+                "referenceId": "ProfileRef29"
+            },
+            "Name": "High Volume Customer Portal User"
+        },
+        {
+            "attributes": {
+                "type": "Profile",
+                "referenceId": "ProfileRef30"
+            },
+            "Name": "Solution Manager"
+        },
+        {
+            "attributes": {
+                "type": "Profile",
+                "referenceId": "ProfileRef31"
+            },
+            "Name": "Read Only"
+        },
+        {
+            "attributes": {
+                "type": "Profile",
+                "referenceId": "ProfileRef32"
+            },
+            "Name": "Custom: Sales Profile"
+        },
+        {
+            "attributes": {
+                "type": "Profile",
+                "referenceId": "ProfileRef33"
+            },
+            "Name": "Custom: Marketing Profile"
+        },
+        {
+            "attributes": {
+                "type": "Profile",
+                "referenceId": "ProfileRef34"
+            },
+            "Name": "Custom: Support Profile"
+        },
+        {
+            "attributes": {
+                "type": "Profile",
+                "referenceId": "ProfileRef35"
+            },
+            "Name": "Marketing User"
+        },
+        {
+            "attributes": {
+                "type": "Profile",
+                "referenceId": "ProfileRef36"
+            },
+            "Name": "Contract Manager"
+        },
+        {
+            "attributes": {
+                "type": "Profile",
+                "referenceId": "ProfileRef37"
+            },
+            "Name": "Standard User"
+        },
+        {
+            "attributes": {
+                "type": "Profile",
+                "referenceId": "ProfileRef38"
+            },
+            "Name": "CPQ Integration User"
+        },
+        {
+            "attributes": {
+                "type": "Profile",
+                "referenceId": "ProfileRef39"
+            },
+            "Name": "Minimum Access - Salesforce"
+        }
+    ]
+}
