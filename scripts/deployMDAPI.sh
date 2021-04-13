@@ -21,6 +21,11 @@ ls -al
 echo "MDAPI source converted from source format..."
 read inpt
 
+if [ "$1" = "Y" ] 
+then
+    sfdx auth:web:login -d -a $MDAPIUser
+fi
+
 sfdx force:mdapi:deploy -u $gitBranch -w 10 -d ./src
 #read inpt
 
