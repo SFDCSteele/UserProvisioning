@@ -334,7 +334,6 @@
     <members>CF_Application_Access__c.FAST_Application_User_Request_Queue</members>
     <members>CF_Application_Access__c.FEP_My_Pending_Fiduciary_Approvals</members>
     <members>CF_Application_Access__c.Orphan_SQUARES_Applications</members>
-    <members>CF_Application_Level__c.HRM_Help_Desk_CF_Application_Level</members>
     <members>DTC_Application__c.All</members>
     <members>DTC_Application__c.All_App_Owners</members>
     <members>DTC_Application__c.All_Apps</members>
