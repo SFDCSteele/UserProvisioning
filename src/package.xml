@@ -342,7 +342,6 @@
     <members>DTC_Application__c.All_with_Sustainment</members>
     <members>DTC_Application__c.Citizen_Developed</members>
     <members>DTC_Application__c.Citizen_Developed_In_Progress</members>
-    <members>DTC_Application__c.HRM_Help_Desk_DTC_Application</members>
     <members>DTC_Application__c.VA_app_Not_Retired</members>
     <members>DTC_Application__c.VA_app_View_All</members>
     <members>DTC_Point_of_Contact__c.All</members>

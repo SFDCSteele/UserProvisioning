@@ -1379,15 +1379,6 @@
         <label>Citizen Developed In Progress</label>
     </listViews>
     <listViews>
-        <fullName>HRM_Help_Desk_DTC_Application</fullName>
-        <filterScope>Queue</filterScope>
-        <label>HRM Help Desk</label>
-        <queue>HRM_Help_Desk</queue>
-        <sharedTo>
-            <allInternalUsers/>
-        </sharedTo>
-    </listViews>
-    <listViews>
         <fullName>VA_app_Not_Retired</fullName>
         <columns>NAME</columns>
         <columns>Business_Line__c</columns>
