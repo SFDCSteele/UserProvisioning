@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
   <types>
-    <name>AppMenu</name>
-    <members>AppSwitcher</members>
-  </types>
-  <types>
     <name>CustomApplication</name>
     <members>AppBrand</members>
     <members>Core_Functionality</members>
@@ -337,18 +333,7 @@
     <members>CF_Application_Access__c.All_WHH</members>
     <members>CF_Application_Access__c.FAST_Application_User_Request_Queue</members>
     <members>CF_Application_Access__c.FEP_My_Pending_Fiduciary_Approvals</members>
-    <members>CF_Application_Access__c.HRM_Help_Desk_CF_Application_Access</members>
-    <members>CF_Application_Access__c.NVSPSE_All</members>
-    <members>CF_Application_Access__c.NVSPSE_Approval_Queue_CF_Application_Access</members>
     <members>CF_Application_Access__c.Orphan_SQUARES_Applications</members>
-    <members>CF_Application_Access__c.VALERI_Approval_Queue_CF_Application_Access</members>
-    <members>CF_Application_Access__c.VALERI_In_Process</members>
-    <members>CF_Application_Access__c.VALERI_Servicer_Approval_Request</members>
-    <members>CF_Application_Access__c.VALERI_User_Request_Queue_CF_Application_Access</members>
-    <members>CF_Application_Access__c.Views_Squares_CERS_CF_Application_Access</members>
-    <members>CF_Application_Access__c.Views_Squares_GPD_CF_Application_Access</members>
-    <members>CF_Application_Access__c.Views_Squares_Other_CF_Application_Access</members>
-    <members>CF_Application_Access__c.Views_Squares_SSVF_CF_Application_Access</members>
     <members>CF_Application_Level__c.HRM_Help_Desk_CF_Application_Level</members>
     <members>DTC_Application__c.All</members>
     <members>DTC_Application__c.All_App_Owners</members>

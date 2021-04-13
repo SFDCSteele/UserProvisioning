@@ -12,7 +12,9 @@ echo "==========================================================================
 git pull origin $gitBranch
 
 rm -rf ./src
-echo "MDAPI source removed..."
+echo "MDAPI source removed...pausing briefly...hit return to continue"
+read inpt
+
 sfdx force:source:convert \
     -d ./src \
     -n "$gitBranch"
