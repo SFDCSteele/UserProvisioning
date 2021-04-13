@@ -19,7 +19,7 @@ sfdx force:source:convert \
 
 ls -al
 echo "MDAPI source converted from source format..."
-#read inpt
+read inpt
 
 sfdx force:mdapi:deploy -u $gitBranch -w 10 -d ./src
 #read inpt

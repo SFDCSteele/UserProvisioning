@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
   <types>
-    <name>AppMenu</name>
-    <members>AppSwitcher</members>
-  </types>
-  <types>
     <name>CustomApplication</name>
     <members>Active_Directory_Manager</members>
   </types>
