@@ -376,6 +376,10 @@
     <members>DTC_Application__c.Compact_Layout</members>
   </types>
   <types>
+    <name>PermissionSet</name>
+    <members>Core_Functionality</members>
+  </types>
+  <types>
     <name>QuickAction</name>
     <members>CF_Application_Access__c.Approve</members>
     <members>CF_Application_Access__c.Reject</members>
