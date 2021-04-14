@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<CustomPermission xmlns="http://soap.sforce.com/2006/04/metadata">
-    <description>DO NOT PUT INTO ANY PERMISSION SETS - if your user needs this, enter an exception and once approved, they will get the standalone permission set with this in it for temp use</description>
-    <isLicensed>false</isLicensed>
-    <label>DisableTriggersFlag</label>
-</CustomPermission>
