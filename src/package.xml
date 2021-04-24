@@ -6,9 +6,12 @@
   </types>
   <types>
     <name>ApexClass</name>
+    <members>ADCreateUpdateUser</members>
     <members>ADGroupChangeEventTriggerHandler</members>
+    <members>ADGroupTriggerHandler</members>
     <members>ADPublishUserEvent</members>
     <members>ADUserChangeEventTriggerHandler</members>
+    <members>ADUserTriggerHandler</members>
     <members>ChangeEventTriggerHandler</members>
     <members>TestGroupChangeEventTrigger</members>
     <members>TestUserChangeEventTrigger</members>
@@ -82,8 +85,10 @@
   <types>
     <name>ApexTrigger</name>
     <members>ADGroupChangeEventTrigger</members>
+    <members>ADGroupTrigger</members>
     <members>ADUserChangeEventTrigger</members>
+    <members>ADUserTrigger</members>
   </types>
-  <version>50.0</version>
+  <version>51.0</version>
   <fullName>ActiveDirectory</fullName>
 </Package>
