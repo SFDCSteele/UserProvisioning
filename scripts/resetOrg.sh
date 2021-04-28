@@ -6,6 +6,8 @@ export gitBranch="CoreFunctionality"
 
 echo "==========================================================================="
 echo "Setting up Scratch Org $dxOrg as user $dxUser and pushing to branch $gitBranch to the Org"
+echo "Authorizing to DevHub   : $1"
+echo "Creating new scratch org: $2"
 echo "==========================================================================="
 
 if [ "$1" = "Y" ]
