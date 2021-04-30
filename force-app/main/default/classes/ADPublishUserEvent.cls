@@ -2,20 +2,53 @@ public class ADPublishUserEvent {
     
     public ADPublishUserEvent(){
     }
+    /*
+     * 
+     * how to run this
+     *         
+            ADPublishUserEvent evntPub = new ADPublishUserEvent();
+            evntPub.execute('User',new AD_User_Inactivation__e(AD_SEC_ID__c='10101010',AD_Federation_Id__c='mickey@mouse_fed.com', Status__c='Inactive'));
+
+            ADPublishGroupEvent evntPub = new ADPublishGroupEvent();
+			evntPub.execute('Group',new AD_Group_Update__e(
+                                    AD_SEC_ID__c='10101010',
+                                    Group_Name__c=grp.AD_Group_Name__c,
+                                    Email_Address__c='mickey@mouse_email.com',
+                                    Federation_Id__c='mickey@mouse_fed.com',
+                                    FirstName__c=adUser.AD_First_Name__c,
+                                    LastName__c=adUser.AD_Last_Name__c,
+                                    Parent_AD_Group__c=parentGroupName,
+                                    Status__c=grp.'Active'));  
+     * 
+     */
+    public String execute(String eventType, SObject eventMessage){
+        
+        String returnString = '';
+        
+        AUP_Core_Functionality_Settings__c aupSettings = AUP_Core_Functionality_Settings__c.getInstance();
+        
+        if ( aupSettings.AUP_ENT_Execute__c ) {
+            returnString = sendUserEvent (eventType, aupSettings, eventMessage);
+        }
+        
+        return returnString;
+    }
     
-    public String execute(String passedJSon){
+    private String sendUserEvent (String eventType, AUP_Core_Functionality_Settings__c aupSettings, SObject eventMessage) {
         
-        //String endpoint='https://enterprise-momentum-4091-dev-ed.cs10.my.salesforce.com/services/oauth2/token';
+        String username = aupSettings.AUP_ENT_Username__c;
+        String password = aupSettings.AUP_ENT_Password__c;
+        String ClientId= aupSettings.AUP_ENT_Client_Id__c;
+        String ClientSecret = aupSettings.AUP_ENT_Client_Secret__c;
         
-        String username = 'test-rnyylfrlgcbo@example.com'; 
-        String password = 'Stay@ut!2021058OZMCc9ZdJZqen6HjvXWkbrz';
-        String ClientId= '3MVG9CxwbdV68qJKXzSb.DcY3C2.5z1phRYoiGJWXywaNXKsyZSXUKrd2lvxnG0FWK.wJ6di7lXCg60QXxfLe';
-        String ClientSecret = 'B681FBC677FB48BEA31F3EA35791BCD6C67B52A6FF2B6A53124D835AF7AFA114';
-        
-        //String authEndPoint = 'https://data-velocity-8782-dev-ed.lightning.force.com/services/oauth2/token';
-        String authEndPoint = 'https://data-velocity-8782-dev-ed.lightning.force.com';
-        // 					   https://data-velocity-8782-dev-ed.cs97.my.salesforce.com/
-        String postEndPoint = 'https://data-velocity-8782-dev-ed.lightning.force.com/services/apexrest/v1/adupdateuserservice/postADUserEvent';
+        String entEndPoint  = aupSettings.AUP_ENT_End_Point__c;
+        String authEndPoint = entEndPoint;
+        String postEndPoint = '';
+        if (eventType.equals('User')) {
+            postEndPoint = entEndPoint + '/services/apexrest/ADUpdateUserService/postADUserEvent';
+        } else {
+            postEndPoint = entEndPoint + '/services/apexrest/ADUpdateGroupService/postADGroupEvent';
+        }
         
         Httprequest req = new HttpRequest();    
         req.setMethod('POST');    
@@ -68,7 +101,8 @@ public class ADPublishUserEvent {
         req1.setHeader('Authorization','Bearer '+Access_Token);  
         //req1.setBody(passedJSon); 
         AUPJSONGenerator sJSonStr = new AUPJSONGenerator();
-        req1.setBody(sJSonStr.generateJSONContent()); 
+        String aupJSONString = sJSonStr.generateJSONContent(eventType, eventMessage);
+        req1.setBody(aupJSONString); 
         
         Http http1 = new Http();
         HttpResponse res1 = http1.send(req1);                 
@@ -82,71 +116,35 @@ public class ADPublishUserEvent {
     }
     
     public class AUPJSONGenerator{
-        /*
-Group_Name__c=grp.AD_Group_Name__c,
-Email_Address__c=adUser.AD_User_Email__c,
-Federation_Id__c=adUser.AD_Federation_Id__c,
-FirstName__c=adUser.AD_First_Name__c,
-LastName__c=adUser.AD_Last_Name__c,
-Parent_AD_Group__c=parentGroupName,
-Status__c=grp.Status__c));                    
-*/
-        
-        private String generateJSONContent() {
+               
+        private String generateJSONContent(String eventType,SObject eventMessage) {
             // Create a JSONGenerator object.
             // Pass true to the constructor for pretty print formatting.
             JSONGenerator gen = JSON.createGenerator(true);
             
-            // Create a list of integers to write to the JSON string.
-            List<integer> intlist = new List<integer>();
-            intlist.add(1);
-            intlist.add(2);
-            intlist.add(3);
-            
-            // Create an object to write to the JSON string.
-            //A x = new A('X');
             
             // Write data to the JSON string.
             gen.writeStartObject();
-            gen.writeStringField('GroupName', 'OHRS-Supervisor');
-            gen.writeStringField('EmailAddress', 'wsteele@salesforce.com');
-            gen.writeStringField('FederationId', 'wsteele@salesforce.com');
-            gen.writeStringField('FirstName', 'William');
-            gen.writeStringField('LastName', 'Steele');
-            gen.writeStringField('ParentADGroup', 'Salesforce');
-            gen.writeStringField('Status', 'Active');
-            /*
-gen.writeNumberField('abc', 1.21);
-gen.writeStringField('def', 'xyz');
-gen.writeFieldName('ghi');
-gen.writeStartObject();
-
-gen.writeObjectField('aaa', intlist);
-
-gen.writeEndObject();
-
-gen.writeFieldName('Object A');
-
-gen.writeObject(x);
-*/
+            if (eventType.equals('User')) {
+	            gen.writeStringField('SECID', (String)eventMessage.get('AD_SEC_ID__c'));
+	            gen.writeStringField('FederationId', (String)eventMessage.get('AD_Federation_Id__c'));
+	            gen.writeStringField('Status', (String)eventMessage.get('Status__c'));
+            } else {
+                gen.writeStringField('GroupName', (String)eventMessage.get('Group_Name__c'));
+                gen.writeStringField('EmailAddress', (String)eventMessage.get('Email_Address__c'));
+                gen.writeStringField('FederationId', (String)eventMessage.get('Federation_Id__c'));
+                gen.writeStringField('SECID', (String)eventMessage.get('AD_SEC_ID__c'));
+                gen.writeStringField('FirstName', (String)eventMessage.get('FirstName__c'));
+                gen.writeStringField('LastName', (String)eventMessage.get('LastName__c'));
+                gen.writeStringField('ParentADGroup', (String)eventMessage.get('Parent_AD_Group__c'));
+                gen.writeStringField('Status', (String)eventMessage.get('Status__c'));
+            }
             gen.writeEndObject();
             
             // Get the JSON string.
             String pretty = gen.getAsString();
             System.debug('generateJSONContent:Message preparing to send: '+pretty);
             
-            /*()
-System.assertEquals('{\n' +
-'  "abc" : 1.21,\n' +
-'  "def" : "xyz",\n' +
-'  "ghi" : {\n' +
-'    "aaa" : [ 1, 2, 3 ]\n' +
-'  },\n' +
-'  "Object A" : {\n' +
-'    "str" : "X"\n' +
-'  }\n' +
-'}', pretty);
-*/
             return pretty;
         }
     }
