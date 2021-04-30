@@ -7,9 +7,9 @@
 https://data-velocity-8782-dev-ed.lightning.force.com/services/apexrest/ADUpdateGroupService/v1</callbackUrl>
         <consumerKey>3MVG9CxwbdV68qJKXzSb.DcY3C2.5z1phRYoiGJWXywaNXKsyZSXUKrd2lvxnG0FWK.wJ6di7lXCg60QXxfLe</consumerKey>
         <isAdminApproved>false</isAdminApproved>
-        <isConsumerSecretOptional>false</isConsumerSecretOptional>
+        <isConsumerSecretOptional>true</isConsumerSecretOptional>
         <isIntrospectAllTokens>false</isIntrospectAllTokens>
-        <isSecretRequiredForRefreshToken>true</isSecretRequiredForRefreshToken>
+        <isSecretRequiredForRefreshToken>false</isSecretRequiredForRefreshToken>
         <scopes>Full</scopes>
         <scopes>OpenID</scopes>
     </oauthConfig>
