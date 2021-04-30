@@ -7,13 +7,15 @@ public class ADPublishUserEvent {
         
         //String endpoint='https://enterprise-momentum-4091-dev-ed.cs10.my.salesforce.com/services/oauth2/token';
         
-        String username = 'test-fudubkdhqeya@example.com'; 
-        String password = 'Stay@ut!202102QR3PECQfbAiFql4DwtzGwxIU';
-        String ClientId= '3MVG9_7ddP9KqTzdd8NcBbiXojajSlyVZoZwww.gnMt725ndVV77wngBPt.MdxwojZablAntxYL9vf2HhGzmM';
-        String ClientSecret = '71B67193960648AFBF40B04EAB3DBB0C4E3F9140083ED610330A82D3453DB4ED';
+        String username = 'test-rnyylfrlgcbo@example.com'; 
+        String password = 'Stay@ut!2021058OZMCc9ZdJZqen6HjvXWkbrz';
+        String ClientId= '3MVG9CxwbdV68qJKXzSb.DcY3C2.5z1phRYoiGJWXywaNXKsyZSXUKrd2lvxnG0FWK.wJ6di7lXCg60QXxfLe';
+        String ClientSecret = 'B681FBC677FB48BEA31F3EA35791BCD6C67B52A6FF2B6A53124D835AF7AFA114';
         
-        String authEndPoint = 'https://enterprise-momentum-4091-dev-ed.cs10.my.salesforce.com/services/oauth2/token';
-        String postEndPoint = 'https://enterprise-momentum-4091-dev-ed.cs10.my.salesforce.com/services/apexrest/v1/adupdateuserservice/postADUserEvent';
+        //String authEndPoint = 'https://data-velocity-8782-dev-ed.lightning.force.com/services/oauth2/token';
+        String authEndPoint = 'https://data-velocity-8782-dev-ed.lightning.force.com';
+        // 					   https://data-velocity-8782-dev-ed.cs97.my.salesforce.com/
+        String postEndPoint = 'https://data-velocity-8782-dev-ed.lightning.force.com/services/apexrest/v1/adupdateuserservice/postADUserEvent';
         
         Httprequest req = new HttpRequest();    
         req.setMethod('POST');    
@@ -31,16 +33,21 @@ public class ADPublishUserEvent {
                           '&password=' + password;
         System.debug('ADPublishUserEvent:execute: '+loginURL);
 		
-        req.setBody('grant_type=password&client_id=' + ClientId + '&client_secret=' + ClientSecret + '&username=' + username +'&password=' + password); 
+        //req.setBody('grant_type=password&client_id=' + ClientId + '&client_secret=' + ClientSecret + '&username=' + username +'&password=' + password); 
         
-        req.setEndpoint(authEndPoint);
+        req.setEndpoint(loginURL);
         //req.setHeader('Authorization', 'OAuth '+UserInfo.getSessionId());
         Http http = new Http();
         HttpResponse res;       
         String Access_Token;
         try {
-            res = http.send(req);                
-            system.debug('body:'+res.getBody());  
+            res = http.send(req);
+            system.debug('FIRST: body:'+res.getBody()+' status: '+res.getStatus()+' status code: '+res.getStatusCode()+' location: '+res.getHeader('Location'));  
+            while (res.getStatusCode() == 302) {
+                req.setEndpoint(res.getHeader('Location'));
+                res = new Http().send(req);
+			}
+            system.debug('SECOND: body:'+res.getBody()+' status: '+res.getStatus()+' status code: '+res.getStatusCode()+' location: '+res.getHeader('Location'));  
             JSONParser parser = JSON.createParser(res.getBody());
             while (parser.nextToken() != null) {
                 if ((parser.getCurrentToken() == JSONToken.FIELD_NAME) && (parser.getText() == 'access_token')) {
@@ -60,16 +67,21 @@ public class ADPublishUserEvent {
         req1.setHeader('Content-Type','application/json');
         req1.setHeader('Authorization','Bearer '+Access_Token);  
         //req1.setBody(passedJSon); 
-        JSONGeneratorSample sJSonStr = new JSONGeneratorSample();
+        AUPJSONGenerator sJSonStr = new AUPJSONGenerator();
         req1.setBody(sJSonStr.generateJSONContent()); 
         
         Http http1 = new Http();
         HttpResponse res1 = http1.send(req1);                 
-        system.debug('body11:'+res1.getBody()); 
+        system.debug('ALMOST LAST: body:'+res1.getBody()+' status: '+res1.getStatus()+' status code: '+res1.getStatusCode()+' location: '+res1.getHeader('Location'));  
+        while (res1.getStatusCode() == 302) {
+            req1.setEndpoint(res1.getHeader('Location'));
+            res1 = new Http().send(req1);
+        }
+        system.debug('LAST: body:'+res1.getBody()+' status: '+res1.getStatus()+' status code: '+res1.getStatusCode()+' location: '+res1.getHeader('Location'));  
         return res1.getBody();
     }
     
-    public class JSONGeneratorSample{
+    public class AUPJSONGenerator{
         /*
 Group_Name__c=grp.AD_Group_Name__c,
 Email_Address__c=adUser.AD_User_Email__c,
