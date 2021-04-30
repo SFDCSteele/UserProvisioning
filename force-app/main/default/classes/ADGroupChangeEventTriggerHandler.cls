@@ -66,9 +66,10 @@ public class ADGroupChangeEventTriggerHandler extends ChangeEventTriggerHandler 
                 
             }
             try {
-                for(AD_User__c adUser : [SELECT AD_First_Name__c, AD_Last_Name__c, AD_User_Email__c, AD_Federation_Id__c FROM AD_User__c where Id =: grp.AD_User__c]){
+                for(AD_User__c adUser : [SELECT SECID__c, AD_First_Name__c, AD_Last_Name__c, AD_User_Email__c, AD_Federation_Id__c FROM AD_User__c where Id =: grp.AD_User__c]){
                     System.debug('102.05.130-##############ADGroupChangeEventTriggerHandler:processTransactions:AD_Group_Name__c => '+grp.AD_Group_Name__c+' User: '+adUser.AD_First_Name__c+' '+adUser.AD_Last_Name__c);
                     groupEvents.add(new AD_Group_Update__e(
+                        AD_SEC_ID__c=aduser.SECID__c,
                         Group_Name__c=grp.AD_Group_Name__c,
                         Email_Address__c=adUser.AD_User_Email__c,
                         Federation_Id__c=adUser.AD_Federation_Id__c,

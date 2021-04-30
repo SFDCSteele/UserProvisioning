@@ -42,13 +42,13 @@ public class ADUserChangeEventTriggerHandler extends ChangeEventTriggerHandler {
         System.debug('102.01-##############ADUserChangeEventTriggerHandler:processUpdate:inside....');
 
         
-        List<AD_User__c> ADUsers = [SELECT Id, OwnerId, Name, RecordTypeId, AD_First_Name__c, AD_Last_Name__c, AD_User_Email__c, 
+        List<AD_User__c> ADUsers = [SELECT Id, SECID__c, OwnerId, Name, RecordTypeId, AD_First_Name__c, AD_Last_Name__c, AD_User_Email__c, 
                                     AD_Federation_Id__c, Status__c FROM AD_User__c WHERE Id =: IdsToProcess];
         List<AD_User_Inactivation__e> userEvents = new List<AD_User_Inactivation__e>();
         //AD_User_Inactivation__e userEvent = new AD_User_Inactivation__e();
         
         for (AD_User__c user : ADUsers) {
-            userEvents.add(new AD_User_Inactivation__e(AD_Federation_Id__c=user.AD_Federation_Id__c, Status__c=user.Status__c));
+            userEvents.add(new AD_User_Inactivation__e(AD_SEC_ID__c=user.SECID__c,AD_Federation_Id__c=user.AD_Federation_Id__c, Status__c=user.Status__c));
         }
         /*
         // Create an instance of the event and store it in the newsEvent variable
