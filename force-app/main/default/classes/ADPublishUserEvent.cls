@@ -21,21 +21,35 @@ public class ADPublishUserEvent {
                                     Status__c=grp.'Active'));  
      * 
      */
-    public String execute(String eventType, SObject eventMessage){
+    
+    @future(callout=true)
+    public static void processUserEvents (List<Id> IdsToProcess) {
         
+        List<Profile> prof = [Select Id,Name from Profile where Name='System Administrator'];
+        AUP_Core_Functionality_Settings__c aupSettings = AUP_Core_Functionality_Settings__c.getInstance(prof[0].Id);
         String returnString = '';
+        System.debug('200010.01-##############ADPublishUserEvent:processEvents:AUP Settings: '+
+                     '\nExecute\t:\t'+aupSettings.AUP_ENT_Execute__c+
+                     '\nUsername\t:\t'+aupSettings.AUP_ENT_Username__c+
+                     '\npassword\t:\t'+aupSettings.AUP_ENT_Password__c+
+                     '\nClientId\t:\t'+aupSettings.AUP_ENT_Client_Id__c+
+                     '\nClientSecret\t:\t'+aupSettings.AUP_ENT_Client_Secret__c+
+                     '\nentEndPoint\t:\t'+aupSettings.AUP_ENT_End_Point__c);
         
-        AUP_Core_Functionality_Settings__c aupSettings = AUP_Core_Functionality_Settings__c.getInstance();
-        
+        System.debug('200020.01-##############ADPublishUserEvent:processEvents:Sending through the web service? '+aupSettings.AUP_ENT_Execute__c);
         if ( aupSettings.AUP_ENT_Execute__c ) {
-            returnString = sendUserEvent (eventType, aupSettings, eventMessage);
+	        List<AD_User__c> ADUsers = [SELECT Id, SECID__c, Name, AD_First_Name__c, AD_Last_Name__c, AD_User_Email__c, 
+    	                                AD_Federation_Id__c, Status__c FROM AD_User__c WHERE Id =: IdsToProcess];
+            ADPublishUserEvent evntPub = new ADPublishUserEvent();
+	        System.debug('200030.01-##############ADPublishUserEvent:processEvents:users to process: '+ADUsers);
+            
+            execute('User',ADUsers,aupSettings);
         }
         
-        return returnString;
     }
-    
-    private String sendUserEvent (String eventType, AUP_Core_Functionality_Settings__c aupSettings, SObject eventMessage) {
-        
+
+    public Static String execute(String eventType, List<SObject> eventMessages, AUP_Core_Functionality_Settings__c aupSettings){
+                
         String username = aupSettings.AUP_ENT_Username__c;
         String password = aupSettings.AUP_ENT_Password__c;
         String ClientId= aupSettings.AUP_ENT_Client_Id__c;
@@ -64,7 +78,7 @@ public class ADPublishUserEvent {
                           '&client_secret=' + ClientSecret +
                           '&username=' + username +
                           '&password=' + password;
-        System.debug('ADPublishUserEvent:execute: '+loginURL);
+        system.debug('300010---$$$$$$$$$-ADPublishUserEvent:execute: '+loginURL);
 		
         //req.setBody('grant_type=password&client_id=' + ClientId + '&client_secret=' + ClientSecret + '&username=' + username +'&password=' + password); 
         
@@ -75,12 +89,12 @@ public class ADPublishUserEvent {
         String Access_Token;
         try {
             res = http.send(req);
-            system.debug('FIRST: body:'+res.getBody()+' status: '+res.getStatus()+' status code: '+res.getStatusCode()+' location: '+res.getHeader('Location'));  
+            system.debug('300020---$$$$$$$$$-FIRST: body:'+res.getBody()+' status: '+res.getStatus()+' status code: '+res.getStatusCode()+' location: '+res.getHeader('Location'));  
             while (res.getStatusCode() == 302) {
                 req.setEndpoint(res.getHeader('Location'));
                 res = new Http().send(req);
 			}
-            system.debug('SECOND: body:'+res.getBody()+' status: '+res.getStatus()+' status code: '+res.getStatusCode()+' location: '+res.getHeader('Location'));  
+            system.debug('300030---$$$$$$$$$-SECOND: body:'+res.getBody()+' status: '+res.getStatus()+' status code: '+res.getStatusCode()+' location: '+res.getHeader('Location'));  
             JSONParser parser = JSON.createParser(res.getBody());
             while (parser.nextToken() != null) {
                 if ((parser.getCurrentToken() == JSONToken.FIELD_NAME) && (parser.getText() == 'access_token')) {
@@ -89,10 +103,10 @@ public class ADPublishUserEvent {
                 } 
             }            
         }catch(system.CalloutException e){            
-            system.debug('error'+e);
+            system.debug('300040---$$$$$$$$$-error:   '+e);
         }
         
-        system.debug('access token: '+Access_Token);
+        system.debug('300050---$$$$$$$$$-access token: '+Access_Token);
         Httprequest req1 = new HttpRequest();  
         req1.setEndpoint(postEndPoint);  
         req1.setMethod('POST');    
@@ -101,17 +115,21 @@ public class ADPublishUserEvent {
         req1.setHeader('Authorization','Bearer '+Access_Token);  
         //req1.setBody(passedJSon); 
         AUPJSONGenerator sJSonStr = new AUPJSONGenerator();
-        String aupJSONString = sJSonStr.generateJSONContent(eventType, eventMessage);
+        String aupJSONString = '';
+        system.debug('300060---$$$$$$$$$-event messages: '+eventMessages);  
+        for (SObject evntMsg : eventMessages ) {
+        	aupJSONString += sJSonStr.generateJSONContent(eventType, evntMsg);            
+        }
         req1.setBody(aupJSONString); 
         
         Http http1 = new Http();
         HttpResponse res1 = http1.send(req1);                 
-        system.debug('ALMOST LAST: body:'+res1.getBody()+' status: '+res1.getStatus()+' status code: '+res1.getStatusCode()+' location: '+res1.getHeader('Location'));  
+        system.debug('300070---$$$$$$$$$-ALMOST LAST: body:'+res1.getBody()+' status: '+res1.getStatus()+' status code: '+res1.getStatusCode()+' location: '+res1.getHeader('Location'));  
         while (res1.getStatusCode() == 302) {
             req1.setEndpoint(res1.getHeader('Location'));
             res1 = new Http().send(req1);
         }
-        system.debug('LAST: body:'+res1.getBody()+' status: '+res1.getStatus()+' status code: '+res1.getStatusCode()+' location: '+res1.getHeader('Location'));  
+        system.debug('300080---$$$$$$$$$-LAST: body:'+res1.getBody()+' status: '+res1.getStatus()+' status code: '+res1.getStatusCode()+' location: '+res1.getHeader('Location'));  
         return res1.getBody();
     }
     
@@ -121,29 +139,35 @@ public class ADPublishUserEvent {
             // Create a JSONGenerator object.
             // Pass true to the constructor for pretty print formatting.
             JSONGenerator gen = JSON.createGenerator(true);
+            String pretty = '';
             
             
+            system.debug('3001000---$$$$$$$$$-AUPJSONGenerator:generateJSONContent:passed in message: '+eventMessage);
             // Write data to the JSON string.
-            gen.writeStartObject();
-            if (eventType.equals('User')) {
-	            gen.writeStringField('SECID', (String)eventMessage.get('AD_SEC_ID__c'));
-	            gen.writeStringField('FederationId', (String)eventMessage.get('AD_Federation_Id__c'));
-	            gen.writeStringField('Status', (String)eventMessage.get('Status__c'));
-            } else {
-                gen.writeStringField('GroupName', (String)eventMessage.get('Group_Name__c'));
-                gen.writeStringField('EmailAddress', (String)eventMessage.get('Email_Address__c'));
-                gen.writeStringField('FederationId', (String)eventMessage.get('Federation_Id__c'));
-                gen.writeStringField('SECID', (String)eventMessage.get('AD_SEC_ID__c'));
-                gen.writeStringField('FirstName', (String)eventMessage.get('FirstName__c'));
-                gen.writeStringField('LastName', (String)eventMessage.get('LastName__c'));
-                gen.writeStringField('ParentADGroup', (String)eventMessage.get('Parent_AD_Group__c'));
-                gen.writeStringField('Status', (String)eventMessage.get('Status__c'));
+            try {
+	            gen.writeStartObject();
+                if (eventType.equals('User')) {
+                    gen.writeStringField('SECID', (String)eventMessage.get('SECID__c'));
+                    gen.writeStringField('FederationId', (String)eventMessage.get('AD_Federation_Id__c'));
+                    gen.writeStringField('Status', (String)eventMessage.get('Status__c'));
+                } else {
+                    gen.writeStringField('GroupName', (String)eventMessage.get('Group_Name__c'));
+                    gen.writeStringField('EmailAddress', (String)eventMessage.get('Email_Address__c'));
+                    gen.writeStringField('FederationId', (String)eventMessage.get('Federation_Id__c'));
+                    gen.writeStringField('SECID', (String)eventMessage.get('AD_SEC_ID__c'));
+                    gen.writeStringField('FirstName', (String)eventMessage.get('FirstName__c'));
+                    gen.writeStringField('LastName', (String)eventMessage.get('LastName__c'));
+                    gen.writeStringField('ParentADGroup', (String)eventMessage.get('Parent_AD_Group__c'));
+                    gen.writeStringField('Status', (String)eventMessage.get('Status__c'));
+                }
+                gen.writeEndObject();
+                
+                // Get the JSON string.
+                pretty = gen.getAsString();
+                system.debug('300120---$$$$$$$$$-generateJSONContent:Message preparing to send: '+pretty);
+            }catch(system.CalloutException e){            
+                system.debug('3001100---$$$$$$$$$-AUPJSONGenerator:error:generateJSONContent: '+e);
             }
-            gen.writeEndObject();
-            
-            // Get the JSON string.
-            String pretty = gen.getAsString();
-            System.debug('generateJSONContent:Message preparing to send: '+pretty);
             
             return pretty;
         }

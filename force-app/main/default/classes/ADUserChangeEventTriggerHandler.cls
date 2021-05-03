@@ -29,7 +29,7 @@ public class ADUserChangeEventTriggerHandler extends ChangeEventTriggerHandler {
     
     public override void processCreate(List<Id> IdsToProcess) {
         System.debug('101.01->>>>>>>>>>>>ADUserChangeEventTriggerHandler:processCreate:inside....');
-
+        
         
         //each team could either add fields to this SOQL or perform an additional SOQL based on their own criteria and then call their method/class
         //List<AD_User__c> ADUsers = [select Id,FirstName,LastName,RecordTypeId,AccountId from AD_User__c where Id= : IdsToProcess];
@@ -40,84 +40,87 @@ public class ADUserChangeEventTriggerHandler extends ChangeEventTriggerHandler {
     
     public override void processUpdate(List<Id> IdsToProcess) {
         System.debug('102.01-##############ADUserChangeEventTriggerHandler:processUpdate:inside....');
-
+        
         
         List<AD_User__c> ADUsers = [SELECT Id, SECID__c, OwnerId, Name, RecordTypeId, AD_First_Name__c, AD_Last_Name__c, AD_User_Email__c, 
                                     AD_Federation_Id__c, Status__c FROM AD_User__c WHERE Id =: IdsToProcess];
+        List<Id> userIds = new List<Id>();
         List<AD_User_Inactivation__e> userEvents = new List<AD_User_Inactivation__e>();
-        //AD_User_Inactivation__e userEvent = new AD_User_Inactivation__e();
         
         for (AD_User__c user : ADUsers) {
-            userEvents.add(new AD_User_Inactivation__e(AD_SEC_ID__c=user.SECID__c,AD_Federation_Id__c=user.AD_Federation_Id__c, Status__c=user.Status__c));
-        }
-        /*
-        // Create an instance of the event and store it in the newsEvent variable
-        Cloud_News__e newsEvent = new Cloud_News__e(
-                   Location__c='Mountain City',
-                   Urgent__c=true,
-                   News_Content__c='Lake Road is closed due to mudslides.');
-        // Call method to publish events
-        Database.SaveResult sr = EventBus.publish(newsEvent);
-        // Inspect publishing result
-        if (sr.isSuccess()) {
-            System.debug('Successfully published event.');
-        } else {
-            for(Database.Error err : sr.getErrors()) {
-                System.debug('Error returned: ' +
-                             err.getStatusCode() +
-                             ' - ' +
-                             err.getMessage());
+            if ( user.Status__c.equals('Inactive')) {
+                userEvents.add(new AD_User_Inactivation__e(AD_SEC_ID__c=user.SECID__c,AD_Federation_Id__c=user.AD_Federation_Id__c, Status__c=user.Status__c));
+                userIds.add(user.Id);
             }
-        }*/
-        // Call method to publish events
-        List<Database.SaveResult> srs = EventBus.publish(userEvents);
-        // Inspect publishing result
-        for (Database.SaveResult sr: srs ) {
-            if (sr.isSuccess()) {
-                System.debug('102.01-##############ADUserChangeEventTriggerHandler:processUpdate:Successfully published event: '+sr);
-            } else {
-                for(Database.Error err : sr.getErrors()) {
-                    System.debug('Error returned: ' +
-                                 err.getStatusCode() +
-                                 ' - ' +
-                                 err.getMessage());
+        }
+        //are there user events?
+        if ( userEvents.size() > 0 ) {
+            // Call method to publish events
+            List<Database.SaveResult> srs = EventBus.publish(userEvents);
+            // Inspect publishing result
+            for (Database.SaveResult sr: srs ) {
+                if (sr.isSuccess()) {
+                    System.debug('102.01-##############ADUserChangeEventTriggerHandler:processUpdate:Successfully published event: '+sr);
+                } else {
+                    for(Database.Error err : sr.getErrors()) {
+                        System.debug('Error returned: ' +
+                                     err.getStatusCode() +
+                                     ' - ' +
+                                     err.getMessage());
+                    }
                 }
             }
+            //insert userEvents;
+            List<Profile> prof = [Select Id,Name from Profile where Name='System Administrator'];
+            AUP_Core_Functionality_Settings__c aupSettings = AUP_Core_Functionality_Settings__c.getInstance(prof[0].Id);
+            String returnString = '';
+            System.debug('AUP Settings: '+
+                         '\nExecute\t:\t'+aupSettings.AUP_ENT_Execute__c+
+                         '\nUsername\t:\t'+aupSettings.AUP_ENT_Username__c+
+                         '\npassword\t:\t'+aupSettings.AUP_ENT_Password__c+
+                         '\nClientId\t:\t'+aupSettings.AUP_ENT_Client_Id__c+
+                         '\nClientSecret\t:\t'+aupSettings.AUP_ENT_Client_Secret__c+
+                         '\nentEndPoint\t:\t'+aupSettings.AUP_ENT_End_Point__c);
+            
+            System.debug('110.01-##############ADUserChangeEventTriggerHandler:processUpdate:Sending through the web service? '+aupSettings.AUP_ENT_Execute__c);
+            if ( aupSettings.AUP_ENT_Execute__c ) {
+                ADPublishUserEvent.processUserEvents(userIds);
+            }
         }
-        //insert userEvents;
+        
     }
     
     private void executeUserCheck(List<AD_User__c> passedADUsers) {
         System.debug('103.01->>>>>>>>>>>>ADUserChangeEventTriggerHandler:executeUserCheck:inside....');
-        //User
-        //Id userRecTypeId = Schema.SObjectType.AD_User__c.getRecordTypeInfosByName().get('ADUserMain').getRecordTypeId();
-        
-        //Account creation variables
-        /*List<Account> newAccounts = new List<Account>();
+                //User
+                //Id userRecTypeId = Schema.SObjectType.AD_User__c.getRecordTypeInfosByName().get('ADUserMain').getRecordTypeId();
+                
+                //Account creation variables
+                /*List<Account> newAccounts = new List<Account>();
         
         for (AD_User__c cont : passedADUsers) {
-            
-            if ( (cont.RecordTypeId == contUVRecTypeId || cont.RecordTypeId == contWHVRecTypeId) && cont.AccountId==null ) {
-                newAccounts.add(new Account(Name = cont.FirstName + ' ' + cont.LastName, RecordTypeID = acctRecTypeId));                
-            }
-            
+        
+        if ( (cont.RecordTypeId == contUVRecTypeId || cont.RecordTypeId == contWHVRecTypeId) && cont.AccountId==null ) {
+        newAccounts.add(new Account(Name = cont.FirstName + ' ' + cont.LastName, RecordTypeID = acctRecTypeId));                
+        }
+        
         }
         insert newAccounts;
         List<AD_User__c> updateADUsers = new List<AD_User__c>();
         //loop through the ADUsers, match up to the newly created accounts, adding the Id to the ADUser
         for (AD_User__c cont : passedADUsers) {
-            
-            if ( (cont.RecordTypeId == contUVRecTypeId || cont.RecordTypeId == contWHVRecTypeId) && cont.AccountId==null ) {
-                for (Account acct: newAccounts ) {
-                    //compName = cont.FirstName + ' ' + cont.LastName;
-                    if ( acct.Name == (cont.FirstName + ' ' + cont.LastName) ) {
-                        cont.AccountId = acct.Id;
-                        updateAD_User__cs.add(cont);                        
-                    }
-                    
-                }
-            }
-            
+        
+        if ( (cont.RecordTypeId == contUVRecTypeId || cont.RecordTypeId == contWHVRecTypeId) && cont.AccountId==null ) {
+        for (Account acct: newAccounts ) {
+        //compName = cont.FirstName + ' ' + cont.LastName;
+        if ( acct.Name == (cont.FirstName + ' ' + cont.LastName) ) {
+        cont.AccountId = acct.Id;
+        updateAD_User__cs.add(cont);                        
+        }
+        
+        }
+        }
+        
         }
         update updateADUsers;
         */
@@ -134,14 +137,14 @@ public class ADUserChangeEventTriggerHandler extends ChangeEventTriggerHandler {
         Id recordId;
         List<Id> recordArr = new List<Id>();
         List<String> changedFields = new List<String>();
-    	//Set<String> caseIds = new Set<String>();
+        //Set<String> caseIds = new Set<String>();
         
         for(AD_User__ChangeEvent event : (List<AD_User__ChangeEvent>) Trigger.new) {
             EventBus.ChangeEventHeader header = event.ChangeEventHeader;
             changedFields = header.getChangedFields();
-	        System.debug('104.02->>>>>>>>>>>>ADUserChangeEventTriggerHandler:getChangeEventIds:header: '+header+' changeType: '+header.changetype);
-	        System.debug('104.02.01->>>>>>>>>>>>ADUserChangeEventTriggerHandler:getChangeEventIds:changeType: '+header.changetype);
-	        System.debug('104.02.02->>>>>>>>>>>>ADUserChangeEventTriggerHandler:getChangeEventIds:changedFields: '+changedFields);
+            System.debug('104.02->>>>>>>>>>>>ADUserChangeEventTriggerHandler:getChangeEventIds:header: '+header+' changeType: '+header.changetype);
+            System.debug('104.02.01->>>>>>>>>>>>ADUserChangeEventTriggerHandler:getChangeEventIds:changeType: '+header.changetype);
+            System.debug('104.02.02->>>>>>>>>>>>ADUserChangeEventTriggerHandler:getChangeEventIds:changedFields: '+changedFields);
             
             if (recordIds.isEmpty() || recordIds.get(header.changetype) == null ) {
                 // Get all Record Ids for this change and add to the set
@@ -152,8 +155,8 @@ public class ADUserChangeEventTriggerHandler extends ChangeEventTriggerHandler {
                     recordArr.add(rId);
                 }
                 if ( changedFields.contains('Status__c') ) {
-			        System.debug('104.02.03->>>>>>>>>>>>ADUserChangeEventTriggerHandler:getChangeEventIds:STATUS has changed: '+changedFields);
-	                recordIds.put(header.changetype,recordArr); 
+                    System.debug('104.02.03->>>>>>>>>>>>ADUserChangeEventTriggerHandler:getChangeEventIds:STATUS has changed: '+changedFields);
+                    recordIds.put(header.changetype,recordArr); 
                 }
             } else {
                 recordArr = recordIds.get(header.changetype);
@@ -161,8 +164,8 @@ public class ADUserChangeEventTriggerHandler extends ChangeEventTriggerHandler {
                     recordArr.add(rId);
                 }
                 if ( changedFields.contains('Status__c') ) {
-			        System.debug('104.02.04->>>>>>>>>>>>ADUserChangeEventTriggerHandler:getChangeEventIds:STATUS has changed: '+changedFields);
-	                recordIds.put(header.changetype,recordArr); 
+                    System.debug('104.02.04->>>>>>>>>>>>ADUserChangeEventTriggerHandler:getChangeEventIds:STATUS has changed: '+changedFields);
+                    recordIds.put(header.changetype,recordArr); 
                 }
             }
             //now put them in an 'ALL' type

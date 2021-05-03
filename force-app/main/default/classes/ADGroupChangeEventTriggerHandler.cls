@@ -99,6 +99,13 @@ public class ADGroupChangeEventTriggerHandler extends ChangeEventTriggerHandler 
             }
         }
         System.debug('102.05.190-##############ADGroupChangeEventTriggerHandler:processTransactions:FINISHING UP!');
+        AUP_Core_Functionality_Settings__c aupSettings = AUP_Core_Functionality_Settings__c.getInstance();
+        String returnString = '';
+        
+        if ( aupSettings.AUP_ENT_Execute__c ) {
+            ADPublishUserEvent evntPub = new ADPublishUserEvent();
+            returnString = evntPub.execute('Group',groupEvents,aupSettings);
+        }
         
     }
     
