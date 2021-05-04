@@ -3,63 +3,227 @@
 //
 
 public class ADUpdateGroupService {
+    
+    public String GroupName {get;set;} 
+    public String EmailAddress {get;set;} 
+    public String FederationId {get;set;} 
+    public String SECID {get;set;} 
+    public String FirstName {get;set;} 
+    public String LastName {get;set;} 
+    public String ParentADGroup {get;set;} 
+    public String Status {get;set;} 
+    
+    public ADUpdateGroupService(JSONParser parser) {
+        while (parser.nextToken() != System.JSONToken.END_OBJECT) {
+            if (parser.getCurrentToken() == System.JSONToken.FIELD_NAME) {
+                String text = parser.getText();
+                if (parser.nextToken() != System.JSONToken.VALUE_NULL) {
+                    if (text == 'GroupName') {
+                        GroupName = parser.getText();
+                    } else if (text == 'EmailAddress') {
+                        EmailAddress = parser.getText();
+                    } else if (text == 'FederationId') {
+                        FederationId = parser.getText();
+                    } else if (text == 'SECID') {
+                        SECID = parser.getText();
+                    } else if (text == 'FirstName') {
+                        FirstName = parser.getText();
+                    } else if (text == 'LastName') {
+                        LastName = parser.getText();
+                    } else if (text == 'ParentADGroup') {
+                        ParentADGroup = parser.getText();
+                    } else if (text == 'Status') {
+                        Status = parser.getText();
+                    } else {
+                        System.debug(LoggingLevel.WARN, 'ADUpdateGroupService consuming unrecognized property: '+text);
+                        consumeObject(parser);
+                    }
+                }
+            }
+        }
+    }
+    
+    
+    public static ADUpdateGroupService parse(String json) {
+        System.JSONParser parser = System.JSON.createParser(json);
+        return new ADUpdateGroupService(parser);
+    }
+    
+    public static void consumeObject(System.JSONParser parser) {
+        Integer depth = 0;
+        do {
+            System.JSONToken curr = parser.getCurrentToken();
+            if (curr == System.JSONToken.START_OBJECT || 
+                curr == System.JSONToken.START_ARRAY) {
+                    depth++;
+                } else if (curr == System.JSONToken.END_OBJECT ||
+                           curr == System.JSONToken.END_ARRAY) {
+                               depth--;
+                           }
+        } while (depth > 0 && parser.nextToken() != null);
+    }
+    
+    public static String execute (String messageRecived ) {
+        ADUpdateGroupService r = ADUpdateGroupService.parse(messageRecived);
+        String returnMessage = 'Success';
+        
+        System.debug('ADUpdateGroupService:GroupName: '+r.GroupName);
+        System.debug('ADUpdateGroupService:EmailAddress: '+r.EmailAddress);
+        System.debug('ADUpdateGroupService:FederationId: '+r.FederationId);
+        System.debug('ADUpdateGroupService:SECID: '+r.SECID);
+        System.debug('ADUpdateGroupService:FirstName: '+r.FirstName);
+        System.debug('ADUpdateGroupService:LastName: '+r.LastName);
+        System.debug('ADUpdateGroupService:ParentADGroup: '+r.ParentADGroup);
+        System.debug('ADUpdateGroupService:Status: '+r.Status);
+        
+        DTC_Application__c dtcApplication = new DTC_Application__c();
+        DTC_Application_Level__c dtcApplicationLevel = new DTC_Application_Level__c();
+        List<CF_Permission_Mapping__c> dtcApplicationLevelPermissions = new List<CF_Permission_Mapping__c>();
 
-	public String GroupName {get;set;} 
-	public String EmailAddress {get;set;} 
-	public String FederationId {get;set;} 
-	public String FirstName {get;set;} 
-	public String LastName {get;set;} 
-	public String ParentADGroup {get;set;} 
-	public String Status {get;set;} 
+        dtcApplication = getDTCApplication(r.ParentADGroup);
+        if ( dtcApplication.Id != null ) {
+			dtcApplicationLevel = getDTCApplicationLevel(dtcApplication.Id,r.GroupName);
+	        if ( dtcApplicationLevel.Id != null ) {
+                dtcApplicationLevelPermissions = getApplicationLevelPermissions(dtcApplication.Id,dtcApplicationLevel.Id);
+		        if ( dtcApplicationLevelPermissions.size() > 0 ) {
+                    createContact(r,dtcApplication,dtcApplicationLevel);
+                }
+            }
+        }
+        
+        
+        return returnMessage;
+        
+    }
+    
+    private static boolean createContact (ADUpdateGroupService grpEvent, DTC_Application__c dtcApplication, DTC_Application_Level__c dtcApplicationLevel) {
+        
+        boolean returnStatus = false;
+        
+        if ( !contactExists(grpEvent.SECID) && !applicationAccessExists(grpEvent.SECID,dtcApplication.Id,dtcApplicationLevel.Id) ) {
 
-	public ADUpdateGroupService(JSONParser parser) {
-		while (parser.nextToken() != System.JSONToken.END_OBJECT) {
-			if (parser.getCurrentToken() == System.JSONToken.FIELD_NAME) {
-				String text = parser.getText();
-				if (parser.nextToken() != System.JSONToken.VALUE_NULL) {
-					if (text == 'GroupName') {
-						GroupName = parser.getText();
-					} else if (text == 'EmailAddress') {
-						EmailAddress = parser.getText();
-					} else if (text == 'FederationId') {
-						FederationId = parser.getText();
-					} else if (text == 'FirstName') {
-						FirstName = parser.getText();
-					} else if (text == 'LastName') {
-						LastName = parser.getText();
-					} else if (text == 'ParentADGroup') {
-						ParentADGroup = parser.getText();
-					} else if (text == 'Status') {
-						Status = parser.getText();
-					} else {
-						System.debug(LoggingLevel.WARN, 'ADUpdateGroupService consuming unrecognized property: '+text);
-						consumeObject(parser);
-					}
-				}
-			}
-		}
-	}
-	
-	
-	public static ADUpdateGroupService parse(String json) {
-		System.JSONParser parser = System.JSON.createParser(json);
-		return new ADUpdateGroupService(parser);
-	}
-	
-	public static void consumeObject(System.JSONParser parser) {
-		Integer depth = 0;
-		do {
-			System.JSONToken curr = parser.getCurrentToken();
-			if (curr == System.JSONToken.START_OBJECT || 
-				curr == System.JSONToken.START_ARRAY) {
-				depth++;
-			} else if (curr == System.JSONToken.END_OBJECT ||
-				curr == System.JSONToken.END_ARRAY) {
-				depth--;
-			}
-		} while (depth > 0 && parser.nextToken() != null);
-	}
-	
+            /*
+                System.debug('ADUpdateGroupService:GroupName: '+r.GroupName);
+                System.debug('ADUpdateGroupService:EmailAddress: '+r.EmailAddress);
+                System.debug('ADUpdateGroupService:FederationId: '+r.FederationId);
+                System.debug('ADUpdateGroupService:SECID: '+r.SECID);
+                System.debug('ADUpdateGroupService:FirstName: '+r.FirstName);
+                System.debug('ADUpdateGroupService:LastName: '+r.LastName);
+                System.debug('ADUpdateGroupService:ParentADGroup: '+r.ParentADGroup);
+                System.debug('ADUpdateGroupService:Status: '+r.Status);
+             */            
+            try {
+                Contact newContact = new Contact(AccountId=dtcApplication.Account__c,
+                                                 Email=grpEvent.EmailAddress,Federation_Id__c=grpEvent.FederationId,SECID__c=grpEvent.SECID,
+                                                 FirstName=grpEvent.FirstName,LastName=grpEvent.LastName,
+                                                 Description='AUP Created Contact');
+                insert newContact;
+		        System.debug('400-10->>>>>>>>>>>>ADUpdateGroupService:contactExists:createContact: newContact: '+newContact);
+                
+                CF_Application_Access__c newAccess = new CF_Application_Access__c(Account__c=newContact.AccountId,
+                                                                                  Approval_Status__c='Approved',Approved_Checkbox__c=true,
+                                                                                  Contact__c=newContact.Id,
+                                                                                  DTC_Application__c=dtcApplication.Id,DTC_Application_Level__c=dtcApplicationLevel.Id,
+                                                                                  Email_Id__c=grpEvent.EmailAddress,Federation_Id__c=grpEvent.FederationId,Inactive__c=false,
+                                                                                  First_Name__c=grpEvent.FirstName,Last_Name__c=grpEvent.LastName,
+                                                                                  Notes__c='AUP Created Application Access');
+                insert newAccess;
+		        System.debug('400-20->>>>>>>>>>>>ADUpdateGroupService:contactExists:create Application Access: newAccess: '+newAccess);
+                
+                returnStatus = true;
+                            
+            }
+            catch (Exception e) {
+                System.debug('Exception(creating new contact and new Application Access record): '+e.getStackTraceString());
+            }
 
+        }
+        return returnStatus;
+        
+        
+    }
+    
+    private static boolean contactExists (String passedSECID ) {
+        boolean returnStatus = false;
+        
+        List<Contact> cnt = [Select Id,Name from Contact where SECID__c =: passedSECID];
+        System.debug('300-10->>>>>>>>>>>>ADUpdateGroupService:contactExists:lookin for contact: passedSECID: '+passedSECID+' found: '+cnt.size());
+        if (cnt.size() > 0 ) {
+            returnStatus = true;
+        }
+        
+        return returnStatus;
+    }
+    
+    private static boolean applicationAccessExists (String passedSECID, Id applicationId, Id applicationLevelId ) {
+        boolean returnStatus = false;
+        
+    	List<CF_Application_Access__c> aa = [Select Id, Name, Approval_Status__c, Application_Name__c, DTC_Application_Level__r.Name, 
+                                             Inactive__c, DTC_Application__r.Name, Contact__r.SECID__c FROM CF_Application_Access__c 
+                                             where Contact__r.SECID__c =: passedSECID AND Inactive__c = true AND 
+                                             DTC_Application__c =: applicationId AND DTC_Application_Level__c =: applicationLevelId];
+        System.debug('300-20->>>>>>>>>>>>ADUpdateGroupService:contactExists:lookin for applicationAccess: passedSECID: '+passedSECID+
+                     ' application Id: '+applicationId+' application level id: '+applicationLevelId+
+                     ' found: '+aa.size());
+        if (aa.size() > 0 ) {
+            returnStatus = true;
+        }
+        
+        return returnStatus;
+    }
 
+    
+    private static DTC_Application__c getDTCApplication (String applicationName ) {
+        DTC_Application__c returnApplication = new DTC_Application__c();
+        
+        System.debug('200-10->>>>>>>>>>>>ADUpdateGroupService:getDTCApplication:lookin for applicationName: '+applicationName);
+        try {
+            returnApplication = [select Id, Name, Account__c, Application_Description__c, Org__c, Profile_ID__c from DTC_Application__c where Name =: applicationName ];
+        } catch (Exception e) {
+            System.debug('ADUpdateGroupService:getDTCApplication:Exception: '+e.getStackTraceString());
+            returnApplication = null;
+        }
+        System.debug('200-15->>>>>>>>>>>>ADUpdateGroupService:getDTCApplication:found application: '+returnApplication);
+        
+        return returnApplication;
+        
+    }
+    
+    private static DTC_Application_Level__c getDTCApplicationLevel (Id applicationId, String applicationLevelName ) {
+        DTC_Application_Level__c returnApplicationLevel = new DTC_Application_Level__c();
+        
+        System.debug('210-10->>>>>>>>>>>>ADUpdateGroupService:getDTCApplicationLevel:lookin for applicationLevelName: '+applicationLevelName);
+        try {
+            returnApplicationLevel = [select Id, Name, DTC_Application__c, Is_Active__c from DTC_Application_Level__c 
+                                      where Name =: applicationLevelName AND DTC_Application__c =: applicationId];
+        } catch (Exception e) {
+            System.debug('ADUpdateGroupService:getDTCApplicationLevel:Exception: '+e.getStackTraceString());
+            returnApplicationLevel = null;
+        }
+        System.debug('210-15->>>>>>>>>>>>ADUpdateGroupService:getDTCApplicationLevel:found application Level: '+returnApplicationLevel);
+        
+        return returnApplicationLevel;
+        
+    }
+     
+    private static List<CF_Permission_Mapping__c> getApplicationLevelPermissions (Id applicationId, Id applicationLevelId ) {
+        List<CF_Permission_Mapping__c> returnApplicationLevelPermissions = new List<CF_Permission_Mapping__c>();
+        
+        System.debug('220-10->>>>>>>>>>>>ADUpdateGroupService:getApplicationLevelPermissions:lookin for applicationId: '+applicationId+
+                     ' applicationLevelId: '+applicationLevelId);
+        try {
+            returnApplicationLevelPermissions = [select Id, Name, DTC_Application__c , DTC_Application_Level__c  from CF_Permission_Mapping__c 
+                                      where DTC_Application_Level__c =: applicationLevelId AND DTC_Application__c =: applicationId];
+        } catch (Exception e) {
+            System.debug('ADUpdateGroupService:getApplicationLevelPermissions:Exception: '+e.getStackTraceString());
+            returnApplicationLevelPermissions = null;
+        }
+        System.debug('220-15->>>>>>>>>>>>ADUpdateGroupService:getApplicationLevelPermissions:found application Level permissions: '+returnApplicationLevelPermissions);
+       
+        
+        return returnApplicationLevelPermissions;
+        
+    }
+
+    
 }

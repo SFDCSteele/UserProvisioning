@@ -3,4 +3,38 @@
     <fullName>Package_License</fullName>
     <active>true</active>
     <label>Package License</label>
+    <picklistValues>
+        <picklist>Access_Type__c</picklist>
+        <values>
+            <fullName>Group</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Permission Set</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Permission Set Groups</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Permission Set Licenses</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Queue</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Permission_Location__c</picklist>
+        <values>
+            <fullName>Destination</fullName>
+            <default>true</default>
+        </values>
+        <values>
+            <fullName>Hub</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
 </RecordType>

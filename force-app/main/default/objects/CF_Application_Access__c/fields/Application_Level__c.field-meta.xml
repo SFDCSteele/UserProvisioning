@@ -12,7 +12,7 @@
             <valueField>$Source.DTC_Application__c</valueField>
         </filterItems>
         <infoMessage>Select your requested level of access</infoMessage>
-        <isOptional>false</isOptional>
+        <isOptional>true</isOptional>
     </lookupFilter>
     <referenceTo>CF_Application_Level__c</referenceTo>
     <relationshipLabel>Application Access</relationshipLabel>

@@ -156,7 +156,7 @@
     <enableSearch>true</enableSearch>
     <enableSharing>true</enableSharing>
     <enableStreamingApi>true</enableStreamingApi>
-    <externalSharingModel>ReadWrite</externalSharingModel>
+    <externalSharingModel>ControlledByParent</externalSharingModel>
     <label>Application Access</label>
     <nameField>
         <displayFormat>AA-{0000}</displayFormat>
@@ -167,7 +167,7 @@
     <pluralLabel>Application Access</pluralLabel>
     <recordTypeTrackHistory>true</recordTypeTrackHistory>
     <searchLayouts/>
-    <sharingModel>ReadWrite</sharingModel>
+    <sharingModel>ControlledByParent</sharingModel>
     <startsWith>Vowel</startsWith>
     <visibility>Public</visibility>
 </CustomObject>
