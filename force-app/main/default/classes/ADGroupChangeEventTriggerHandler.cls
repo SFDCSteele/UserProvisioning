@@ -34,79 +34,125 @@ public class ADGroupChangeEventTriggerHandler extends ChangeEventTriggerHandler 
     }
     
     public override void processUpdate(List<Id> IdsToProcess) {
-        System.debug('102.01-##############ADGroupChangeEventTriggerHandler:processUpdate:inside....IdsToProcess: '+IdsToProcess);
+        System.debug('101.02-##############ADGroupChangeEventTriggerHandler:processUpdate:inside....IdsToProcess: '+IdsToProcess);
         
         processTransactions(IdsToProcess);
     }
     
     
     public override void processDelete(List<Id> IdsToProcess) {
-        System.debug('102.01-##############ADGroupChangeEventTriggerHandler:processDelete:inside....IdsToProcess: '+IdsToProcess);
+        System.debug('101.03-##############ADGroupChangeEventTriggerHandler:processDelete:inside....IdsToProcess: '+IdsToProcess);
         
         processTransactions(IdsToProcess);
     }
     
     private void processTransactions(List<Id> IdsToProcess) {
-        System.debug('102.05-##############ADGroupChangeEventTriggerHandler:processTransactions:Ids: '+IdsToProcess);
+        System.debug('777.04-##############ADGroupChangeEventTriggerHandler:processTransactions:Ids: '+IdsToProcess);
         
+        AUPJSONGenerator sJSonStr = new AUPJSONGenerator();
         List<AD_Group_Update__e> groupEvents = new List<AD_Group_Update__e>();
+        AD_Group_Update__e groupEvent = new AD_Group_Update__e();
         
-        String parentGroupName = '';
+        String applicationName = '';
+        String applicationLevelName = '';
+        boolean assignmentFound = false;
+        String  grpSJONString = '';
+        Integer grpCount = 0;
         for(AD_Group__c grp: [SELECT Id, Name, RecordTypeId, Parent_AD_Group__c, AD_Group_Name__c, Status__c,AD_User__c FROM AD_Group__c where Id =: IdsToProcess]){
-            System.debug('102.05.100-##############ADGroupChangeEventTriggerHandler:processTransactions:AD_Group_Name__c => '+grp.AD_Group_Name__c+' Parent Group Id: '+grp.Parent_AD_Group__c+
+            applicationName = '';
+            applicationLevelName = '';
+            assignmentFound = false;
+            System.debug('777.05.100-##############ADGroupChangeEventTriggerHandler:processTransactions:AD_Group_Name__c => '+grp.AD_Group_Name__c+' Parent Group Id: '+grp.Parent_AD_Group__c+
                          ' user: '+grp.AD_User__c);
-            parentGroupName = '';
-            try {
-                for(AD_Group__c parentGroup : [SELECT Id, Name, RecordTypeId, Parent_AD_Group__c, AD_Group_Name__c, Status__c FROM AD_Group__c where Id =: grp.Parent_AD_Group__c]){
-                    parentGroupName = parentGroup.AD_Group_Name__c;
-                    System.debug('102.05.110-##############ADGroupChangeEventTriggerHandler:processTransactions:AD_Group_Name__c => '+grp.AD_Group_Name__c+' Parent Group Name: '+parentGroup.AD_Group_Name__c);
-                }
-            } catch (NullPointerException npe) {
-                System.debug('102.05.120-##############ADGroupChangeEventTriggerHandler:processTransactions:AD_Group_Name__c => '+grp.AD_Group_Name__c+' Parent_AD_Group__c: '+grp.Parent_AD_Group__c+' IS NULL!');
-                
-            }
-            try {
-                for(AD_User__c adUser : [SELECT SECID__c, AD_First_Name__c, AD_Last_Name__c, AD_User_Email__c, AD_Federation_Id__c FROM AD_User__c where Id =: grp.AD_User__c]){
-                    System.debug('102.05.130-##############ADGroupChangeEventTriggerHandler:processTransactions:AD_Group_Name__c => '+grp.AD_Group_Name__c+' User: '+adUser.AD_First_Name__c+' '+adUser.AD_Last_Name__c);
-                    groupEvents.add(new AD_Group_Update__e(
-                        AD_SEC_ID__c=aduser.SECID__c,
-                        Group_Name__c=grp.AD_Group_Name__c,
-                        Email_Address__c=adUser.AD_User_Email__c,
-                        Federation_Id__c=adUser.AD_Federation_Id__c,
-                        FirstName__c=adUser.AD_First_Name__c,
-                        LastName__c=adUser.AD_Last_Name__c,
-                        Parent_AD_Group__c=parentGroupName,
-                        Status__c=grp.Status__c));                    
-                }
-            } catch (NullPointerException npe) {
-                System.debug('102.05.140-##############ADGroupChangeEventTriggerHandler:processTransactions:AD_Group_Name__c => '+grp.AD_Group_Name__c+' AD_User__c: '+grp.AD_User__c+' IS NULL!');
-                
-            }
-        }
-        // Call method to publish events
-        List<Database.SaveResult> srs = EventBus.publish(groupEvents);
-        // Inspect publishing result
-        for (Database.SaveResult sr: srs ) {
-            if (sr.isSuccess()) {
-                System.debug('102.01-##############ADGroupChangeEventTriggerHandler:processTransactions:Successfully published event: '+sr);
-            } else {
-                for(Database.Error err : sr.getErrors()) {
-                    System.debug('Error returned: ' +
-                                 err.getStatusCode() +
-                                 ' - ' +
-                                 err.getMessage());
+            if ( grp.Parent_AD_Group__c != null ) {
+                try {
+                    for(AD_Group__c parentGroup : [SELECT Id, Name, RecordTypeId, Parent_AD_Group__c, AD_Group_Name__c, Status__c FROM AD_Group__c where Id =: grp.Parent_AD_Group__c]){
+                        //parentGroupName = parentGroup.AD_Group_Name__c;
+                        System.debug('777.05.110-##############ADGroupChangeEventTriggerHandler:processTransactions:AD_Group_Name__c => '+grp.AD_Group_Name__c+
+                                     ' Parent Group Name: '+parentGroup.AD_Group_Name__c);
+                        if ( parentGroup.Parent_AD_Group__c != null ) {
+                            applicationName = parentGroup.AD_Group_Name__c;
+                            applicationLevelName = grp.AD_Group_Name__c;
+                            assignmentFound = true;
+                        }
+                    }
+                } catch (NullPointerException npe) {
+                    System.debug('777.05.120-##############ADGroupChangeEventTriggerHandler:processTransactions:AD_Group_Name__c => '+grp.AD_Group_Name__c+
+                                 ' Parent_AD_Group__c: '+grp.Parent_AD_Group__c+' IS NULL!');
+                    
                 }
             }
+            if ( assignmentFound ) {
+                System.debug('777.05.XXX-##############ADGroupChangeEventTriggerHandler:processTransactions:applicationName => '+applicationName+
+                             ' applicationLevelName: '+applicationLevelName);
+                try {
+                    for(AD_User__c adUser : [SELECT SECID__c, AD_First_Name__c, AD_Last_Name__c, AD_User_Email__c, AD_Federation_Id__c FROM AD_User__c where Id =: grp.AD_User__c]){
+                        System.debug('777.05.130-##############ADGroupChangeEventTriggerHandler:processTransactions:AD_Group_Name__c => '+grp.AD_Group_Name__c+
+                                     ' User: '+adUser.AD_First_Name__c+' '+adUser.AD_Last_Name__c);
+                        groupEvent = new AD_Group_Update__e(
+                            AD_SEC_ID__c=aduser.SECID__c,
+                            Group_Name__c=applicationLevelName,
+                            Email_Address__c=adUser.AD_User_Email__c,
+                            Federation_Id__c=adUser.AD_Federation_Id__c,
+                            FirstName__c=adUser.AD_First_Name__c,
+                            LastName__c=adUser.AD_Last_Name__c,
+                            Parent_AD_Group__c=applicationName,
+                            Status__c=grp.Status__c);
+                        groupEvents.add(groupEvent);  
+                        if ( (grpCount++) > 0 ) {
+                            grpSJONString += ',';
+                        }
+                        grpSJONString  += sJSonStr.generateJSONContent('Group', groupEvent);  
+                        /*
+                        grpSJONString += '{"AD_SEC_ID__c":"'+aduser.SECID__c+'",'+
+                            '"Group_Name__c":"'+applicationLevelName+'",'+
+                            '"Email_Address__c":"'+adUser.AD_User_Email__c+'",'+
+                            '"Federation_Id__c":"'+adUser.AD_Federation_Id__c+'",'+
+                            '"FirstName__c":"'+adUser.AD_First_Name__c+'",'+
+                            '"LastName__c":"'+adUser.AD_Last_Name__c+'",'+
+                            '"Parent_AD_Group__c":"'+applicationName+'",'+
+                            '"Status__c":"'+grp.Status__c+'"}';
+						*/
+                    }
+                    System.debug('777.05.200-##############ADGroupChangeEventTriggerHandler:processTransactions:groupEvents => '+groupEvents);
+                } catch (NullPointerException npe) {
+                    System.debug('777.05.300-##############ADGroupChangeEventTriggerHandler:processTransactions:AD_Group_Name__c => '+grp.AD_Group_Name__c+' AD_User__c: '+grp.AD_User__c+' IS NULL!');
+                    
+                }
+            }
         }
-        System.debug('102.05.190-##############ADGroupChangeEventTriggerHandler:processTransactions:FINISHING UP!');
-        AUP_Core_Functionality_Settings__c aupSettings = AUP_Core_Functionality_Settings__c.getInstance();
-        String returnString = '';
-        
-        if ( aupSettings.AUP_ENT_Execute__c ) {
-            ADPublishUserEvent evntPub = new ADPublishUserEvent();
-            returnString = evntPub.execute('Group',groupEvents,aupSettings);
+        if ( groupEvents.size() > 0 ) {
+            // Call method to publish events
+            List<Database.SaveResult> srs = EventBus.publish(groupEvents);
+            // Inspect publishing result
+            for (Database.SaveResult sr: srs ) {
+                if (sr.isSuccess()) {
+                    System.debug('777.01-##############ADGroupChangeEventTriggerHandler:processTransactions:Successfully published event: '+sr);
+                } else {
+                    for(Database.Error err : sr.getErrors()) {
+                        System.debug('Error returned: ' +
+                                     err.getStatusCode() +
+                                     ' - ' +
+                                     err.getMessage());
+                    }
+                }
+            }
+            System.debug('777.05.190-##############ADGroupChangeEventTriggerHandler:processTransactions:FINISHING UP!');
+            List<Profile> prof = [Select Id,Name from Profile where Name='System Administrator'];
+            AUP_Core_Functionality_Settings__c aupSettings = AUP_Core_Functionality_Settings__c.getInstance(prof[0].Id);
+            System.debug('AUP Settings: '+
+                         '\nExecute\t:\t'+aupSettings.AUP_ENT_Execute__c+
+                         '\nUsername\t:\t'+aupSettings.AUP_ENT_Username__c+
+                         '\npassword\t:\t'+aupSettings.AUP_ENT_Password__c+
+                         '\nClientId\t:\t'+aupSettings.AUP_ENT_Client_Id__c+
+                         '\nClientSecret\t:\t'+aupSettings.AUP_ENT_Client_Secret__c+
+                         '\nentEndPoint\t:\t'+aupSettings.AUP_ENT_End_Point__c);
+            
+            System.debug('777.01-##############ADGroupChangeEventTriggerHandler:processUpdate:Sending through the web service? '+aupSettings.AUP_ENT_Execute__c);
+            if ( aupSettings.AUP_ENT_Execute__c ) {
+                ADPublishUserEvent.processEvents('Group',grpSJONString);
+            }
         }
-        
     }
     
     //This method takes all of the events in Trigger.new and maps the record Ids based on change type
@@ -135,19 +181,19 @@ public class ADGroupChangeEventTriggerHandler extends ChangeEventTriggerHandler 
                 for (Id rId : header.recordIds) {
                     recordArr.add(rId);
                 }
-                if ( changedFields.contains('Status__c') && event.get('Status__c') != 'New' ) {
-                    System.debug('104.02.03->>>>>>>>>>>>ADGroupChangeEventTriggerHandler:getChangeEventIds:STATUS has changed: '+changedFields);
+                //if ( changedFields.contains('Status__c') && event.get('Status__c') != 'New' ) {
+                    System.debug('104.02.03->>>>>>>>>>>>ADGroupChangeEventTriggerHandler:getChangeEventIds:Fields have changed: '+changedFields);
                     recordIds.put(header.changetype,recordArr); 
-                }
+                //}
             } else {
                 recordArr = recordIds.get(header.changetype);
                 for (Id rId : header.recordIds) {
                     recordArr.add(rId);
                 }
-                if ( changedFields.contains('Status__c') && event.get('Status__c') != 'New' ) {
-                    System.debug('104.02.04->>>>>>>>>>>>ADGroupChangeEventTriggerHandler:getChangeEventIds:STATUS has changed: '+changedFields);
+                //if ( changedFields.contains('Status__c') && event.get('Status__c') != 'New' ) {
+                    System.debug('104.02.04->>>>>>>>>>>>ADGroupChangeEventTriggerHandler:getChangeEventIds:Fields have changed: '+changedFields);
                     recordIds.put(header.changetype,recordArr); 
-                }
+                //}
             }
             //now put them in an 'ALL' type
             if (recordIds.isEmpty() || recordIds.get('ALL') == null ) {

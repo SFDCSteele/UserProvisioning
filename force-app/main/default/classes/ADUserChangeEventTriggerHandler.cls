@@ -41,16 +41,23 @@ public class ADUserChangeEventTriggerHandler extends ChangeEventTriggerHandler {
     public override void processUpdate(List<Id> IdsToProcess) {
         System.debug('102.01-##############ADUserChangeEventTriggerHandler:processUpdate:inside....');
         
+        AUPJSONGenerator sJSonStr = new AUPJSONGenerator();
         
         List<AD_User__c> ADUsers = [SELECT Id, SECID__c, OwnerId, Name, RecordTypeId, AD_First_Name__c, AD_Last_Name__c, AD_User_Email__c, 
                                     AD_Federation_Id__c, Status__c FROM AD_User__c WHERE Id =: IdsToProcess];
-        List<Id> userIds = new List<Id>();
         List<AD_User_Inactivation__e> userEvents = new List<AD_User_Inactivation__e>();
+        AD_User_Inactivation__e userEvent = new AD_User_Inactivation__e();
+        String  usrSJONString = '';
+        Integer usrCount = 0;
         
         for (AD_User__c user : ADUsers) {
             if ( user.Status__c.equals('Inactive')) {
-                userEvents.add(new AD_User_Inactivation__e(AD_SEC_ID__c=user.SECID__c,AD_Federation_Id__c=user.AD_Federation_Id__c, Status__c=user.Status__c));
-                userIds.add(user.Id);
+                userEvent = new AD_User_Inactivation__e(AD_SEC_ID__c=user.SECID__c,AD_Federation_Id__c=user.AD_Federation_Id__c, Status__c=user.Status__c);
+                userEvents.add(userEvent);
+                if ( (usrCount++) > 0 ) {
+                    usrSJONString += ',';
+                }
+                usrSJONString  += sJSonStr.generateJSONContent('User', userEvent);  
             }
         }
         //are there user events?
@@ -73,7 +80,6 @@ public class ADUserChangeEventTriggerHandler extends ChangeEventTriggerHandler {
             //insert userEvents;
             List<Profile> prof = [Select Id,Name from Profile where Name='System Administrator'];
             AUP_Core_Functionality_Settings__c aupSettings = AUP_Core_Functionality_Settings__c.getInstance(prof[0].Id);
-            String returnString = '';
             System.debug('AUP Settings: '+
                          '\nExecute\t:\t'+aupSettings.AUP_ENT_Execute__c+
                          '\nUsername\t:\t'+aupSettings.AUP_ENT_Username__c+
@@ -84,7 +90,7 @@ public class ADUserChangeEventTriggerHandler extends ChangeEventTriggerHandler {
             
             System.debug('110.01-##############ADUserChangeEventTriggerHandler:processUpdate:Sending through the web service? '+aupSettings.AUP_ENT_Execute__c);
             if ( aupSettings.AUP_ENT_Execute__c ) {
-                ADPublishUserEvent.processUserEvents(userIds);
+                ADPublishUserEvent.processEvents('User',usrSJONString);
             }
         }
         
