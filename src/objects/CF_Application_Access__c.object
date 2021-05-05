@@ -156,7 +156,7 @@
     <enableSearch>true</enableSearch>
     <enableSharing>true</enableSharing>
     <enableStreamingApi>true</enableStreamingApi>
-    <externalSharingModel>ReadWrite</externalSharingModel>
+    <externalSharingModel>ControlledByParent</externalSharingModel>
     <label>Application Access</label>
     <nameField>
         <displayFormat>AA-{0000}</displayFormat>
@@ -167,7 +167,7 @@
     <pluralLabel>Application Access</pluralLabel>
     <recordTypeTrackHistory>true</recordTypeTrackHistory>
     <searchLayouts/>
-    <sharingModel>ReadWrite</sharingModel>
+    <sharingModel>ControlledByParent</sharingModel>
     <startsWith>Vowel</startsWith>
     <visibility>Public</visibility>
     <fields>
@@ -196,7 +196,7 @@
                 <valueField>$Source.DTC_Application__c</valueField>
             </filterItems>
             <infoMessage>Select your requested level of access</infoMessage>
-            <isOptional>false</isOptional>
+            <isOptional>true</isOptional>
         </lookupFilter>
         <referenceTo>CF_Application_Level__c</referenceTo>
         <relationshipLabel>Application Access</relationshipLabel>
@@ -399,6 +399,20 @@
         <trackHistory>true</trackHistory>
         <trackTrending>false</trackTrending>
         <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>DTC_Application_Level__c</fullName>
+        <externalId>false</externalId>
+        <label>DTC Application Level</label>
+        <referenceTo>DTC_Application_Level__c</referenceTo>
+        <relationshipLabel>Application Access</relationshipLabel>
+        <relationshipName>Application_Access</relationshipName>
+        <relationshipOrder>0</relationshipOrder>
+        <reparentableMasterDetail>false</reparentableMasterDetail>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>MasterDetail</type>
+        <writeRequiresMasterRead>false</writeRequiresMasterRead>
     </fields>
     <fields>
         <fullName>DTC_Application__c</fullName>
@@ -2694,7 +2708,7 @@ FLOOR((NOW() -  CreatedDate )*24) &gt; 48, TRUE, FALSE)</formula>
     </webLinks>
     <validationRules>
         <fullName>FEP_Disable_Approval_of_Cancelled_record</fullName>
-        <active>true</active>
+        <active>false</active>
         <description>Prevents users from approving cancelled records by mistake.</description>
         <errorConditionFormula>AND(
 ISPICKVAL(PRIORVALUE(Approval_Status__c), &apos;Cancelled&apos;),
@@ -2705,14 +2719,14 @@ ISPICKVAL(Approval_Status__c, &apos;Approved&apos;),
     </validationRules>
     <validationRules>
         <fullName>Stationfieldcannotbenull</fullName>
-        <active>true</active>
+        <active>false</active>
         <errorConditionFormula>AND(Application_Level__r.Name= &apos;Firm POC Fiduciary Access&apos; || Application_Level__r.Name= &apos;Individual Fiduciary Access&apos; , ISPICKVAL(Station__c ,&apos;Null&apos;))</errorConditionFormula>
         <errorDisplayField>Station__c</errorDisplayField>
         <errorMessage>Please select valid station</errorMessage>
     </validationRules>
     <validationRules>
         <fullName>VALERI_Servicer_Admin</fullName>
-        <active>true</active>
+        <active>false</active>
         <errorConditionFormula>AND(ISBLANK(Application_Level__c) ,ISPICKVAL(Approval_Status__c , &apos;Approved&apos;) )</errorConditionFormula>
         <errorMessage>Application must have a Application level to be approved.</errorMessage>
     </validationRules>

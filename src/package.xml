@@ -1,14 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
   <types>
+    <name>AppMenu</name>
+    <members>AppSwitcher</members>
+  </types>
+  <types>
     <name>CustomApplication</name>
     <members>AppBrand</members>
     <members>Core_Functionality</members>
   </types>
   <types>
     <name>ApexClass</name>
+    <members>ADGroupReceiveEvent</members>
+    <members>ADGroupUpdateEventTriggerHandler</members>
+    <members>ADUpdateGroupService</members>
+    <members>ADUserInactivationEventTriggerHandler</members>
+    <members>ADUserReceiveEvent</members>
+    <members>AUPJSONGenerator</members>
+    <members>PlatformEventTriggerHandler</members>
     <members>Views_CF_PBAddPublicGroupFromFlow</members>
     <members>Views_CF_PBRemovePublicGroupFromFlow</members>
+  </types>
+  <types>
+    <name>ConnectedApp</name>
+    <members>AUP_Event_Manager</members>
   </types>
   <types>
     <name>CustomPermission</name>
@@ -24,12 +39,7 @@
   </types>
   <types>
     <name>Flow</name>
-    <members>CF_Account_Related_Functionality_Add_Account</members>
-    <members>CF_Account_Related_Functionality_Add_Account_Flow</members>
-    <members>CF_Account_Related_Functionality_Deactivate_Account</members>
-    <members>CF_Account_Related_Functionality_Deactivate_Account_Process</members>
     <members>CF_Add_Parent_Public_Group_as_a_member_of_Child_Public_Group</members>
-    <members>CF_Application_Access_With_Contact_and_Account</members>
     <members>CF_Assign_Permission_Set_to_User</members>
     <members>CF_Create_Group_on_VA_Org_Account_Creation</members>
     <members>CF_Delete_Permission_Set_Assignment</members>
@@ -40,7 +50,6 @@
     <members>CF_Permission_Set_Assginment</members>
     <members>CF_User_When_the_Contact_is_Created</members>
     <members>CF_User_When_the_Contact_is_Created_Process</members>
-    <members>CF_Views_add_Functionality</members>
     <members>CJTVALERI_activation</members>
   </types>
   <types>
@@ -61,12 +70,19 @@
     <members>CF_Application_Level_Access__c-Application Level Access Layout</members>
     <members>CF_Application_Level__c-Application Level Layout</members>
     <members>CF_Permission_Mapping__c-Permission Set Layout</members>
+    <members>Contact-Contact %28Marketing%29 Layout</members>
+    <members>Contact-Contact %28Sales%29 Layout</members>
+    <members>Contact-Contact %28Support%29 Layout</members>
+    <members>Contact-Contact Layout</members>
     <members>DTC_Application_Level__c-DTC Application Level Layout</members>
     <members>DTC_Application__c-DTC Application Layout</members>
     <members>DTC_User_Setup_Instructions__c-User Setup Instructions Layout</members>
+    <members>User-User Layout</members>
   </types>
   <types>
     <name>CustomObject</name>
+    <members>AD_Group_Update__e</members>
+    <members>AD_User_Inactivation__e</members>
     <members>Account</members>
     <members>CF_Application_Access__c</members>
     <members>CF_Application_Level_Access__c</members>
@@ -82,6 +98,17 @@
   </types>
   <types>
     <name>CustomField</name>
+    <members>AD_Group_Update__e.AD_SEC_ID__c</members>
+    <members>AD_Group_Update__e.Email_Address__c</members>
+    <members>AD_Group_Update__e.Federation_Id__c</members>
+    <members>AD_Group_Update__e.FirstName__c</members>
+    <members>AD_Group_Update__e.Group_Name__c</members>
+    <members>AD_Group_Update__e.LastName__c</members>
+    <members>AD_Group_Update__e.Parent_AD_Group__c</members>
+    <members>AD_Group_Update__e.Status__c</members>
+    <members>AD_User_Inactivation__e.AD_Federation_Id__c</members>
+    <members>AD_User_Inactivation__e.AD_SEC_ID__c</members>
+    <members>AD_User_Inactivation__e.Status__c</members>
     <members>Account.AccountNumber</members>
     <members>Account.AccountSource</members>
     <members>Account.AnnualRevenue</members>
@@ -137,6 +164,7 @@
     <members>CF_Application_Access__c.Contact_Street__c</members>
     <members>CF_Application_Access__c.Contact_Zip_Code__c</members>
     <members>CF_Application_Access__c.Contact__c</members>
+    <members>CF_Application_Access__c.DTC_Application_Level__c</members>
     <members>CF_Application_Access__c.DTC_Application__c</members>
     <members>CF_Application_Access__c.Destination_Org_Contact_Id__c</members>
     <members>CF_Application_Access__c.Destination_Org_Creation_Status__c</members>
@@ -176,8 +204,12 @@
     <members>CF_Application_Level_Access__c.DTC_Application_Level__c</members>
     <members>CF_Application_Level__c.DTC_Application__c</members>
     <members>CF_Application_Level__c.Process_Route__c</members>
+    <members>CF_Permission_Mapping__c.Access_API_Name__c</members>
+    <members>CF_Permission_Mapping__c.Access_Type__c</members>
     <members>CF_Permission_Mapping__c.Application_Role__c</members>
+    <members>CF_Permission_Mapping__c.DTC_Application_Level__c</members>
     <members>CF_Permission_Mapping__c.DTC_Application__c</members>
+    <members>CF_Permission_Mapping__c.Permission_Location__c</members>
     <members>CF_Permission_Mapping__c.Permission_Set_API_Name__c</members>
     <members>CF_Permission_Mapping__c.Permission_Set_ID__c</members>
     <members>Contact.AccountId</members>
@@ -209,6 +241,7 @@
     <members>Contact.OwnerId</members>
     <members>Contact.Phone</members>
     <members>Contact.ReportsToId</members>
+    <members>Contact.SECID__c</members>
     <members>Contact.Title</members>
     <members>Contact.User_ID__c</members>
     <members>DTC_Application_Level__c.Application_Level_User_Creation_Apex__c</members>
@@ -228,6 +261,7 @@
     <members>DTC_Application_Level__c.Public_Group_s__c</members>
     <members>DTC_Application__c.AE_Lead_Email__c</members>
     <members>DTC_Application__c.AE_Lead_Name__c</members>
+    <members>DTC_Application__c.Account__c</members>
     <members>DTC_Application__c.Actual_Community_EA__c</members>
     <members>DTC_Application__c.Actual_DrawLoop__c</members>
     <members>DTC_Application__c.Actual_Einstein_Analytics__c</members>
@@ -321,6 +355,7 @@
     <members>User.Account_Id__c</members>
     <members>User.CF_User_Office__c</members>
     <members>User.License_Name__c</members>
+    <members>User.SECID__c</members>
   </types>
   <types>
     <name>ListView</name>
@@ -380,15 +415,28 @@
     <members>Core_Functionality</members>
   </types>
   <types>
+    <name>PlatformEventChannelMember</name>
+    <members>ChangeEvents_CF_Application_Access_ChangeEvent</members>
+  </types>
+  <types>
     <name>QuickAction</name>
     <members>CF_Application_Access__c.Approve</members>
     <members>CF_Application_Access__c.Reject</members>
     <members>FeedItem.NewTaskFromFeedItem</members>
   </types>
   <types>
+    <name>ReportType</name>
+    <members>DTC_Applications_with_DTC_Application_Levels_with_Application_Access</members>
+  </types>
+  <types>
     <name>CustomTab</name>
     <members>DTC_Application__c</members>
   </types>
-  <version>50.0</version>
+  <types>
+    <name>ApexTrigger</name>
+    <members>ADGroupUpdateEventTrigger</members>
+    <members>ADUserInactivationEventTrigger</members>
+  </types>
+  <version>51.0</version>
   <fullName>CoreFunctionality</fullName>
 </Package>

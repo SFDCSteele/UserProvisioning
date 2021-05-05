@@ -164,6 +164,55 @@
     <sharingModel>ControlledByParent</sharingModel>
     <visibility>Public</visibility>
     <fields>
+        <fullName>Access_API_Name__c</fullName>
+        <externalId>false</externalId>
+        <label>Access API Name</label>
+        <length>100</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Access_Type__c</fullName>
+        <externalId>false</externalId>
+        <label>Access Type</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+        <valueSet>
+            <restricted>true</restricted>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>Group</fullName>
+                    <default>false</default>
+                    <label>Group</label>
+                </value>
+                <value>
+                    <fullName>Queue</fullName>
+                    <default>false</default>
+                    <label>Queue</label>
+                </value>
+                <value>
+                    <fullName>Permission Set</fullName>
+                    <default>false</default>
+                    <label>Permission Set</label>
+                </value>
+                <value>
+                    <fullName>Permission Set Groups</fullName>
+                    <default>false</default>
+                    <label>Permission Set Groups</label>
+                </value>
+                <value>
+                    <fullName>Permission Set Licenses</fullName>
+                    <default>false</default>
+                    <label>Permission Set Licenses</label>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
         <fullName>Application_Role__c</fullName>
         <deleteConstraint>SetNull</deleteConstraint>
         <externalId>false</externalId>
@@ -173,6 +222,19 @@
         <required>false</required>
         <trackTrending>false</trackTrending>
         <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>DTC_Application_Level__c</fullName>
+        <externalId>false</externalId>
+        <label>DTC Application Level</label>
+        <referenceTo>DTC_Application_Level__c</referenceTo>
+        <relationshipLabel>Permission Mappings</relationshipLabel>
+        <relationshipName>Permission_Mappings</relationshipName>
+        <relationshipOrder>1</relationshipOrder>
+        <reparentableMasterDetail>false</reparentableMasterDetail>
+        <trackTrending>false</trackTrending>
+        <type>MasterDetail</type>
+        <writeRequiresMasterRead>false</writeRequiresMasterRead>
     </fields>
     <fields>
         <fullName>DTC_Application__c</fullName>
@@ -186,6 +248,30 @@
         <trackTrending>false</trackTrending>
         <type>MasterDetail</type>
         <writeRequiresMasterRead>false</writeRequiresMasterRead>
+    </fields>
+    <fields>
+        <fullName>Permission_Location__c</fullName>
+        <externalId>false</externalId>
+        <label>Permission Location</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+        <valueSet>
+            <restricted>true</restricted>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>Destination</fullName>
+                    <default>true</default>
+                    <label>Destination</label>
+                </value>
+                <value>
+                    <fullName>Hub</fullName>
+                    <default>false</default>
+                    <label>Hub</label>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
     </fields>
     <fields>
         <fullName>Permission_Set_API_Name__c</fullName>
@@ -212,23 +298,159 @@
         <fullName>Package_License</fullName>
         <active>true</active>
         <label>Package License</label>
+        <picklistValues>
+            <picklist>Access_Type__c</picklist>
+            <values>
+                <fullName>Group</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Permission Set</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Permission Set Groups</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Permission Set Licenses</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Queue</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Permission_Location__c</picklist>
+            <values>
+                <fullName>Destination</fullName>
+                <default>true</default>
+            </values>
+            <values>
+                <fullName>Hub</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
     </recordTypes>
     <recordTypes>
         <fullName>Permission_Sets_License</fullName>
         <active>true</active>
         <description>Permission Sets License needed for the user</description>
         <label>Permission Sets License</label>
+        <picklistValues>
+            <picklist>Access_Type__c</picklist>
+            <values>
+                <fullName>Group</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Permission Set</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Permission Set Groups</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Permission Set Licenses</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Queue</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Permission_Location__c</picklist>
+            <values>
+                <fullName>Destination</fullName>
+                <default>true</default>
+            </values>
+            <values>
+                <fullName>Hub</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
     </recordTypes>
     <recordTypes>
         <fullName>VALERI_Groups</fullName>
         <active>true</active>
         <description>Give names of the groups to be assigned to the user</description>
         <label>Groups</label>
+        <picklistValues>
+            <picklist>Access_Type__c</picklist>
+            <values>
+                <fullName>Group</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Permission Set</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Permission Set Groups</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Permission Set Licenses</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Queue</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Permission_Location__c</picklist>
+            <values>
+                <fullName>Destination</fullName>
+                <default>true</default>
+            </values>
+            <values>
+                <fullName>Hub</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
     </recordTypes>
     <recordTypes>
         <fullName>VALERI_Permission_Sets</fullName>
         <active>true</active>
         <description>Permission Sets to be associated to the user</description>
         <label>Permission Sets</label>
+        <picklistValues>
+            <picklist>Access_Type__c</picklist>
+            <values>
+                <fullName>Group</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Permission Set</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Permission Set Groups</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Permission Set Licenses</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Queue</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Permission_Location__c</picklist>
+            <values>
+                <fullName>Destination</fullName>
+                <default>true</default>
+            </values>
+            <values>
+                <fullName>Hub</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
     </recordTypes>
 </CustomObject>
