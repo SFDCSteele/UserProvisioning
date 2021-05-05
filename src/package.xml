@@ -12,6 +12,7 @@
     <members>ADPublishUserEvent</members>
     <members>ADUserChangeEventTriggerHandler</members>
     <members>ADUserTriggerHandler</members>
+    <members>AUPJSONGenerator</members>
     <members>ChangeEventTriggerHandler</members>
     <members>TestGroupChangeEventTrigger</members>
     <members>TestUserChangeEventTrigger</members>
@@ -32,9 +33,11 @@
     <members>AD_Group__c</members>
     <members>AD_User_Inactivation__e</members>
     <members>AD_User__c</members>
+    <members>AUP_Core_Functionality_Settings__c</members>
   </types>
   <types>
     <name>CustomField</name>
+    <members>AD_Group_Update__e.AD_SEC_ID__c</members>
     <members>AD_Group_Update__e.Email_Address__c</members>
     <members>AD_Group_Update__e.Federation_Id__c</members>
     <members>AD_Group_Update__e.FirstName__c</members>
@@ -47,12 +50,20 @@
     <members>AD_Group__c.Parent_AD_Group__c</members>
     <members>AD_Group__c.Status__c</members>
     <members>AD_User_Inactivation__e.AD_Federation_Id__c</members>
+    <members>AD_User_Inactivation__e.AD_SEC_ID__c</members>
     <members>AD_User_Inactivation__e.Status__c</members>
     <members>AD_User__c.AD_Federation_Id__c</members>
     <members>AD_User__c.AD_First_Name__c</members>
     <members>AD_User__c.AD_Last_Name__c</members>
     <members>AD_User__c.AD_User_Email__c</members>
+    <members>AD_User__c.SECID__c</members>
     <members>AD_User__c.Status__c</members>
+    <members>AUP_Core_Functionality_Settings__c.AUP_ENT_Client_Id__c</members>
+    <members>AUP_Core_Functionality_Settings__c.AUP_ENT_Client_Secret__c</members>
+    <members>AUP_Core_Functionality_Settings__c.AUP_ENT_End_Point__c</members>
+    <members>AUP_Core_Functionality_Settings__c.AUP_ENT_Execute__c</members>
+    <members>AUP_Core_Functionality_Settings__c.AUP_ENT_Password__c</members>
+    <members>AUP_Core_Functionality_Settings__c.AUP_ENT_Username__c</members>
   </types>
   <types>
     <name>ListView</name>
@@ -76,6 +87,7 @@
   <types>
     <name>RemoteSiteSetting</name>
     <members>EnterpriseOrg</members>
+    <members>EnterpriseOrgRedirect</members>
   </types>
   <types>
     <name>CustomTab</name>
