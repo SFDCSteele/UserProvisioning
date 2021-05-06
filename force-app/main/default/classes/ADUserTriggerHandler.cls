@@ -41,6 +41,7 @@ public class ADUserTriggerHandler {
         AUP_Core_Functionality_Settings__c aupSettings = AUP_Core_Functionality_Settings__c.getInstance();
         String returnString = '';
         
+        /*
         System.debug('110.01-##############ADUserChangeEventTriggerHandler:processUpdate:Sending through the web service? '+aupSettings.AUP_ENT_Execute__c);
         if ( aupSettings.AUP_ENT_Execute__c ) {
             ADPublishUserEvent evntPub = new ADPublishUserEvent();
@@ -48,6 +49,6 @@ public class ADUserTriggerHandler {
 	            returnString = evntPub.execute('User',userEvents,aupSettings);
             }
         }
-        
+        */
     }
 }

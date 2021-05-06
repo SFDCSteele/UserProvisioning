@@ -27,7 +27,8 @@ then
 fi
 
 sfdx force:mdapi:deploy -u $gitBranch -w 10 -d ./src
-#read inpt
+echo "MDAPI source deployed...press return to continue..."
+read inpt
 
 git status
 git add .
