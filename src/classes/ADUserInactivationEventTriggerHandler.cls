@@ -65,7 +65,7 @@ public class ADUserInactivationEventTriggerHandler extends PlatformEventTriggerH
         System.debug('777.10-##############ADUserInactivationEventTriggerHandler:afterInsert:JSON String: '+usrSJONString);
         }
         System.debug('777.20-##############ADUserInactivationEventTriggerHandler:afterInsert:publishing event: '+usrSJONString);
-        ADUpdateUserService.execute(usrSJONString);
+        String wStr = ADUpdateUserService.execute(usrSJONString);
     }
     
     //This method takes all of the events in Trigger.new and maps the record Ids based on change type
