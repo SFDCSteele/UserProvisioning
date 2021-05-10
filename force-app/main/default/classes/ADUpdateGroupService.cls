@@ -84,7 +84,7 @@ public class ADUpdateGroupService {
         if ( dtcApplication.Id != null ) {
 			dtcApplicationLevel = getDTCApplicationLevel(dtcApplication.Id,r.GroupName);
 	        if ( dtcApplicationLevel.Id != null ) {
-                dtcApplicationLevelPermissions = getApplicationLevelPermissions(dtcApplication.Id,dtcApplicationLevel.Id);
+                dtcApplicationLevelPermissions = getApplicationLevelPermissions(dtcApplication.Id,dtcApplicationLevel.Id,'Destination');
 		        if ( dtcApplicationLevelPermissions.size() > 0 ) {
                     createContact(r,dtcApplication,dtcApplicationLevel);
                 }
@@ -94,6 +94,140 @@ public class ADUpdateGroupService {
         
         return returnMessage;
         
+    }
+    
+    public static void createUser(List<Id> IdsToProcess) {
+
+        Boolean bIsActive = true;
+        String sLanguagelocalekey='en_US';
+        String sTimezonesidkey='America/New_York';
+        String sLocalesidkey='en_US';
+        String sEmailencodingkey='UTF-8';
+        
+        List<User> newUsers = new List<User>();
+        User newUser = new User();
+        
+        Contact cont = new Contact();
+        Map<Id,Contact> contactMap = new Map<Id,Contact>();
+        DTC_Application__c dtcApp  = new DTC_Application__c();
+        Map<Id,DTC_Application__c> DTCApplicationMap = new Map<Id,DTC_Application__c>();
+        DTC_Application_Level__c dtcAppLevel = new DTC_Application_Level__c();
+        Map<Id,DTC_Application_Level__c> DTCApplicationLevelMap = new Map<Id,DTC_Application_Level__c>();
+        List<CF_Permission_Mapping__c> permissions = new List<CF_Permission_Mapping__c>();
+        Map<String,List<CF_Permission_Mapping__c>> hubPermissionsMap = new Map<String,List<CF_Permission_Mapping__c>>();
+        Map<String,List<CF_Permission_Mapping__c>> destPermissionsMap = new Map<String,List<CF_Permission_Mapping__c>>();
+        
+        
+        List<CF_Application_Access__c> appAccessList = [SELECT Id, Account__c, Approval_Status__c, Approved_Checkbox__c, DTC_Application__c, 
+                                                    Contact__c, Inactive__c, DTC_Application_Level__c FROM CF_Application_Access__c where Id =: IdsToProcess];
+        
+        System.debug('600-10->>>>>>>>>>>>ADUpdateGroupService:createUser:records to process: '+appAccessList);
+        for (CF_Application_Access__c appAccess : appAccessList ) {
+
+	        System.debug('600-20->>>>>>>>>>>>ADUpdateGroupService:createUser:reading singular record: '+appAccess);
+            if (contactMap.isEmpty() || contactMap.get(appAccess.Contact__c) == null ) {
+                cont = getContact(appAccess.Contact__c);
+                contactMap.put(appAccess.Contact__c,cont); 
+            } 
+	        System.debug('600-30->>>>>>>>>>>>ADUpdateGroupService:createUser:updated contactMap: '+contactMap);
+            if (DTCApplicationMap.isEmpty() || DTCApplicationMap.get(appAccess.DTC_Application__c) == null ) {
+                dtcApp = getDTCApplication(appAccess.DTC_Application__c);
+                DTCApplicationMap.put(appAccess.DTC_Application__c,dtcApp); 
+            }
+	        System.debug('600-40->>>>>>>>>>>>ADUpdateGroupService:createUser:updated DTCApplicationMap: '+DTCApplicationMap);
+            if (DTCApplicationLevelMap.isEmpty() || DTCApplicationLevelMap.get(appAccess.DTC_Application_Level__c) == null ) {
+                dtcAppLevel = getDTCApplicationLevel(appAccess.DTC_Application_Level__c);
+                DTCApplicationLevelMap.put(appAccess.DTC_Application_Level__c,dtcAppLevel); 
+            }
+	        System.debug('600-40->>>>>>>>>>>>ADUpdateGroupService:createUser:updated DTCApplicationLevelMap: '+DTCApplicationLevelMap);
+            if (hubPermissionsMap.isEmpty() || hubPermissionsMap.get((appAccess.DTC_Application__c+'|'+appAccess.DTC_Application_Level__c+'|hub')) == null ) {
+                permissions = getApplicationLevelPermissions(appAccess.DTC_Application__c,appAccess.DTC_Application_Level__c,'Hub');
+                if ( permissions.size() > 0 ) {
+	                hubPermissionsMap.put((appAccess.DTC_Application__c+'|'+appAccess.DTC_Application_Level__c+'|hub'),permissions); 
+                } else {
+			        System.debug('600-45->>>>>>>>>>>>ADUpdateGroupService:createUser:did not find any HUB permissions');
+                }
+            }
+	        System.debug('600-50->>>>>>>>>>>>ADUpdateGroupService:createUser:updated hubPermissionsMap: '+hubPermissionsMap);
+            if (destPermissionsMap.isEmpty() || destPermissionsMap.get((appAccess.DTC_Application__c+'|'+appAccess.DTC_Application_Level__c+'|dest')) == null ) {
+                permissions = getApplicationLevelPermissions(appAccess.DTC_Application__c,appAccess.DTC_Application_Level__c,'Destination');
+                if ( permissions.size() > 0 ) {
+	                destPermissionsMap.put((appAccess.DTC_Application__c+'|'+appAccess.DTC_Application_Level__c+'|dest'),permissions); 
+                } else {
+			        System.debug('600-55->>>>>>>>>>>>ADUpdateGroupService:createUser:did not find any Destination permissions');
+                }
+            }
+	        System.debug('600-60->>>>>>>>>>>>ADUpdateGroupService:createUser:updated destPermissionsMap: '+destPermissionsMap);
+
+            
+        }
+                                                     
+            
+                                                     
+			/* create user:
+
+                newUsers.add(new User(username=appAccess.Federation_Id__c,firstname=appAccess.Contact__r.FirstName,lastname=Contact__r.LastName,email=Contact__r.Email,federationidentifier=Contact__r.LastName,
+                alias=users.get(5),isactive=bIsActive,profileid=adminProfile.Id,languagelocalekey=sLanguagelocalekey,timezonesidkey=sTimezonesidkey,localesidkey=sLocalesidkey,emailencodingkey=sEmailencodingkey);
+
+				userValues.add(new List<String>{'arevankar@mulesoft.com ','Amit',' Revankar','arevankar@mulesoft.com','arevankar@mulesoft.com','arev','true','00et0000000QGuGAAW','en_US','America/New_York','en_US','UTF-8'});
+                userValues.add(new List<String>{'afelrice@salesforce.com','Andrew','Felrice','afelrice@salesforce.com','afelrice@salesforce.com','afeir','true','00et0000000QGuGAAW','en_US','America/New_York','en_US','UTF-8'});
+                userValues.add(new List<String>{'bryan.broome@va.gov','Bryan','Broome','bryan.broome@va.gov','bryan.broome@va.gov','bbro','true','00et0000000QGuGAAW','en_US','America/New_York','en_US','UTF-8},'});
+                userValues.add(new List<String>{'wsteele@salesforce.com','William','Steele','wsteele@salesforce.com','wsteele@salesforce.com','wstee','true','00et0000000QGuGAAW','en_US','America/New_York','en_US','UTF-8'});
+                
+                Integer cnt = 0;
+                for ( List<String> users : userValues) {
+                    System.debug('======================================================================');
+                    //newUsers.add(new User(username=users.get(0),firstname=users.get(1),lastname=users.get(2),email=users.get(3),federationidentifier=users.get(4),alias=users.get(5),isactive=Boolean.valueOf(users.get(6)),profileid=adminProfile.Id,languagelocalekey=users.get(8),timezonesidkey=users.get(9),localesidkey=users.get(10),emailencodingkey='UTF-8'));
+                    newUsers.add(new User(username=users.get(0),firstname=users.get(1),lastname=users.get(2),email=users.get(3),federationidentifier=users.get(4),alias=users.get(5),isactive=bIsActive,profileid=adminProfile.Id,languagelocalekey=sLanguagelocalekey,timezonesidkey=sTimezonesidkey,localesidkey=sLocalesidkey,emailencodingkey=sEmailencodingkey);
+                }
+                System.debug('======================================================================');
+                System.debug('users to be added: '+newUsers);
+                Insert newUsers;
+			 */
+
+        
+    }
+     
+    private static DTC_Application_Level__c getDTCApplicationLevel (Id DTCApplicationLevelId) {
+        DTC_Application_Level__c rtnDTCApplicationLevel = new DTC_Application_Level__c();
+        try {
+            rtnDTCApplicationLevel = [select Id,Name,Is_Active__c,
+                                      Hub_Org_Role__c,Hub_Org_Profile__c,Hub_Org_License__c,
+                                      Destination_Org_Role__c,Destination_Org_Profile__c,Destination_Org_License__c,
+                                      Application_Level_User_Creation_Flow__c,Application_Level_User_Creation_Apex__c 
+                                      FROM DTC_Application_Level__c where Id =: DTCApplicationLevelId];
+        }
+        catch (Exception e) {
+            System.debug('Exception while looking for DTC Application: '+DTCApplicationLevelId+': '+e.getStackTraceString());
+            rtnDTCApplicationLevel = null;
+        }
+        return rtnDTCApplicationLevel;
+    }
+   
+    private static DTC_Application__c getDTCApplication (Id DTCApplicationId) {
+        DTC_Application__c rtnDTCApplication = new DTC_Application__c();
+        try {
+            rtnDTCApplication = [select Id,Name,Application_Description__c,Org__c,Profile_ID__c, 
+                                 Overall_User_Creation_Flow__c,Overall_User_Creation_Apex__c  
+                                 FROM DTC_Application__c where Id =: DTCApplicationId];
+        }
+        catch (Exception e) {
+            System.debug('Exception while looking for DTC Application: '+DTCApplicationId+': '+e.getStackTraceString());
+            rtnDTCApplication = null;
+        }
+        return rtnDTCApplication;
+    }
+    
+    private static Contact getContact (Id contactId) {
+        Contact rtnContact = new Contact();
+        try {
+            rtnContact = [select Id,FirstName,LastName,Email,Federation_Id__c,SECID__c FROM Contact where Id =: contactId];
+        }
+        catch (Exception e) {
+            System.debug('Exception while looking for contact: '+contactId+': '+e.getStackTraceString());
+            rtnContact = null;
+        }
+        return rtnContact;
     }
     
     private static boolean createContact (ADUpdateGroupService grpEvent, DTC_Application__c dtcApplication, DTC_Application_Level__c dtcApplicationLevel) {
@@ -206,14 +340,16 @@ public class ADUpdateGroupService {
         
     }
      
-    private static List<CF_Permission_Mapping__c> getApplicationLevelPermissions (Id applicationId, Id applicationLevelId ) {
+    private static List<CF_Permission_Mapping__c> getApplicationLevelPermissions (Id applicationId, Id applicationLevelId,String permissionLocation ) {
         List<CF_Permission_Mapping__c> returnApplicationLevelPermissions = new List<CF_Permission_Mapping__c>();
         
         System.debug('220-10->>>>>>>>>>>>ADUpdateGroupService:getApplicationLevelPermissions:lookin for applicationId: '+applicationId+
                      ' applicationLevelId: '+applicationLevelId);
         try {
             returnApplicationLevelPermissions = [select Id, Name, DTC_Application__c , DTC_Application_Level__c  from CF_Permission_Mapping__c 
-                                      where DTC_Application_Level__c =: applicationLevelId AND DTC_Application__c =: applicationId];
+                                      where DTC_Application_Level__c =: applicationLevelId AND 
+                                                 DTC_Application__c =: applicationId AND 
+                                                 Permission_Location__c =: permissionLocation];
         } catch (Exception e) {
             System.debug('ADUpdateGroupService:getApplicationLevelPermissions:Exception: '+e.getStackTraceString());
             returnApplicationLevelPermissions = null;
