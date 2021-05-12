@@ -12,7 +12,7 @@ public class AUPJSONGenerator{
         try {
             gen.writeStartObject();
             if (eventType.equals('User')) {
-                gen.writeStringField('SECID', (String)eventMessage.get('SECID__c'));
+                gen.writeStringField('SECID', (String)eventMessage.get('AD_SEC_ID__c'));
                 gen.writeStringField('FederationId', (String)eventMessage.get('AD_Federation_Id__c'));
                 gen.writeStringField('Status', (String)eventMessage.get('Status__c'));
             } else {
