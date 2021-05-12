@@ -1,34 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
   <types>
-    <name>AppMenu</name>
-    <members>AppSwitcher</members>
-  </types>
-  <types>
     <name>ApexClass</name>
-    <members>ADUserUpdateService</members>
     <members>AUPDestinationUserEventTriggerHandler</members>
     <members>AUPJSONGenerator</members>
     <members>PlatformEventTriggerHandler</members>
   </types>
   <types>
-    <name>ConnectedApp</name>
-    <members>AD_Subscribe_Event_App</members>
-  </types>
-  <types>
     <name>CustomObject</name>
-    <members>AD_Group_Update__e</members>
     <members>AUP_Destination_User_Event__e</members>
   </types>
   <types>
     <name>CustomField</name>
-    <members>AD_Group_Update__e.Email_Address__c</members>
-    <members>AD_Group_Update__e.Federation_Id__c</members>
-    <members>AD_Group_Update__e.FirstName__c</members>
-    <members>AD_Group_Update__e.Group_Name__c</members>
-    <members>AD_Group_Update__e.LastName__c</members>
-    <members>AD_Group_Update__e.Parent_AD_Group__c</members>
-    <members>AD_Group_Update__e.Status__c</members>
     <members>AUP_Destination_User_Event__e.AD_SEC_ID__c</members>
     <members>AUP_Destination_User_Event__e.Alias__c</members>
     <members>AUP_Destination_User_Event__e.Destination_Org__c</members>
