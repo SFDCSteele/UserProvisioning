@@ -13,13 +13,11 @@
     <members>ADUserInactivationEventTriggerHandler</members>
     <members>ADUserReceiveEvent</members>
     <members>AUPJSONGenerator</members>
+    <members>AppAccessChangeEventTriggerHandler</members>
+    <members>ChangeEventTriggerHandler</members>
     <members>PlatformEventTriggerHandler</members>
     <members>Views_CF_PBAddPublicGroupFromFlow</members>
     <members>Views_CF_PBRemovePublicGroupFromFlow</members>
-  </types>
-  <types>
-    <name>ConnectedApp</name>
-    <members>AUP_Event_Manager</members>
   </types>
   <types>
     <name>CustomPermission</name>
@@ -79,6 +77,7 @@
     <name>CustomObject</name>
     <members>AD_Group_Update__e</members>
     <members>AD_User_Inactivation__e</members>
+    <members>AUP_Destination_User_Event__e</members>
     <members>Account</members>
     <members>CF_Application_Access__c</members>
     <members>CF_Application_Level_Access__c</members>
@@ -105,6 +104,22 @@
     <members>AD_User_Inactivation__e.AD_Federation_Id__c</members>
     <members>AD_User_Inactivation__e.AD_SEC_ID__c</members>
     <members>AD_User_Inactivation__e.Status__c</members>
+    <members>AUP_Destination_User_Event__e.AD_SEC_ID__c</members>
+    <members>AUP_Destination_User_Event__e.Alias__c</members>
+    <members>AUP_Destination_User_Event__e.Destination_Org__c</members>
+    <members>AUP_Destination_User_Event__e.Email_Address__c</members>
+    <members>AUP_Destination_User_Event__e.Federation_Id__c</members>
+    <members>AUP_Destination_User_Event__e.FirstName__c</members>
+    <members>AUP_Destination_User_Event__e.Groups__c</members>
+    <members>AUP_Destination_User_Event__e.LastName__c</members>
+    <members>AUP_Destination_User_Event__e.License_Name__c</members>
+    <members>AUP_Destination_User_Event__e.Permission_Set_Groups__c</members>
+    <members>AUP_Destination_User_Event__e.Permission_Set_Licenses__c</members>
+    <members>AUP_Destination_User_Event__e.Permission_Sets__c</members>
+    <members>AUP_Destination_User_Event__e.Profile_Name__c</members>
+    <members>AUP_Destination_User_Event__e.Queues__c</members>
+    <members>AUP_Destination_User_Event__e.Role_Name__c</members>
+    <members>AUP_Destination_User_Event__e.Username__c</members>
     <members>Account.AccountNumber</members>
     <members>Account.AccountSource</members>
     <members>Account.AnnualRevenue</members>
@@ -432,6 +447,7 @@
     <name>ApexTrigger</name>
     <members>ADGroupUpdateEventTrigger</members>
     <members>ADUserInactivationEventTrigger</members>
+    <members>AppAccessChangeEventTrigger</members>
   </types>
   <version>51.0</version>
   <fullName>CoreFunctionality</fullName>
