@@ -97,21 +97,31 @@ public class ADUpdateGroupService {
     }
     
     public static void createUser(List<Id> IdsToProcess) {
+        
+        List<User> newUsers = new List<User>();
+        User newUser = new User();
+        List<String> secIdArr = new List<String>();
 
+        Id hubProfileId = null;// = new Id();
+        Id hubRoleId    = null;//new List<String>();
+        String hubLicenseId = ''; 
+        String destProfile  = '';
+        String destRole     = '';
+        String destLicense  = ''; 
+ 
         Boolean bIsActive = true;
         String sLanguagelocalekey='en_US';
         String sTimezonesidkey='America/New_York';
         String sLocalesidkey='en_US';
         String sEmailencodingkey='UTF-8';
-        
-        List<User> newUsers = new List<User>();
-        User newUser = new User();
+
         
         Contact cont = new Contact();
         Map<Id,Contact> contactMap = new Map<Id,Contact>();
         DTC_Application__c dtcApp  = new DTC_Application__c();
         Map<Id,DTC_Application__c> DTCApplicationMap = new Map<Id,DTC_Application__c>();
         DTC_Application_Level__c dtcAppLevel = new DTC_Application_Level__c();
+        Map<String,CF_Application_Access__c> accessListMap = new Map<String,CF_Application_Access__c>();
         Map<Id,DTC_Application_Level__c> DTCApplicationLevelMap = new Map<Id,DTC_Application_Level__c>();
         List<CF_Permission_Mapping__c> permissions = new List<CF_Permission_Mapping__c>();
         Map<String,List<CF_Permission_Mapping__c>> hubPermissionsMap = new Map<String,List<CF_Permission_Mapping__c>>();
@@ -129,7 +139,12 @@ public class ADUpdateGroupService {
                 cont = getContact(appAccess.Contact__c);
                 contactMap.put(appAccess.Contact__c,cont); 
             } 
+            secIdArr.add(cont.SECID__c);
 	        System.debug('600-30->>>>>>>>>>>>ADUpdateGroupService:createUser:updated contactMap: '+contactMap);
+            if (accessListMap.isEmpty() || accessListMap.get(cont.SECID__c) == null ) {
+                accessListMap.put(cont.SECID__c,appAccess); 
+            } 
+	        System.debug('600-35->>>>>>>>>>>>ADUpdateGroupService:createUser:updated accessListMap: '+accessListMap);
             if (DTCApplicationMap.isEmpty() || DTCApplicationMap.get(appAccess.DTC_Application__c) == null ) {
                 dtcApp = getDTCApplication(appAccess.DTC_Application__c);
                 DTCApplicationMap.put(appAccess.DTC_Application__c,dtcApp); 
@@ -158,10 +173,67 @@ public class ADUpdateGroupService {
                 }
             }
 	        System.debug('600-60->>>>>>>>>>>>ADUpdateGroupService:createUser:updated destPermissionsMap: '+destPermissionsMap);
+	        System.debug('600-62->>>>>>>>>>>>ADUpdateGroupService:createUser:looking for HUB profile: '+dtcAppLevel.Hub_Org_Profile__c);
+            hubProfileId = [Select Id From Profile Where Name =: dtcAppLevel.Hub_Org_Profile__c limit 1].Id;
+	        System.debug('600-64->>>>>>>>>>>>ADUpdateGroupService:createUser:looking for HUB roleId: '+dtcAppLevel.Hub_Org_Role__c);
+            if ( dtcAppLevel.Hub_Org_Role__c <> null ) {
+	            hubRoleId = [SELECT Id FROM UserRole where DeveloperName =: dtcAppLevel.Hub_Org_Role__c limit 1].Id;
+            } else {
+                hubRoleId = null;
+            }
+            hubLicenseId = ''; 
+            destProfile  = dtcAppLevel.Destination_Org_Profile__c;
+            destRole     = dtcAppLevel.Destination_Org_Role__c;
+            destLicense  = dtcAppLevel.Destination_Org_License__c; 
+
+            newUser = new User(username=cont.Email,
+                               firstname=cont.FirstName,
+                               lastname=cont.LastName,
+                               email=cont.Email,
+                               SECID__c=cont.SECID__c,
+                               federationidentifier=cont.Federation_Id__c,
+                               alias=cont.FirstName.substring(0, 2)+cont.LastName.substring(0,3),
+                               profileid=hubProfileId,
+                               isactive=bIsActive,
+                               languagelocalekey=sLanguagelocalekey,timezonesidkey=sTimezonesidkey,localesidkey=sLocalesidkey,emailencodingkey=sEmailencodingkey);
+            newUsers.add(newUser);
 
             
         }
-                                                     
+        
+        Map<String,Id> existingUsers = getExistingUsers(secIdArr);
+        List<User>     usersToAdd    = new List<User>();
+        
+        for (User usr : usersToAdd) {
+            if (existingUsers.isEmpty() || existingUsers.get(usr.SECID__c) == null ) {
+                usersToAdd.add(usr);
+            } 
+        }
+        
+        insert usersToAdd;
+        
+        //Lets get all the users we added as well as the users that already existed
+        List<User> listOfUsers = [Select SECID__c,Id from User where SECID__c =: secIdArr];
+        for ( User usr : listOfUsers ) {
+        
+            /*
+            //now we loop through each of the users and add 'Permissions'
+            CF_Permission_Mapping__c accessRecord = accessListMap.get(usr.SECID__c);
+            
+            //Add permission Permission Set Groups
+            addPermissionSetGroups(usr.Id,hubPermissionsMap.get((appAccess.DTC_Application__c+'|'+appAccess.DTC_Application_Level__c+'|hub')))
+            //Add permission sets
+            
+            //Add Permission Set Licenses
+            
+            
+            //Add Groups
+            
+            
+            //Add Queues
+            
+            */                                        
+        }
             
                                                      
 			/* create user:
@@ -186,6 +258,36 @@ public class ADUpdateGroupService {
 			 */
 
         
+    }
+    
+    private static Map<String,Id> getExistingUsers ( List<String> secIdArr ) {
+        
+        Map<String,Id> existingUserMap = new Map<String,Id>();
+        for ( User usr : [Select SECID__c,Id from User where SECID__c =: secIdArr]) {
+            existingUserMap.put(usr.SECID__c,usr.Id);
+        }
+        
+            /*
+               return new User(
+                        Alias = 'instMgr',
+                        Email = (firstName + lastName + '@example.com').remove(' '),
+                        EmailEncodingKey = 'UTF-8',
+                        FederationIdentifier = generateRandomStringByLength(15),
+                        FirstName = firstName,
+                        LastName = lastName,
+                        LanguageLocaleKey = 'en_US',
+                        LocaleSidKey = 'en_US',
+                        ProfileId = testProfile.Id,
+                        TimeZoneSidKey = 'GMT',
+                        UserName = (firstName + lastName + '@testorg.com' + UserInfo.getOrganizationId()+String.valueOf(Datetime.now()).replace(' ','').replace(':','').replace('-','')).remove(' ')
+            if (existingUserMap.isEmpty() || existingUserMap.get(cont.SECID__c) == null ) {
+            } 
+	        }
+			*/
+        System.debug('600-70->>>>>>>>>>>>ADUpdateGroupService:createUser:existing Users: '+existingUserMap);
+        //insert returnUsers;
+        
+        return existingUserMap;
     }
      
     private static DTC_Application_Level__c getDTCApplicationLevel (Id DTCApplicationLevelId) {
