@@ -6,11 +6,7 @@
     <picklistValues>
         <picklist>Access_Type__c</picklist>
         <values>
-            <fullName>Group</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Permission Set</fullName>
+            <fullName>Groups</fullName>
             <default>false</default>
         </values>
         <values>
@@ -22,7 +18,11 @@
             <default>false</default>
         </values>
         <values>
-            <fullName>Queue</fullName>
+            <fullName>Permission Sets</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Queues</fullName>
             <default>false</default>
         </values>
     </picklistValues>

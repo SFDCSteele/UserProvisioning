@@ -11,19 +11,19 @@
         <valueSetDefinition>
             <sorted>false</sorted>
             <value>
-                <fullName>Group</fullName>
+                <fullName>Groups</fullName>
                 <default>false</default>
-                <label>Group</label>
+                <label>Groups</label>
             </value>
             <value>
-                <fullName>Queue</fullName>
+                <fullName>Queues</fullName>
                 <default>false</default>
-                <label>Queue</label>
+                <label>Queues</label>
             </value>
             <value>
-                <fullName>Permission Set</fullName>
+                <fullName>Permission Sets</fullName>
                 <default>false</default>
-                <label>Permission Set</label>
+                <label>Permission Sets</label>
             </value>
             <value>
                 <fullName>Permission Set Groups</fullName>

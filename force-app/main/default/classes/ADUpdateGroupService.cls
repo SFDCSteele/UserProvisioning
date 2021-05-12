@@ -100,6 +100,8 @@ public class ADUpdateGroupService {
         
         List<User> newUsers = new List<User>();
         User newUser = new User();
+        List<AUP_Destination_User_Event__e> userEvents = new List<AUP_Destination_User_Event__e>();
+        AUP_Destination_User_Event__e userEvent = new AUP_Destination_User_Event__e();
         List<String> secIdArr = new List<String>();
 
         Id hubProfileId = null;// = new Id();
@@ -197,9 +199,41 @@ public class ADUpdateGroupService {
                                isactive=bIsActive,
                                languagelocalekey=sLanguagelocalekey,timezonesidkey=sTimezonesidkey,localesidkey=sLocalesidkey,emailencodingkey=sEmailencodingkey);
             newUsers.add(newUser);
+	        System.debug('600-70->>>>>>>>>>>>ADUpdateGroupService:createUser:Users to be created: '+newUsers);
+            //SELECT Id, AD_SEC_ID__c, Email_Address__c, Federation_Id__c, FirstName__c, LastName__c, Profile_Name__c, Role_Name__c, License_Name__c, Username__c, 
+            //Alias__c, Permission_Set_Groups__c, Permission_Sets__c, Destination_Org__c, Groups__c, Queues__c, Permission_Set_Licenses__c 
+            //FROM AUP_Destination_User_Event__e
+            
+            userEvent = new AUP_Destination_User_Event__e(AD_SEC_ID__c=cont.SECID__c, 
+                                                          Email_Address__c=cont.Email, 
+                                                          Federation_Id__c=cont.Federation_Id__c, 
+                                                          FirstName__c=cont.FirstName, 
+                                                          LastName__c=cont.LastName, 
+                                                          Profile_Name__c=dtcAppLevel.Destination_Org_Profile__c, 
+                                                          Role_Name__c=dtcAppLevel.Destination_Org_Role__c, 
+                                                          License_Name__c=dtcAppLevel.Destination_Org_License__c, 
+                                                          Username__c=cont.Email, 
+                                                          Alias__c=cont.FirstName.substring(0, 2)+cont.LastName.substring(0,3), 
+                                                          Permission_Set_Groups__c=appendString('Destination','Permission Set Groups',
+                                                                                                destPermissionsMap.get((appAccess.DTC_Application__c+'|'+appAccess.DTC_Application_Level__c+'|dest'))), 
+                                                          Permission_Sets__c=appendString('Destination','Permission Sets',
+                                                                                          destPermissionsMap.get((appAccess.DTC_Application__c+'|'+appAccess.DTC_Application_Level__c+'|dest'))), 
+                                                          Destination_Org__c=dtcApp.Org__c, 
+                                                          Groups__c=appendString('Destination','Groups',
+                                                                                 destPermissionsMap.get((appAccess.DTC_Application__c+'|'+appAccess.DTC_Application_Level__c+'|dest'))), 
+                                                          Queues__c=appendString('Destination','Queues',
+                                                                                 destPermissionsMap.get((appAccess.DTC_Application__c+'|'+appAccess.DTC_Application_Level__c+'|dest'))), 
+                                                          Permission_Set_Licenses__c=appendString('Destination','Permission Set Licenses',
+                                                                                                  destPermissionsMap.get((appAccess.DTC_Application__c+'|'+appAccess.DTC_Application_Level__c+'|dest')))
+                                                         );
+            userEvents.add(userEvent);
+	        System.debug('600-80->>>>>>>>>>>>ADUpdateGroupService:createUser:UserEvents to be published: '+userEvents);
 
             
         }
+        
+        System.debug('600-90->>>>>>>>>>>>ADUpdateGroupService:createUser:returning from publishing events: '+
+                     publishUserEvents (userEvents ));
         
         Map<String,Id> existingUsers = getExistingUsers(secIdArr);
         List<User>     usersToAdd    = new List<User>();
@@ -210,7 +244,7 @@ public class ADUpdateGroupService {
             } 
         }
         
-        insert usersToAdd;
+        //insert usersToAdd;
         
         //Lets get all the users we added as well as the users that already existed
         List<User> listOfUsers = [Select SECID__c,Id from User where SECID__c =: secIdArr];
@@ -259,6 +293,45 @@ public class ADUpdateGroupService {
 
         
     }
+    
+    private static boolean publishUserEvents (List<AUP_Destination_User_Event__e> userEvents ) {
+        boolean returnStatus = false;
+   
+        System.debug('700.10-##############ADUpdateGroupService:publishUserEvents:Ready to published events: '+userEvents);
+        if ( userEvents.size() > 0 ) {
+            // Call method to publish events
+            List<Database.SaveResult> srs = EventBus.publish(userEvents);
+            // Inspect publishing result
+            for (Database.SaveResult sr: srs ) {
+                if (sr.isSuccess()) {
+                    System.debug('700.20-##############ADUpdateGroupService:publishUserEvents:Successfully published event: '+sr);
+                    returnStatus = true;
+                } else {
+                    for(Database.Error err : sr.getErrors()) {
+                        System.debug('Error returned: ' +
+                                     err.getStatusCode() +
+                                     ' - ' +
+                                     err.getMessage());
+                    }
+                }
+            }
+            System.debug('700.30-##############ADUpdateGroupService:publishUserEvents:FINISHING UP!');
+        }
+
+        
+        return returnStatus;
+    }
+
+    private static String appendString(String location, String type, List<CF_Permission_Mapping__c> permissions) {
+        String returnString = '';
+        
+        for ( CF_Permission_Mapping__c perm : permissions ) {
+            if ( perm.Permission_Location__c.equals(location) && perm.Access_Type__c.equals(type) ) {
+                returnString += perm.Name + '|';
+            }
+        }        
+        return returnString;
+    }    
     
     private static Map<String,Id> getExistingUsers ( List<String> secIdArr ) {
         
@@ -448,7 +521,8 @@ public class ADUpdateGroupService {
         System.debug('220-10->>>>>>>>>>>>ADUpdateGroupService:getApplicationLevelPermissions:lookin for applicationId: '+applicationId+
                      ' applicationLevelId: '+applicationLevelId);
         try {
-            returnApplicationLevelPermissions = [select Id, Name, DTC_Application__c , DTC_Application_Level__c  from CF_Permission_Mapping__c 
+            returnApplicationLevelPermissions = [select Id, Name, DTC_Application__c , DTC_Application_Level__c, Access_Type__c, Permission_Location__c    
+                                                 from CF_Permission_Mapping__c 
                                       where DTC_Application_Level__c =: applicationLevelId AND 
                                                  DTC_Application__c =: applicationId AND 
                                                  Permission_Location__c =: permissionLocation];
