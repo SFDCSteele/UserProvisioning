@@ -21,9 +21,11 @@ if [ "$2" = "Y" ]
 then
     sfdx force:org:create -s -f config/project-scratch-def.json -a $dxOrg --durationdays 30
     sfdx force:user:password:generate
+    echo "Enter new username: "
+    read dxUser
 fi
 sfdx force:org:list
-echo "Org has been created, hit return to continue..."
+echo "$dxOrg Org has been created with user $dxUser, hit return to continue..."
 read inpt
 
 git pull origin $gitBranch
