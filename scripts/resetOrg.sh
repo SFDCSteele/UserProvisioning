@@ -1,24 +1,31 @@
 #!/bin/bash
 
 export dxOrg="UserProvisioningAppScratch"
-export dxUser="test-fudubkdhqeya@example.com"
+export dxUser="test-hmtdsblmbaha@example.com"
 export gitBranch="UserProvisioning"
 
 echo "==========================================================================="
 echo "Setting up Scratch Org $dxOrg as user $dxUser and pushing to branch $gitBranch to the Org"
+echo "Authorizing to DevHub   : $1"
+echo "Creating new scratch org: $2"
 echo "==========================================================================="
-
-#sfdx auth:web:login -d -a DevHub
-#echo "Once DevHub is authorized, hit return to continue..."
-#read inpt
 
 if [ "$1" = "Y" ]
 then
+    sfdx auth:web:login -d -a DevHub
+    echo "Once DevHub is authorized, hit return to continue..."
+    read inpt
+fi
+
+if [ "$2" = "Y" ]
+then
     sfdx force:org:create -s -f config/project-scratch-def.json -a $dxOrg --durationdays 30
     sfdx force:user:password:generate
+    echo "Enter new username: "
+    read dxUser
 fi
 sfdx force:org:list
-echo "Org has been created, hit return to continue..."
+echo "$dxOrg Org has been created with user $dxUser, hit return to continue..."
 read inpt
 
 git pull origin $gitBranch
