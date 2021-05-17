@@ -275,9 +275,11 @@ public class ADUpdateGroupService {
             addPermissionSets(usr.Id,hubPermissionsMap.get('000009|hub'));
             
             //Add Permission Set Licenses
+            addPermissionSetLiceenses(usr.Id,hubPermissionsMap.get('000009|hub'));
             
             
             //Add Groups
+            addGroups(usr.Id,hubPermissionsMap.get('000009|hub'));
             
             
             //Add Queues
@@ -309,6 +311,133 @@ public class ADUpdateGroupService {
 			 */
 
         
+    }
+    
+    private static void addGroups (Id usrId,List<CF_Permission_Mapping__c> hubPermissions ) {
+        
+        String debugSection = '680';
+        System.debug(debugSection+'-00->>>>>>>>>>>>ADUpdateGroupService:addGroups:inside:permission sets for user('+usrId+'): '+hubPermissions);
+        List<String> existingGrp         = new List<String>();
+        //Get the api names for all permission sets to be assigned
+        for ( CF_Permission_Mapping__c psg : hubPermissions ) {
+	        System.debug(debugSection+'-02->>>>>>>>>>>>ADUpdateGroupService:addGroups:access type: '+psg.Access_Type__c+' api name: '+psg.Permission_Set_API_Name__c);
+            if ( psg.Access_Type__c.equals('Groups')) {
+		        //System.debug(debugSection+'-04->>>>>>>>>>>>ADUpdateGroupService:addGroups:FOUND access type: '+psm.Access_Type__c+' api name: '+psm.Permission_Set_API_Name__c);
+                existingGrp.add(psg.Permission_Set_API_Name__c);
+            }
+        }        
+        System.debug(debugSection+'-10->>>>>>>>>>>>ADUpdateGroupService:addGroups:permission sets for user('+usrId+'): '+existingGrp);
+        //Take the names and query the actual group object to get the Ids
+        List<Group> grpList = [SELECT Id, Name, DeveloperName, Type, Email FROM Group where DeveloperName =: existingGrp];
+        Map<Id,Group> grpMap = new Map<Id,Group>();
+        Map<String,Group> existingGrpMap = new Map<String,Group>();
+        System.debug(debugSection+'-12->>>>>>>>>>>>ADUpdateGroupService:addGroups:looking for groups based on the api names: '+grpList);
+        for (Group grp: grpList) {
+            grpMap.put(grp.Id,grp);                               
+            existingGrpMap.put(grp.DeveloperName,grp);
+		}
+        System.debug(debugSection+'-20->>>>>>>>>>>>ADUpdateGroupService:addGroups:groups to be added: '+grpMap);
+        //there were groups part of the permission mapping that don't actually exist---lets add them
+        List<Group> newGroups = new List<Group>();
+        System.debug(debugSection+'-20.03->>>>>>>>>>>>ADUpdateGroupService:addGroups:do we need to add groups-existing groups: '+grpList.size()+' permission groups: '+existingGrp.size());
+        if (grpList.size() < existingGrp.size() ) {
+            for ( String grp : existingGrp ) {
+	            if (existingGrpMap.isEmpty() || existingGrpMap.get(grp) == null ) {
+                    newGroups.add(new Group(Name=grp.replace('_',' '), DeveloperName=grp, Type='Regular'));
+                }
+            }
+            insert newGroups;
+            for ( Group newGrp : newGroups ) {
+                grpMap.put(newGrp.Id,newGrp);
+            }
+        }        
+        System.debug(debugSection+'-20.07->>>>>>>>>>>>ADUpdateGroupService:addGroups:NEW groups to be added: '+newGroups);
+        
+        //now, loop through the existing assignments for this user and save off the ones that don't already exist
+        List<GroupMember> newAssignments = new List<GroupMember>();
+        List<GroupMember> existingAssignments = [SELECT Id, GroupId, UserOrGroupId FROM GroupMember where UserOrGroupId =: usrId];
+        System.debug(debugSection+'-22->>>>>>>>>>>>ADUpdateGroupService:addGroups:existing assignments: '+existingAssignments);        
+        for (GroupMember grpa  : existingAssignments ) {
+            if (grpMap.isEmpty() || grpMap.get(grpa.GroupId) == null ) {
+                if ( grpa.GroupId != null ) {
+                    System.debug(debugSection+'-23->>>>>>>>>>>>ADUpdateGroupService:addGroups:extracting existing assignments: '+grpa);        
+                    newAssignments.add(new GroupMember(GroupId = grpa.GroupId,UserOrGroupId = usrId)); 
+                }
+            }
+		}
+        //There weren't any existing assignments, so we'll add all the new ones
+        if ( newAssignments.size() <= 0 ) {
+            for (Group grp2: grpList) {
+		        System.debug(debugSection+'-24->>>>>>>>>>>>ADUpdateGroupService:addGroups:looping through PSLs: '+grp2);        
+	            newAssignments.add(new GroupMember(GroupId = grp2.Id,UserOrGroupId = usrId)); 
+            }
+        }
+        System.debug(debugSection+'-30->>>>>>>>>>>>ADUpdateGroupService:addGroups:permission set group assignments to be added: '+newAssignments);
+        
+       //now we know the ones that need to be added, lets load up the object and insert them
+       //insert newAssignments;
+       /*
+        PermissionSetAssignment assignment = new PermissionSetAssignment(
+            PermissionSetGroupId = groupId,
+            AssigneeId = userId);
+    
+	    insert assignment;
+		*/
+    }
+    
+    private static void addPermissionSetLiceenses (Id usrId,List<CF_Permission_Mapping__c> hubPermissions ) {
+        
+        String debugSection = '670';
+        System.debug(debugSection+'-00->>>>>>>>>>>>ADUpdateGroupService:addPermissionSetLicenses:inside:permission sets for user('+usrId+'): '+hubPermissions);
+        List<String> existingPsl = new List<String>();
+        //Get the api names for all permission sets to be assigned
+        for ( CF_Permission_Mapping__c psm : hubPermissions ) {
+	        System.debug(debugSection+'-02->>>>>>>>>>>>ADUpdateGroupService:addPermissionSetLicenses:access type: '+psm.Access_Type__c+' api name: '+psm.Permission_Set_API_Name__c);
+            if ( psm.Access_Type__c.equals('Permission Set Licenses')) {
+		        //System.debug(debugSection+'-04->>>>>>>>>>>>ADUpdateGroupService:addPermissionSetLicenses:FOUND access type: '+psm.Access_Type__c+' api name: '+psm.Permission_Set_API_Name__c);
+                existingPsl.add(psm.Permission_Set_API_Name__c);
+            }
+        }        
+        System.debug(debugSection+'-10->>>>>>>>>>>>ADUpdateGroupService:addPermiaddPermissionSetLicensesssionSetGroups:permission sets for user('+usrId+'): '+existingPsl);
+        //Take the names and query the actual permission set group object to get the Ids
+        List<PermissionSetLicense> pslList = [SELECT Id, DeveloperName, Language, MasterLabel, TotalLicenses, Status, ExpirationDate, UsedLicenses FROM PermissionSetLicense where DeveloperName =: existingPsl];
+        Map<Id,PermissionSetLicense> pslMap = new Map<Id,PermissionSetLicense>();
+        System.debug(debugSection+'-12->>>>>>>>>>>>ADUpdateGroupService:addPermissionSetLicenses:looking for permission sets based on the api names: '+pslList);
+        for (PermissionSetLicense ps: pslList) {
+            pslMap.put(ps.Id,ps);                               
+		}
+        System.debug(debugSection+'-20->>>>>>>>>>>>ADUpdateGroupService:addPermissionSetLicenses:permission sets to be added: '+pslMap);        
+        
+        //now, loop through the existing assignments for this user and save off the ones that don't already exist
+        List<PermissionSetLicenseAssign> newAssignments = new List<PermissionSetLicenseAssign>();
+        List<PermissionSetLicenseAssign> existingAssignments = [SELECT Id, PermissionSetLicenseId, AssigneeId FROM PermissionSetLicenseAssign where AssigneeId =: usrId];
+        System.debug(debugSection+'-22->>>>>>>>>>>>ADUpdateGroupService:addPermissionSetLicenses:existing assignments: '+existingAssignments);        
+        for (PermissionSetLicenseAssign psla  : existingAssignments ) {
+            if (pslMap.isEmpty() || pslMap.get(psla.PermissionSetLicenseId) == null ) {
+                if ( psla.PermissionSetLicenseId != null ) {
+                    System.debug(debugSection+'-23->>>>>>>>>>>>ADUpdateGroupService:addPermissionSetLicenses:extracting existing assignments: '+psla);        
+                    newAssignments.add(new PermissionSetLicenseAssign(PermissionSetLicenseId = psla.PermissionSetLicenseId,AssigneeId = usrId)); 
+                }
+            }
+		}
+        //There weren't any existing assignments, so we'll add all the new ones
+        if ( newAssignments.size() <= 0 ) {
+            for (PermissionSetLicense psl2: pslList) {
+		        System.debug(debugSection+'-24->>>>>>>>>>>>ADUpdateGroupService:addPermissionSetLicenses:looping through PSLs: '+psl2);        
+	            newAssignments.add(new PermissionSetLicenseAssign(PermissionSetLicenseId = psl2.Id,AssigneeId = usrId)); 
+            }
+        }
+        System.debug(debugSection+'-30->>>>>>>>>>>>ADUpdateGroupService:addPermissionSetLicenses:permission set group assignments to be added: '+newAssignments);
+        
+       //now we know the ones that need to be added, lets load up the object and insert them
+       //insert newAssignments;
+       /*
+        PermissionSetAssignment assignment = new PermissionSetAssignment(
+            PermissionSetGroupId = groupId,
+            AssigneeId = userId);
+    
+	    insert assignment;
+		*/
     }
     
     private static void addPermissionSets (Id usrId,List<CF_Permission_Mapping__c> hubPermissions ) {

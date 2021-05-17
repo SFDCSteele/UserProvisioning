@@ -112,6 +112,7 @@
         <fields>Access_Type__c</fields>
         <fields>Application_Role__c</fields>
         <fields>Permission_Set_API_Name__c</fields>
+        <fields>Permission_Location__c</fields>
         <relatedList>CF_Permission_Mapping__c.DTC_Application_Level__c</relatedList>
     </relatedLists>
     <relatedLists>
