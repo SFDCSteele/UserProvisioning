@@ -257,7 +257,11 @@ public class ADUpdateGroupService {
         }
         printDebug (debugMethod,debugSection,'-98:ADDING new users: '+usersToAdd);
         
-        insert usersToAdd;
+        try {
+            insert usersToAdd;
+        } catch (Exception e) {
+            System.debug(debugMethod+':'+debugSection+'--Exception while try to insert users: '+usersToAdd+' => '+e.getStackTraceString());
+        }
         
         //Lets get all the users we added as well as the users that already existed
         List<User> listOfUsers = [Select SECID__c,Id from User where SECID__c =: secIdArr];
@@ -282,7 +286,7 @@ public class ADUpdateGroupService {
             addPermissionSets(usr.Id,hubPermissionsMap.get(usr.SECID__c+'|hub'));
             
             //Add Permission Set Licenses
-            addPermissionSetLiceenses(usr.Id,hubPermissionsMap.get(usr.SECID__c+'|hub'));
+            addPermissionSetLicenses(usr.Id,hubPermissionsMap.get(usr.SECID__c+'|hub'));
             
             
             //Add Groups
@@ -296,29 +300,6 @@ public class ADUpdateGroupService {
             */                                        
         }
             
-                                                     
-			/* create user:
-
-                newUsers.add(new User(username=appAccess.Federation_Id__c,firstname=appAccess.Contact__r.FirstName,lastname=Contact__r.LastName,email=Contact__r.Email,federationidentifier=Contact__r.LastName,
-                alias=users.get(5),isactive=bIsActive,profileid=adminProfile.Id,languagelocalekey=sLanguagelocalekey,timezonesidkey=sTimezonesidkey,localesidkey=sLocalesidkey,emailencodingkey=sEmailencodingkey);
-
-				userValues.add(new List<String>{'arevankar@mulesoft.com ','Amit',' Revankar','arevankar@mulesoft.com','arevankar@mulesoft.com','arev','true','00et0000000QGuGAAW','en_US','America/New_York','en_US','UTF-8'});
-                userValues.add(new List<String>{'afelrice@salesforce.com','Andrew','Felrice','afelrice@salesforce.com','afelrice@salesforce.com','afeir','true','00et0000000QGuGAAW','en_US','America/New_York','en_US','UTF-8'});
-                userValues.add(new List<String>{'bryan.broome@va.gov','Bryan','Broome','bryan.broome@va.gov','bryan.broome@va.gov','bbro','true','00et0000000QGuGAAW','en_US','America/New_York','en_US','UTF-8},'});
-                userValues.add(new List<String>{'wsteele@salesforce.com','William','Steele','wsteele@salesforce.com','wsteele@salesforce.com','wstee','true','00et0000000QGuGAAW','en_US','America/New_York','en_US','UTF-8'});
-                
-                Integer cnt = 0;
-                for ( List<String> users : userValues) {
-                    System.debug('======================================================================');
-                    //newUsers.add(new User(username=users.get(0),firstname=users.get(1),lastname=users.get(2),email=users.get(3),federationidentifier=users.get(4),alias=users.get(5),isactive=Boolean.valueOf(users.get(6)),profileid=adminProfile.Id,languagelocalekey=users.get(8),timezonesidkey=users.get(9),localesidkey=users.get(10),emailencodingkey='UTF-8'));
-                    newUsers.add(new User(username=users.get(0),firstname=users.get(1),lastname=users.get(2),email=users.get(3),federationidentifier=users.get(4),alias=users.get(5),isactive=bIsActive,profileid=adminProfile.Id,languagelocalekey=sLanguagelocalekey,timezonesidkey=sTimezonesidkey,localesidkey=sLocalesidkey,emailencodingkey=sEmailencodingkey);
-                }
-                System.debug('======================================================================');
-                System.debug('users to be added: '+newUsers);
-                Insert newUsers;
-			 */
-
-        
     }
     
     private static void addQueues (Id usrId,List<CF_Permission_Mapping__c> hubPermissions ) {
@@ -355,7 +336,11 @@ public class ADUpdateGroupService {
                     newQueues.add(new Group(Name=queue.replace('_',' '), DeveloperName=queue, Type='Queue'));
                 }
             }
-            insert newQueues;
+            try {
+	            insert newQueues;
+            } catch (Exception e) {
+                System.debug(debugMethod+':'+debugSection+'--Exception while try to insert Queues: '+newQueues+' => '+e.getStackTraceString());
+            }
             for ( Group newQueue : newQueues ) {
                 queueMap.put(newQueue.Id,newQueue);
             }
@@ -363,6 +348,21 @@ public class ADUpdateGroupService {
         printDebug (debugMethod,debugSection,'-20.07:NEW Queues to be added: '+newQueues);
         
         //now, loop through the existing assignments for this user and save off the ones that don't already exist
+        List<GroupMember> newAssignments = new List<GroupMember>();
+        Map<Id,GroupMember> existingAssignmentMap = new Map<Id,GroupMember>();
+        for ( GroupMember queueM : [SELECT Id, GroupId, UserOrGroupId FROM GroupMember where UserOrGroupId =: usrId]) {
+            existingAssignmentMap.put(queueM.GroupId,queueM);
+        }
+        printDebug (debugMethod,debugSection,'-22:existing assignments: '+existingAssignmentMap);        
+		//I need to loop through my assignments and if I already have an assignment one of the permission sets I'm concerned about, I need to skip it
+		//If I don't have an assignment for one of my permission sets, I need to add it to the new assignments        
+        for (Group que: queueList) {
+           if ((existingAssignmentMap.isEmpty() || existingAssignmentMap.get(que.Id) == null) ) {
+                  newAssignments.add(new GroupMember(GroupId = que.Id,UserOrGroupId = usrId)); 
+           }
+		}
+
+		/*
         List<GroupMember> newAssignments = new List<GroupMember>();
         List<GroupMember> existingAssignments = [SELECT Id, GroupId, UserOrGroupId FROM GroupMember where UserOrGroupId =: usrId];
         printDebug (debugMethod,debugSection,'-22:existing assignments: '+existingAssignments);        
@@ -374,6 +374,7 @@ public class ADUpdateGroupService {
                 }
             }
 		}
+		*/
         //There weren't any existing assignments, so we'll add all the new ones
         if ( newAssignments.size() <= 0 ) {
             for (Group queue2: queueList) {
@@ -384,14 +385,11 @@ public class ADUpdateGroupService {
         printDebug (debugMethod,debugSection,'-30:Queue assignments to be added: '+newAssignments);
         
        //now we know the ones that need to be added, lets load up the object and insert them
-       insert newAssignments;
-       /*
-        PermissionSetAssignment assignment = new PermissionSetAssignment(
-            PermissionSetGroupId = groupId,
-            AssigneeId = userId);
-    
-	    insert assignment;
-		*/
+        try {
+            insert newAssignments;
+        } catch (Exception e) {
+            System.debug(debugMethod+':'+debugSection+'--Exception while try to insert assignments: '+newAssignments+' => '+e.getStackTraceString());
+        }
     }
     
     private static void addGroups (Id usrId,List<CF_Permission_Mapping__c> hubPermissions ) {
@@ -428,7 +426,11 @@ public class ADUpdateGroupService {
                     newGroups.add(new Group(Name=grp.replace('_',' '), DeveloperName=grp, Type='Regular'));
                 }
             }
-            insert newGroups;
+            try {
+                insert newGroups;
+            } catch (Exception e) {
+                System.debug(debugMethod+':'+debugSection+'--Exception while try to insert groups: '+newGroups+' => '+e.getStackTraceString());
+            }
             for ( Group newGrp : newGroups ) {
                 grpMap.put(newGrp.Id,newGrp);
             }
@@ -437,8 +439,19 @@ public class ADUpdateGroupService {
         
         //now, loop through the existing assignments for this user and save off the ones that don't already exist
         List<GroupMember> newAssignments = new List<GroupMember>();
-        List<GroupMember> existingAssignments = [SELECT Id, GroupId, UserOrGroupId FROM GroupMember where UserOrGroupId =: usrId];
-        printDebug (debugMethod,debugSection,'-22:existing assignments: '+existingAssignments);        
+        Map<Id,GroupMember> existingAssignmentMap = new Map<Id,GroupMember>();
+        for ( GroupMember grpM : [SELECT Id, GroupId, UserOrGroupId FROM GroupMember where UserOrGroupId =: usrId]) {
+            existingAssignmentMap.put(grpM.GroupId,grpM);
+        }
+        printDebug (debugMethod,debugSection,'-22:existing assignments: '+existingAssignmentMap);        
+		//I need to loop through my assignments and if I already have an assignment one of the permission sets I'm concerned about, I need to skip it
+		//If I don't have an assignment for one of my permission sets, I need to add it to the new assignments        
+        for (Group grp: grpList) {
+           if ((existingAssignmentMap.isEmpty() || existingAssignmentMap.get(grp.Id) == null) ) {
+                  newAssignments.add(new GroupMember(GroupId = grp.Id,UserOrGroupId = usrId)); 
+           }
+		}
+        /*
         for (GroupMember grpa  : existingAssignments ) {
             if (grpMap.isEmpty() || grpMap.get(grpa.GroupId) == null ) {
                 if ( grpa.GroupId != null ) {
@@ -447,6 +460,7 @@ public class ADUpdateGroupService {
                 }
             }
 		}
+		*/
         //There weren't any existing assignments, so we'll add all the new ones
         if ( newAssignments.size() <= 0 ) {
             for (Group grp2: grpList) {
@@ -457,21 +471,18 @@ public class ADUpdateGroupService {
         printDebug (debugMethod,debugSection,'-30:permission set group assignments to be added: '+newAssignments);
         
        //now we know the ones that need to be added, lets load up the object and insert them
-       insert newAssignments;
-       /*
-        PermissionSetAssignment assignment = new PermissionSetAssignment(
-            PermissionSetGroupId = groupId,
-            AssigneeId = userId);
-    
-	    insert assignment;
-		*/
+        try {
+            insert newAssignments;
+        } catch (Exception e) {
+            System.debug(debugMethod+':'+debugSection+'--Exception while try to insert assignments: '+newAssignments+' => '+e.getStackTraceString());
+        }
     }
     
-    private static void addPermissionSetLiceenses (Id usrId,List<CF_Permission_Mapping__c> hubPermissions ) {
+    private static void addPermissionSetLicenses (Id usrId,List<CF_Permission_Mapping__c> hubPermissions ) {
         
         String debugSection = '670';
         String debugMethod  = 'addPermissionSetLiceenses';
-        printDebug (debugMethod,debugSection,'-00:inside:permission sets for user('+usrId+'): '+hubPermissions);
+        printDebug (debugMethod,debugSection,'-00:inside:permission set licenses for user('+usrId+'): '+hubPermissions);
         List<String> existingPsl = new List<String>();
         //Get the api names for all permission sets to be assigned
         for ( CF_Permission_Mapping__c psm : hubPermissions ) {
@@ -481,20 +492,33 @@ public class ADUpdateGroupService {
                 existingPsl.add(psm.Permission_Set_API_Name__c);
             }
         }        
-        printDebug (debugMethod,debugSection,'-10->>>>>>>>>>>>ADUpdateGroupService:addPermiaddPermissionSetLicensesssionSetGroups:permission sets for user('+usrId+'): '+existingPsl);
+        printDebug (debugMethod,debugSection,'-10:permission set licenses for user('+usrId+'): '+existingPsl);
         //Take the names and query the actual permission set group object to get the Ids
         List<PermissionSetLicense> pslList = [SELECT Id, DeveloperName, Language, MasterLabel, TotalLicenses, Status, ExpirationDate, UsedLicenses FROM PermissionSetLicense where DeveloperName =: existingPsl];
         Map<Id,PermissionSetLicense> pslMap = new Map<Id,PermissionSetLicense>();
-        printDebug (debugMethod,debugSection,'-12:looking for permission sets based on the api names: '+pslList);
+        printDebug (debugMethod,debugSection,'-12:looking for permission set licenses based on the api names: '+pslList);
+        /*
         for (PermissionSetLicense ps: pslList) {
             pslMap.put(ps.Id,ps);                               
 		}
         printDebug (debugMethod,debugSection,'-20:permission sets to be added: '+pslMap);        
-        
+        */
         //now, loop through the existing assignments for this user and save off the ones that don't already exist
         List<PermissionSetLicenseAssign> newAssignments = new List<PermissionSetLicenseAssign>();
-        List<PermissionSetLicenseAssign> existingAssignments = [SELECT Id, PermissionSetLicenseId, AssigneeId FROM PermissionSetLicenseAssign where AssigneeId =: usrId];
-        printDebug (debugMethod,debugSection,'-22:existing assignments: '+existingAssignments);        
+        Map<Id,PermissionSetLicenseAssign> existingAssignmentMap = new Map<Id,PermissionSetLicenseAssign>();
+        for ( PermissionSetLicenseAssign psla :  [SELECT Id, PermissionSetLicenseId, AssigneeId FROM PermissionSetLicenseAssign where AssigneeId =: usrId]) {
+            existingAssignmentMap.put(psla.PermissionSetLicenseId,psla);
+        }
+        printDebug (debugMethod,debugSection,'-22:existing assignments: '+existingAssignmentMap);        
+		//I need to loop through my assignments and if I already have an assignment one of the permission sets I'm concerned about, I need to skip it
+		//If I don't have an assignment for one of my permission sets, I need to add it to the new assignments        
+        for (PermissionSetLicense psl: pslList) {
+           if ((existingAssignmentMap.isEmpty() || existingAssignmentMap.get(psl.Id) == null) ) {
+                  newAssignments.add(new PermissionSetLicenseAssign(PermissionSetLicenseId = psl.Id,AssigneeId = usrId)); 
+           }
+		}
+        /*
+
         for (PermissionSetLicenseAssign psla  : existingAssignments ) {
             if (pslMap.isEmpty() || pslMap.get(psla.PermissionSetLicenseId) == null ) {
                 if ( psla.PermissionSetLicenseId != null ) {
@@ -502,7 +526,7 @@ public class ADUpdateGroupService {
                     newAssignments.add(new PermissionSetLicenseAssign(PermissionSetLicenseId = psla.PermissionSetLicenseId,AssigneeId = usrId)); 
                 }
             }
-		}
+		}*/
         //There weren't any existing assignments, so we'll add all the new ones
         if ( newAssignments.size() <= 0 ) {
             for (PermissionSetLicense psl2: pslList) {
@@ -510,17 +534,14 @@ public class ADUpdateGroupService {
 	            newAssignments.add(new PermissionSetLicenseAssign(PermissionSetLicenseId = psl2.Id,AssigneeId = usrId)); 
             }
         }
-        printDebug (debugMethod,debugSection,'-30:permission set group assignments to be added: '+newAssignments);
+        printDebug (debugMethod,debugSection,'-30:permission set license assignments to be added: '+newAssignments);
         
        //now we know the ones that need to be added, lets load up the object and insert them
-       insert newAssignments;
-       /*
-        PermissionSetAssignment assignment = new PermissionSetAssignment(
-            PermissionSetGroupId = groupId,
-            AssigneeId = userId);
-    
-	    insert assignment;
-		*/
+        try {
+            insert newAssignments;
+        } catch (Exception e) {
+            System.debug(debugMethod+':'+debugSection+'--Exception while try to insert assignments: '+newAssignments+' => '+e.getStackTraceString());
+        }
     }
     
     private static void addPermissionSets (Id usrId,List<CF_Permission_Mapping__c> hubPermissions ) {
@@ -541,21 +562,27 @@ public class ADUpdateGroupService {
         //Take the names and query the actual permission set group object to get the Ids
         List<PermissionSet> psList = [SELECT Id, Name, Label, LicenseId, ProfileId, IsCustom, Description, Type, PermissionSetGroupId, NamespacePrefix, IsOwnedByProfile 
                                        FROM PermissionSet where Name =: existingPs];
+        printDebug (debugMethod,debugSection,'-12:extracted permission sets based on the api names: '+psList);
+        /*
         Map<Id,PermissionSet> psMap = new Map<Id,PermissionSet>();
-        //List<PermissionSet> newPs = 
-        printDebug (debugMethod,debugSection,'-12:looking for permission sets based on the api names: '+psList);
         for (PermissionSet ps: psList) {
             psMap.put(ps.Id,ps);                               
 		}
         printDebug (debugMethod,debugSection,'-20:permission sets to be added: '+psMap);        
+        */
+        /*
+         * 1. Need a List with the Id's of the permission sets the are supposed to get------psList
+         * 2. Neep a map with the Id's of the permission sets they already have-------------existingAssignmentMap
+         * 3. Loop through #1, for those that don't exist in #2, add an assignment record--- 
+        */
         
         //now, loop through the existing assignments for this user and save off the ones that don't already exist
         List<PermissionSetAssignment> newAssignments = new List<PermissionSetAssignment>();
         Map<Id,PermissionSetAssignment> existingAssignmentMap = new Map<Id,PermissionSetAssignment>();
         for ( PermissionSetAssignment psa :  [SELECT Id, PermissionSetId, AssigneeId FROM PermissionSetAssignment where AssigneeId =: usrId]) {
-            if ((existingAssignmentMap.isEmpty() || existingAssignmentMap.get(psa.PermissionSetId) == null) ) {
+            //if ((existingAssignmentMap.isEmpty() || existingAssignmentMap.get(psa.PermissionSetId) == null) ) {
                 existingAssignmentMap.put(psa.PermissionSetId,psa);
-            }           
+            //}           
         }
         //List<PermissionSetAssignment> existingAssignments = ;
         printDebug (debugMethod,debugSection,'-22:existing assignments: '+existingAssignmentMap);
@@ -586,14 +613,11 @@ public class ADUpdateGroupService {
         printDebug (debugMethod,debugSection,'-30:permission set group assignments to be added: '+newAssignments);
         
        //now we know the ones that need to be added, lets load up the object and insert them
-       insert newAssignments;
-       /*
-        PermissionSetAssignment assignment = new PermissionSetAssignment(
-            PermissionSetGroupId = groupId,
-            AssigneeId = userId);
-    
-	    insert assignment;
-		*/
+        try {
+            insert newAssignments;
+        } catch (Exception e) {
+            System.debug(debugMethod+':'+debugSection+'--Exception while try to insert assignments: '+newAssignments+' => '+e.getStackTraceString());
+        }
     }
     
     private static void addPermissionSetGroups (Id usrId,List<CF_Permission_Mapping__c> hubPermissions ) {
@@ -614,18 +638,30 @@ public class ADUpdateGroupService {
         //Take the names and query the actual permission set group object to get the Ids
         List<PermissionSetGroup> psgList = [SELECT Id, IsDeleted, DeveloperName, Language, MasterLabel, NamespacePrefix, Description, Status 
                                        FROM PermissionSetGroup where DeveloperName =: existingPsgs];
+        /*
         Map<Id,PermissionSetGroup> psgMap = new Map<Id,PermissionSetGroup>();
-        //List<PermissionSetGroup> newPsgs = 
         printDebug (debugMethod,debugSection,'-12:looking for permission set groups based on the api names: '+psgList);
         for (PermissionSetGroup psg: psgList) {
             psgMap.put(psg.Id,psg);                               
 		}
         printDebug (debugMethod,debugSection,'-20:permission set groups to be added: '+psgMap);        
-        
+        */
         //now, loop through the existing assignments for this user and save off the ones that don't already exist
         List<PermissionSetAssignment> newAssignments = new List<PermissionSetAssignment>();
-        List<PermissionSetAssignment> existingAssignments = [SELECT Id, PermissionSetId, PermissionSetGroupId, AssigneeId FROM PermissionSetAssignment where AssigneeId =: usrId];
-        printDebug (debugMethod,debugSection,'-22:existing assignments: '+existingAssignments);        
+        Map<Id,PermissionSetAssignment> existingAssignmentMap = new Map<Id,PermissionSetAssignment>();
+        for ( PermissionSetAssignment psa :  [SELECT Id, PermissionSetId, PermissionSetGroupId, AssigneeId FROM PermissionSetAssignment where AssigneeId =: usrId]) {
+            existingAssignmentMap.put(psa.PermissionSetGroupId,psa);
+        }
+        //List<PermissionSetAssignment> existingAssignments = ;
+        printDebug (debugMethod,debugSection,'-22:existing assignments: '+existingAssignmentMap);        
+		//I need to loop through my assignments and if I already have an assignment one of the permission sets I'm concerned about, I need to skip it
+		//If I don't have an assignment for one of my permission sets, I need to add it to the new assignments        
+        for (PermissionSetGroup psg: psgList) {
+           if ((existingAssignmentMap.isEmpty() || existingAssignmentMap.get(psg.Id) == null) ) {
+                  newAssignments.add(new PermissionSetAssignment(PermissionSetGroupId = psg.Id,AssigneeId = usrId)); 
+           }
+		}
+        /*
         for (PermissionSetAssignment psa  : existingAssignments ) {
             if (psgMap.isEmpty() || psgMap.get(psa.PermissionSetGroupId) == null ) {
                 if ( psa.PermissionSetGroupId != null ) {
@@ -633,7 +669,7 @@ public class ADUpdateGroupService {
                     newAssignments.add(new PermissionSetAssignment(PermissionSetGroupId = psa.PermissionSetGroupId,AssigneeId = usrId)); 
                 }
             }
-		}
+		}*/
         //There weren't any existing assignments, so we'll add all the new ones
         if ( newAssignments.size() <= 0 ) {
             for (PermissionSetGroup psg2: psgList) {
@@ -644,14 +680,11 @@ public class ADUpdateGroupService {
         printDebug (debugMethod,debugSection,'-30:permission set group assignments to be added: '+newAssignments);
         
        //now we know the ones that need to be added, lets load up the object and insert them
-       insert newAssignments;
-       /*
-        PermissionSetAssignment assignment = new PermissionSetAssignment(
-            PermissionSetGroupId = groupId,
-            AssigneeId = userId);
-    
-	    insert assignment;
-		*/
+        try {
+            insert newAssignments;
+        } catch (Exception e) {
+            System.debug(debugMethod+':'+debugSection+'--Exception while try to insert assignments: '+newAssignments+' => '+e.getStackTraceString());
+        }
     }
     
     private static boolean publishUserEvents (List<AUP_Destination_User_Event__e> userEvents ) {
@@ -709,23 +742,6 @@ public class ADUpdateGroupService {
             existingUserMap.put(usr.SECID__c,usr.Id);
         }
         
-            /*
-               return new User(
-                        Alias = 'instMgr',
-                        Email = (firstName + lastName + '@example.com').remove(' '),
-                        EmailEncodingKey = 'UTF-8',
-                        FederationIdentifier = generateRandomStringByLength(15),
-                        FirstName = firstName,
-                        LastName = lastName,
-                        LanguageLocaleKey = 'en_US',
-                        LocaleSidKey = 'en_US',
-                        ProfileId = testProfile.Id,
-                        TimeZoneSidKey = 'GMT',
-                        UserName = (firstName + lastName + '@testorg.com' + UserInfo.getOrganizationId()+String.valueOf(Datetime.now()).replace(' ','').replace(':','').replace('-','')).remove(' ')
-            if (existingUserMap.isEmpty() || existingUserMap.get(cont.SECID__c) == null ) {
-            } 
-	        }
-			*/
         printDebug (debugMethod,debugSection,'-70:existing Users: '+existingUserMap);
         
         return existingUserMap;
@@ -781,22 +797,16 @@ public class ADUpdateGroupService {
         
         if ( !contactExists(grpEvent.SECID) && !applicationAccessExists(grpEvent.SECID,dtcApplication.Id,dtcApplicationLevel.Id) ) {
 
-            /*
-                System.debug('ADUpdateGroupService:GroupName: '+r.GroupName);
-                System.debug('ADUpdateGroupService:EmailAddress: '+r.EmailAddress);
-                System.debug('ADUpdateGroupService:FederationId: '+r.FederationId);
-                System.debug('ADUpdateGroupService:SECID: '+r.SECID);
-                System.debug('ADUpdateGroupService:FirstName: '+r.FirstName);
-                System.debug('ADUpdateGroupService:LastName: '+r.LastName);
-                System.debug('ADUpdateGroupService:ParentADGroup: '+r.ParentADGroup);
-                System.debug('ADUpdateGroupService:Status: '+r.Status);
-             */            
             try {
                 Contact newContact = new Contact(AccountId=dtcApplication.Account__c,
                                                  Email=grpEvent.EmailAddress,Federation_Id__c=grpEvent.FederationId,SECID__c=grpEvent.SECID,
                                                  FirstName=grpEvent.FirstName,LastName=grpEvent.LastName,
                                                  Description='AUP Created Contact');
-                insert newContact;
+                try {
+                    insert newContact;
+                } catch (Exception e) {
+                    System.debug(debugMethod+':'+debugSection+'--Exception while try to insert contacts: '+newContact+' => '+e.getStackTraceString());
+                }
 		        printDebug (debugMethod,debugSection,'-10:newContact: '+newContact);
                 
                 CF_Application_Access__c newAccess = new CF_Application_Access__c(Account__c=newContact.AccountId,
@@ -806,7 +816,11 @@ public class ADUpdateGroupService {
                                                                                   Email_Id__c=grpEvent.EmailAddress,Federation_Id__c=grpEvent.FederationId,Inactive__c=false,
                                                                                   First_Name__c=grpEvent.FirstName,Last_Name__c=grpEvent.LastName,
                                                                                   Notes__c='AUP Created Application Access');
-                insert newAccess;
+                try {
+	                insert newAccess;
+                } catch (Exception e) {
+                    System.debug(debugMethod+':'+debugSection+'--Exception while try to insert Application Access: '+newAccess+' => '+e.getStackTraceString());
+                }
 		        printDebug (debugMethod,debugSection,'400-20:create Application Access: newAccess: '+newAccess);
                 
                 returnStatus = true;
