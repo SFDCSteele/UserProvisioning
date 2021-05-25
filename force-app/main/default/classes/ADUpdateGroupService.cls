@@ -713,6 +713,18 @@ public class ADUpdateGroupService {
             printDebug (debugMethod,debugSection,'-30:FINISHING UP!');
         }
 
+        List<String> destOrgNames = new List<String>();
+		List<Destination_Org__c> destOrgs = new List<Destination_Org__c>();  
+        for ( AUP_Destination_User_Event__e evnt : userEvents ) {
+            destOrgNames.add(evnt.Destination_Org__c);
+        }
+        try {
+         	destOrgs = [select Id, Dest_Client_Id__c,Dest_Client_Secret__c,Dest_Password__c,Dest_Username__c,Destination_End_Point__c,Destination_Org__c
+                       FROM Destination_Org__c  where Destination_Org__c =: destOrgNames limit 1];
+        } catch (Exception e) {
+            System.debug(debugMethod+':'+debugSection+'--Exception while try to find destination Orgs: '+destOrgNames+' => '+e.getStackTraceString());
+        }
+
         
         return returnStatus;
     }
