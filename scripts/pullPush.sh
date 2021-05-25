@@ -1,7 +1,7 @@
 #!/bin/bash
 
 export dxOrg="ActiveDirectoryAppScratch"
-export dxUser="test-pypzrfk2a5hj@example.com"
+export dxUser="test-3hz0yojewuba@example.com"
 export gitBranch="ActiveDirectory"
 
 echo "==========================================================================="
