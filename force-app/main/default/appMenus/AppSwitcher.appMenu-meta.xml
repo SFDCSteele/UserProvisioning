@@ -65,7 +65,7 @@
         <type>CustomApplication</type>
     </appMenuItems>
     <appMenuItems>
-        <name>AD_Subscribe_Event_App</name>
+        <name>AUP_Event_Manager</name>
         <type>ConnectedApp</type>
     </appMenuItems>
 </AppMenu>

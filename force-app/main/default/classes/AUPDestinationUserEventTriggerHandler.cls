@@ -66,8 +66,8 @@ public class AUPDestinationUserEventTriggerHandler extends PlatformEventTriggerH
         System.debug('777.10-##############AUPDestinationUserEventTriggerHandler:afterInsert:JSON String: '+usrSJONString);
         }
         System.debug('777.20-##############AUPDestinationUserEventTriggerHandler:afterInsert:publishing event: '+usrSJONString);
-        ADUpdateGroupService.execute(usrSJONString);
         */
+        AUPDestinationUserService.execute(Trigger.New);
     }
     
     //This method takes all of the events in Trigger.new and maps the record Ids based on change type
