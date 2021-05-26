@@ -51,6 +51,7 @@ public class ADPublishUserEvent {
     @future(callout=true)
     public static void processEvents (String eventType, String msgSJONString) {
         
+        System.debug('200000.01-##############ADPublishUserEvent:processEvents:inside method: eventType: '+eventType+' json: '+msgSJONString);
         List<Profile> prof = [Select Id,Name from Profile where Name='System Administrator'];
         AUP_Core_Functionality_Settings__c aupSettings = AUP_Core_Functionality_Settings__c.getInstance(prof[0].Id);
         String returnString = '';

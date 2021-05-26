@@ -5,6 +5,7 @@
     <columns>AD_First_Name__c</columns>
     <columns>AD_Last_Name__c</columns>
     <columns>AD_User_Email__c</columns>
+    <columns>SECID__c</columns>
     <columns>AD_Federation_Id__c</columns>
     <columns>CREATED_DATE</columns>
     <columns>LAST_UPDATE</columns>
