@@ -3,13 +3,35 @@ public class AUPPublishDestinationEvent {
     public AUPPublishDestinationEvent(){
     }
     
-    @future(callout=true)
-    public static void processEvents (String eventType, String msgSJONString) {
+    public static void processUserEvents (List<AUP_Destination_User_Event__e> userEvents) {
+		Map<String,Destination_Org__c> destOrgs = new Map<String,Destination_Org__c>();  
+        List<String> destOrgNames = new List<String>();
+        AUPJSONGenerator jSONString = new AUPJSONGenerator();
+        for ( AUP_Destination_User_Event__e evnt : userEvents ) {
+            destOrgNames.add(evnt.Destination_Org__c);
+        }
+        for ( Destination_Org__c dOrg  : [select Id, Dest_Client_Id__c,Dest_Client_Secret__c,Dest_Password__c,Dest_Username__c,Destination_End_Point__c,Destination_Org__c
+                   FROM Destination_Org__c  where Destination_Org__c =: destOrgNames]) {
+                       
+                       destOrgs.put(dOrg.Destination_Org__c,dOrg);
+                       
+        }
+        for ( AUP_Destination_User_Event__e evnt : userEvents ) {
+            if ( destOrgs.get(evnt.Destination_Org__c) != null ) {
+                processEvents('Destination',jSONString.generateJSONContent('Destination',evnt),evnt.Destination_Org__c);
+            }
+        }
         
-        List<Profile> prof = [Select Id,Name from Profile where Name='System Administrator'];
+     }
+
+    
+    @future(callout=true)
+    public static void processEvents (String eventType, String msgSJONString, String destOrgName) {
+        
+        //List<Profile> prof = [Select Id,Name from Profile where Name='System Administrator'];
+        
         Destination_Org__c destOrg = [select Id, Dest_Client_Id__c,Dest_Client_Secret__c,Dest_Password__c,Dest_Username__c,Destination_End_Point__c,Destination_Org__c 
-                                      FROM Destination_Org__c  where Destination_Org__c =: eventType limit 1];
-        String returnString = '';
+                                      FROM Destination_Org__c  where Destination_Org__c =: destOrgName limit 1];
         System.debug('200010.01-##############AUPPublishDestinationEvent:processEvents:destOrgs: '+
                      '\nDestination Org\t:\t'+destOrg.Destination_Org__c+
                      '\nUsername\t:\t'+destOrg.Dest_Username__c+

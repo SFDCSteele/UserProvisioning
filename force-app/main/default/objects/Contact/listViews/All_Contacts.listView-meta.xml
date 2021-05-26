@@ -8,6 +8,6 @@
     <columns>CONTACT.EMAIL</columns>
     <columns>CONTACT.TITLE</columns>
     <columns>CORE.USERS.ALIAS</columns>
-    <filterScope>Mine</filterScope>
+    <filterScope>Everything</filterScope>
     <label>All Contacts</label>
 </ListView>
