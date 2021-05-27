@@ -74,7 +74,7 @@ public class ADUpdateUserService {
 
         for (User usr : [select Id, username, SECID__C,IsActive,profileid from User where SECID__c =: SECID]) {
             usr.IsActive = false;
-            usr.profileid = newProfileId;
+            //usr.profileid = newProfileId;
             inActivateUsers.add(usr);
             usrIds.add(usr.Id);
             returnMessage += 'User Inactivated';
@@ -82,10 +82,10 @@ public class ADUpdateUserService {
         System.debug('ADUserReceiveEvent:preparing to update users: '+inActivateUsers);
         
         try {
-	        update inActivateUsers;
-            removePermissionSets(usrIds);
             removePermissionSetLicenses(usrIds);
+            removePermissionSets(usrIds);
             removeGroupsAndQueues(usrIds);
+	        update inActivateUsers;
         } catch (Exception e) {
             System.debug('ADUserReceiveEvent:inactivateUser:Exception: '+e.getStackTraceString());
             //return e.getStackTraceString();
