@@ -86,49 +86,49 @@
         <inputAssignments>
             <field>AD_SEC_ID__c</field>
             <value>
-                <elementReference>Output_AD_SEC_ID</elementReference>
+                <elementReference>SECID_Input</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
             <field>Email_Address__c</field>
             <value>
-                <elementReference>Output_Email_Address</elementReference>
+                <elementReference>Email_Address_Input</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
             <field>Federation_Id__c</field>
             <value>
-                <elementReference>Output_Federation_Id</elementReference>
+                <elementReference>Federation_Id_Input</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
             <field>FirstName__c</field>
             <value>
-                <elementReference>Output_FirstName</elementReference>
+                <elementReference>First_Name_input</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
             <field>Group_Name__c</field>
             <value>
-                <elementReference>Output_Application_Level</elementReference>
+                <elementReference>Level_Name_Picklist</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
             <field>LastName__c</field>
             <value>
-                <elementReference>Output_LastName</elementReference>
+                <elementReference>Last_Name_Input</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
             <field>Parent_AD_Group__c</field>
             <value>
-                <elementReference>Output_Application_Name</elementReference>
+                <elementReference>Application_Name_picklist</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
             <field>Status__c</field>
             <value>
-                <elementReference>Output_Status</elementReference>
+                <elementReference>Status_Picklist</elementReference>
             </value>
         </inputAssignments>
         <object>AD_Group_Update__e</object>
