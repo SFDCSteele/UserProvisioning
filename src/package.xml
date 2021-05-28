@@ -23,20 +23,29 @@
     <members>Active_Directory_Manager_UtilityBar</members>
   </types>
   <types>
+    <name>Flow</name>
+    <members>Add_User</members>
+  </types>
+  <types>
     <name>Layout</name>
+    <members>AD_Application__c-AD Application Layout</members>
     <members>AD_Group__c-AD Group Layout</members>
     <members>AD_User__c-AD User Layout</members>
+    <members>Application_Level__c-Application Level Layout</members>
   </types>
   <types>
     <name>CustomObject</name>
+    <members>AD_Application__c</members>
     <members>AD_Group_Update__e</members>
     <members>AD_Group__c</members>
     <members>AD_User_Inactivation__e</members>
     <members>AD_User__c</members>
     <members>AUP_Core_Functionality_Settings__c</members>
+    <members>Application_Level__c</members>
   </types>
   <types>
     <name>CustomField</name>
+    <members>AD_Application__c.Application_Name__c</members>
     <members>AD_Group_Update__e.AD_SEC_ID__c</members>
     <members>AD_Group_Update__e.Email_Address__c</members>
     <members>AD_Group_Update__e.Federation_Id__c</members>
@@ -64,9 +73,12 @@
     <members>AUP_Core_Functionality_Settings__c.AUP_ENT_Execute__c</members>
     <members>AUP_Core_Functionality_Settings__c.AUP_ENT_Password__c</members>
     <members>AUP_Core_Functionality_Settings__c.AUP_ENT_Username__c</members>
+    <members>Application_Level__c.AD_Application__c</members>
+    <members>Application_Level__c.Level_Name__c</members>
   </types>
   <types>
     <name>ListView</name>
+    <members>AD_Application__c.All</members>
     <members>AD_Group__c.All</members>
     <members>AD_User__c.All</members>
   </types>
@@ -74,6 +86,10 @@
     <name>RecordType</name>
     <members>AD_Group__c.ADGroupMain</members>
     <members>AD_User__c.ADUserMain</members>
+  </types>
+  <types>
+    <name>WebLink</name>
+    <members>AD_User__c.Add_User</members>
   </types>
   <types>
     <name>PermissionSet</name>
@@ -91,6 +107,7 @@
   </types>
   <types>
     <name>CustomTab</name>
+    <members>AD_Application__c</members>
     <members>AD_Group__c</members>
     <members>AD_User__c</members>
   </types>

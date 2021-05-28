@@ -128,14 +128,11 @@
     </actionOverrides>
     <actionOverrides>
         <actionName>View</actionName>
-        <comment>Action override created by Lightning App Builder during activation.</comment>
-        <content>AD_User_Record_Page</content>
-        <formFactor>Large</formFactor>
-        <skipRecordTypeSelect>false</skipRecordTypeSelect>
-        <type>Flexipage</type>
+        <type>Default</type>
     </actionOverrides>
     <actionOverrides>
         <actionName>View</actionName>
+        <formFactor>Large</formFactor>
         <type>Default</type>
     </actionOverrides>
     <actionOverrides>
@@ -146,159 +143,38 @@
     <allowInChatterGroups>false</allowInChatterGroups>
     <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
     <deploymentStatus>Deployed</deploymentStatus>
-    <description>Active Directory Users</description>
-    <enableActivities>true</enableActivities>
+    <enableActivities>false</enableActivities>
     <enableBulkApi>true</enableBulkApi>
     <enableFeeds>false</enableFeeds>
-    <enableHistory>true</enableHistory>
+    <enableHistory>false</enableHistory>
     <enableLicensing>false</enableLicensing>
-    <enableReports>true</enableReports>
+    <enableReports>false</enableReports>
     <enableSearch>true</enableSearch>
     <enableSharing>true</enableSharing>
     <enableStreamingApi>true</enableStreamingApi>
     <externalSharingModel>Private</externalSharingModel>
-    <label>AD User</label>
+    <label>AD Application</label>
     <nameField>
-        <displayFormat>AU-{00000}</displayFormat>
-        <label>AD User Name</label>
-        <trackHistory>false</trackHistory>
+        <displayFormat>APP-{00000}</displayFormat>
+        <label>AD Application Name</label>
         <type>AutoNumber</type>
     </nameField>
-    <pluralLabel>AD Users</pluralLabel>
-    <recordTypeTrackHistory>false</recordTypeTrackHistory>
-    <searchLayouts>
-        <excludedStandardButtons>OpenListInQuip</excludedStandardButtons>
-        <listViewButtons>Add_User</listViewButtons>
-    </searchLayouts>
+    <pluralLabel>AD Applications</pluralLabel>
+    <searchLayouts/>
     <sharingModel>ReadWrite</sharingModel>
     <visibility>Public</visibility>
     <fields>
-        <fullName>AD_Federation_Id__c</fullName>
+        <fullName>Application_Name__c</fullName>
         <externalId>false</externalId>
-        <label>AD Federation Id</label>
-        <length>80</length>
+        <label>Application Name</label>
+        <length>50</length>
         <required>false</required>
-        <trackHistory>false</trackHistory>
         <trackTrending>false</trackTrending>
         <type>Text</type>
         <unique>false</unique>
     </fields>
-    <fields>
-        <fullName>AD_First_Name__c</fullName>
-        <externalId>false</externalId>
-        <label>AD First Name</label>
-        <length>80</length>
-        <required>false</required>
-        <trackHistory>false</trackHistory>
-        <trackTrending>false</trackTrending>
-        <type>Text</type>
-        <unique>false</unique>
-    </fields>
-    <fields>
-        <fullName>AD_Last_Name__c</fullName>
-        <externalId>false</externalId>
-        <label>AD Last Name</label>
-        <length>80</length>
-        <required>false</required>
-        <trackHistory>false</trackHistory>
-        <trackTrending>false</trackTrending>
-        <type>Text</type>
-        <unique>false</unique>
-    </fields>
-    <fields>
-        <fullName>AD_User_Email__c</fullName>
-        <externalId>false</externalId>
-        <label>AD User Email</label>
-        <required>false</required>
-        <trackHistory>false</trackHistory>
-        <trackTrending>false</trackTrending>
-        <type>Email</type>
-        <unique>false</unique>
-    </fields>
-    <fields>
-        <fullName>SECID__c</fullName>
-        <displayFormat>{000000}</displayFormat>
-        <externalId>true</externalId>
-        <label>SECID</label>
-        <trackHistory>false</trackHistory>
-        <trackTrending>false</trackTrending>
-        <type>AutoNumber</type>
-    </fields>
-    <fields>
-        <fullName>Status__c</fullName>
-        <externalId>false</externalId>
-        <label>Status</label>
-        <required>false</required>
-        <trackHistory>false</trackHistory>
-        <trackTrending>false</trackTrending>
-        <type>Picklist</type>
-        <valueSet>
-            <restricted>true</restricted>
-            <valueSetDefinition>
-                <sorted>false</sorted>
-                <value>
-                    <fullName>New</fullName>
-                    <default>false</default>
-                    <label>New</label>
-                </value>
-                <value>
-                    <fullName>Active</fullName>
-                    <default>false</default>
-                    <label>Active</label>
-                </value>
-                <value>
-                    <fullName>Inactive</fullName>
-                    <default>false</default>
-                    <label>Inactive</label>
-                </value>
-            </valueSetDefinition>
-        </valueSet>
-    </fields>
-    <recordTypes>
-        <fullName>ADUserMain</fullName>
-        <active>true</active>
-        <label>ADUserMain</label>
-        <picklistValues>
-            <picklist>Status__c</picklist>
-            <values>
-                <fullName>Active</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Inactive</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>New</fullName>
-                <default>false</default>
-            </values>
-        </picklistValues>
-    </recordTypes>
-    <webLinks>
-        <fullName>Add_User</fullName>
-        <availability>online</availability>
-        <displayType>massActionButton</displayType>
-        <encodingKey>UTF-8</encodingKey>
-        <height>600</height>
-        <linkType>url</linkType>
-        <masterLabel>Add User</masterLabel>
-        <openType>sidebar</openType>
-        <protected>false</protected>
-        <requireRowSelection>true</requireRowSelection>
-        <url>/flow/Add_User</url>
-    </webLinks>
     <listViews>
         <fullName>All</fullName>
-        <columns>NAME</columns>
-        <columns>AD_First_Name__c</columns>
-        <columns>AD_Last_Name__c</columns>
-        <columns>AD_User_Email__c</columns>
-        <columns>SECID__c</columns>
-        <columns>AD_Federation_Id__c</columns>
-        <columns>CREATED_DATE</columns>
-        <columns>LAST_UPDATE</columns>
-        <columns>Status__c</columns>
-        <columns>RECORDTYPE</columns>
         <filterScope>Everything</filterScope>
         <label>All</label>
     </listViews>
