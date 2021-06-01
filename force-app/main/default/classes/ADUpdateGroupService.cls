@@ -85,7 +85,7 @@ public class ADUpdateGroupService {
         if ( dtcApplication.Id != null ) {
 			dtcApplicationLevel = getDTCApplicationLevel(dtcApplication.Id,r.GroupName);
 	        if ( dtcApplicationLevel.Id != null ) {
-                dtcApplicationLevelPermissions = getApplicationLevelPermissions(dtcApplication.Id,dtcApplicationLevel.Id,'Destination');
+                dtcApplicationLevelPermissions = getApplicationLevelPermissions(dtcApplication.Id,dtcApplicationLevel.Id,'Hub');//Destination');
 		        if ( dtcApplicationLevelPermissions.size() > 0 ) {
                     createContact(r,dtcApplication,dtcApplicationLevel);
                 }
@@ -97,10 +97,12 @@ public class ADUpdateGroupService {
         
     }
     
-    public static void createUser(List<Id> IdsToProcess) {
+    public static String createUser(List<Id> IdsToProcess) {
         
         String debugSection = '690';
         String debugMethod  = 'createUser';
+        String returnString = '';
+        
         List<User> newUsers = new List<User>();
         User newUser = new User();
         List<AUP_Destination_User_Event__e> userEvents = new List<AUP_Destination_User_Event__e>();
@@ -196,7 +198,7 @@ public class ADUpdateGroupService {
             destRole     = dtcAppLevel.Destination_Org_Role__c;
             destLicense  = dtcAppLevel.Destination_Org_License__c; 
 
-            newUser = new User(username=cont.Email,
+            newUser = new User(username=cont.Email+'.'+dtcApp.Hub_Org_Ext__c,
                                firstname=cont.FirstName,
                                lastname=cont.LastName,
                                email=cont.Email,
@@ -220,7 +222,7 @@ public class ADUpdateGroupService {
                                                           Profile_Name__c=dtcAppLevel.Destination_Org_Profile__c, 
                                                           Role_Name__c=dtcAppLevel.Destination_Org_Role__c, 
                                                           License_Name__c=dtcAppLevel.Destination_Org_License__c, 
-                                                          Username__c=cont.Email, 
+                                                          Username__c=cont.Email+'.'+dtcApp.Dest_Org_Ext__c, 
                                                           Alias__c=cont.FirstName.substring(0, 2)+cont.LastName.substring(0,3), 
                                                           Permission_Set_Groups__c=appendString('Destination','Permission Set Groups',
                                                                                                 destPermissionsMap.get((cont.SECID__c+'|dest'))), 
@@ -298,7 +300,9 @@ public class ADUpdateGroupService {
             
             /*
             */                                        
+			returnString += '--Id: '+usr.Id;
         }
+        return returnString;
             
     }
     
@@ -767,7 +771,7 @@ public class ADUpdateGroupService {
     private static DTC_Application__c getDTCApplication (Id DTCApplicationId) {
         DTC_Application__c rtnDTCApplication = new DTC_Application__c();
         try {
-            rtnDTCApplication = [select Id,Name,Application_Description__c,Org__c,Profile_ID__c, 
+            rtnDTCApplication = [select Id,Name,Application_Description__c,Org__c,Dest_Org_Ext__c,Hub_Org_Ext__c,Profile_ID__c, 
                                  Overall_User_Creation_Flow__c,Overall_User_Creation_Apex__c  
                                  FROM DTC_Application__c where Id =: DTCApplicationId];
         }
@@ -790,11 +794,11 @@ public class ADUpdateGroupService {
         return rtnContact;
     }
     
-    private static boolean createContact (ADUpdateGroupService grpEvent, DTC_Application__c dtcApplication, DTC_Application_Level__c dtcApplicationLevel) {
+    private static String createContact (ADUpdateGroupService grpEvent, DTC_Application__c dtcApplication, DTC_Application_Level__c dtcApplicationLevel) {
         
         String debugSection = '400';
         String debugMethod  = 'createContact';
-        boolean returnStatus = false;
+        String returnString = '';
         
         if ( !contactExists(grpEvent.SECID) && !applicationAccessExists(grpEvent.SECID,dtcApplication.Id,dtcApplicationLevel.Id) ) {
 
@@ -805,8 +809,10 @@ public class ADUpdateGroupService {
                                                  Description='AUP Created Contact');
                 try {
                     insert newContact;
+                    returnString += '-'+newContact.Id;
                 } catch (Exception e) {
                     System.debug(debugMethod+':'+debugSection+'--Exception while try to insert contacts: '+newContact+' => '+e.getStackTraceString());
+                    returnString += 'FAILURE=1';
                 }
 		        printDebug (debugMethod,debugSection,'-10:newContact: '+newContact);
                 
@@ -821,10 +827,11 @@ public class ADUpdateGroupService {
 	                insert newAccess;
                 } catch (Exception e) {
                     System.debug(debugMethod+':'+debugSection+'--Exception while try to insert Application Access: '+newAccess+' => '+e.getStackTraceString());
+                    returnString += 'FAILURE=2';
                 }
 		        printDebug (debugMethod,debugSection,'400-20:create Application Access: newAccess: '+newAccess);
                 
-                returnStatus = true;
+                //returnStatus = true;
                             
             }
             catch (Exception e) {
@@ -832,7 +839,7 @@ public class ADUpdateGroupService {
             }
 
         }
-        return returnStatus;
+        return returnString;
         
         
     }
@@ -878,7 +885,7 @@ public class ADUpdateGroupService {
         
         printDebug (debugMethod,debugSection,'-10:lookin for applicationName: '+applicationName);
         try {
-            returnApplication = [select Id, Name, Account__c, Application_Description__c, Org__c, Profile_ID__c from DTC_Application__c where Name =: applicationName ];
+            returnApplication = [select Id, Name, Account__c, Application_Description__c, Org__c, Dest_Org_Ext__c, Hub_Org_Ext__c, Profile_ID__c from DTC_Application__c where Name =: applicationName ];
         } catch (Exception e) {
             printDebug (debugMethod,debugSection,'ADUpdateGroupService:getDTCApplication:Exception: '+e.getStackTraceString());
             returnApplication = null;
@@ -934,7 +941,7 @@ public class ADUpdateGroupService {
     
     private static void printDebug(String method, String section, String debugMessage) {
         if ( debugOn ) {
-            System.debug('ADUpdateGroupService: '+method+': '+section+': >>>>>>>>>>>>>>>>>>>> '+debugMessage);
+            System.debug('ADUpdateGroupService.11: '+method+': '+section+': >>>>>>>>>>>>>>>>>>>> '+debugMessage);
         }  
     }
 

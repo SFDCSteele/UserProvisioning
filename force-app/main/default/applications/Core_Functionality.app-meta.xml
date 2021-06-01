@@ -12,6 +12,7 @@
     <label>Core Functionality</label>
     <navType>Standard</navType>
     <tabs>DTC_Application__c</tabs>
+    <tabs>Destination_Org__c</tabs>
     <uiType>Lightning</uiType>
     <utilityBar>Core_Functionality_UtilityBar</utilityBar>
 </CustomApplication>

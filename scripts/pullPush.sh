@@ -1,7 +1,7 @@
 #!/bin/bash
 
 export dxOrg="CoreFunctionalityAppScratch"
-export dxUser="test-rnyylfrlgcbo@example.com"
+export dxUser="test-dnwzjultoxar@example.com"
 export gitBranch="CoreFunctionality"
 
 echo "==========================================================================="
