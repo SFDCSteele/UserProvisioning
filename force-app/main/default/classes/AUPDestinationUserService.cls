@@ -72,7 +72,7 @@ public class AUPDestinationUserService {
 	        printDebug (debugMethod,debugSection,'-30:current event record: '+msg);
             
             if (existingUserMap.isEmpty() || existingUserMap.get(msg.AD_SEC_ID__c) == null ) {
-                newUser = new User(username=msg.Email_Address__c ,
+                newUser = new User(username=msg.Username__c ,
                                    firstname=msg.FirstName__c,
                                    lastname=msg.LastName__c,
                                    email=msg.Email_Address__c,
