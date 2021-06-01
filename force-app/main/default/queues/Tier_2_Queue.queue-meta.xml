@@ -5,9 +5,4 @@
     <queueSobject>
         <sobjectType>Case</sobjectType>
     </queueSobject>
-    <queueMembers>
-        <users>
-            <user>jgrillot@salesforce.com</user>
-        </users>
-    </queueMembers>
 </Queue>
