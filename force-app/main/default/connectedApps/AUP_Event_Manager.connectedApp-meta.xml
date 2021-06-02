@@ -5,7 +5,7 @@
     <oauthConfig>
         <callbackUrl>https://dream-force-76552-dev-ed.lightning.force.com/services/apexrest/ADUpdateUserService/v1
 https://dream-force-76552-dev-ed.lightning.force.com/services/apexrest/ADUpdateGroupService/v1</callbackUrl>
-        <consumerKey>3MVG9GnaLrwG9TQQaIpsTkyefzgf_MVgGA56sC4mthaAR3Le.7XdPwhz_T.bAkbm9yQJpIC.gv.LOvVGugPKA</consumerKey>
+        <consumerKey></consumerKey>
         <isAdminApproved>false</isAdminApproved>
         <isConsumerSecretOptional>true</isConsumerSecretOptional>
         <isIntrospectAllTokens>false</isIntrospectAllTokens>
