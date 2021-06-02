@@ -19,7 +19,7 @@ public class AUPDestinationUserService {
     
     public static void createUsers(List<AUP_Destination_User_Event__e> incomingMessages, Map<String,Contact> createdContactMap) {
         
-        String debugSection = '690';
+        String debugSection = '600';
         String debugMethod  = 'createUsers';
         List<User> newUsers = new List<User>();
         User newUser = new User();
@@ -181,7 +181,10 @@ public class AUPDestinationUserService {
         String debugMethod  = 'addQueues';
         printDebug (debugMethod,debugSection,'-00:inside:groups for user('+usrId+'): '+msgEvent);
         List<String> existingQueues = msgEvent.Queues__c.split('\\|');
-        printDebug (debugMethod,debugSection,'-10:permission sets for user('+usrId+'): '+existingQueues);
+        printDebug (debugMethod,debugSection,'-10:queues for user('+usrId+'): '+existingQueues);
+        for ( String queName : existingQueues ) {
+	        printDebug (debugMethod,debugSection,'-11:looping through queues to show names: '+queName+'*');            
+        }
         //Take the names and query the actual queue object to get the Ids
         List<Group> queueList = [SELECT Id, Name, DeveloperName, Type, Email FROM Group where DeveloperName =: existingQueues AND Type = 'Queue' ];
         Map<Id,Group> queueMap = new Map<Id,Group>();
@@ -726,7 +729,7 @@ public class AUPDestinationUserService {
     */
     private static void printDebug(String method, String section, String debugMessage) {
         if ( debugOn ) {
-            System.debug('ADUpdateGroupService: '+method+': '+section+': >>>>>>>>>>>>>>>>>>>> '+debugMessage);
+            System.debug('AUPDestinationUserService: '+method+': '+section+': >>>>>>>>>>>>>>>>>>>> '+debugMessage);
         }  
     }
 
