@@ -74,7 +74,7 @@ public class ADUpdateUserService {
 
         for (User usr : [select Id, username, SECID__C,IsActive,profileid from User where SECID__c =: SECID]) {
             usr.IsActive = false;
-            //usr.profileid = newProfileId;
+            usr.profileid = newProfileId;
             inActivateUsers.add(usr);
             usrIds.add(usr.Id);
             returnMessage += 'User Inactivated';

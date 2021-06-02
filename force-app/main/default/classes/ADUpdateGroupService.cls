@@ -728,7 +728,7 @@ public class ADUpdateGroupService {
         try {
             for ( CF_Permission_Mapping__c perm : permissions ) {
                 if ( perm.Permission_Location__c.equals(location) && perm.Access_Type__c.equals(type) ) {
-                        returnString += perm.Name + '|';
+                    returnString += perm.Permission_Set_API_Name__c + '|';
                 }
             }        
         } catch (Exception e) {
