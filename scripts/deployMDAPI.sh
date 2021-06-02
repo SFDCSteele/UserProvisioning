@@ -1,7 +1,7 @@
 #!/bin/bash
 
 export dxOrg="UserProvisioningAppScratch"
-export dxUser="test-hmtdsblmbaha@example.com"
+export dxUser="wsteele@wsteele-20210208-1.demo.dest"
 export MDAPIUser="UserProvisioning"
 export gitBranch="UserProvisioning"
 
@@ -28,10 +28,26 @@ then
     sfdx auth:web:login -d -a $MDAPIUser
 fi
 
-
-sfdx force:mdapi:deploy -u $gitBranch -w 10 -d ./src
-echo "MDAPI source deployed...press return to continue..."
+echo "Deploying via MetaData API to DEST1($MDAPIUser)..."
 read inpt
+
+sfdx force:mdapi:deploy -u $MDAPIUser -w 10 -d ./src
+echo "MDAPI DEST1 source deployed...press return to continue..."
+read inpt
+
+export MDAPIUser="UserProvisoning2"
+echo "Deploying via MetaData API to DEST2($MDAPIUser)..."
+if [ "$1" = "Y" ] 
+then
+    sfdx auth:web:login -d -a $MDAPIUser
+fi
+
+
+sfdx force:mdapi:deploy -u $MDAPIUser -w 10 -d ./src
+echo "MDAPI DEST2 source deployed...press return to continue..."
+read inpt
+
+
 
 git status
 git add .
