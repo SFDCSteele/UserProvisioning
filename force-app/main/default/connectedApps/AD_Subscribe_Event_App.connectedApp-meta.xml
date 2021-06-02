@@ -4,7 +4,7 @@
     <label>AD Subscribe Event App</label>
     <oauthConfig>
         <callbackUrl>https://enterprise-momentum-4091-dev-ed.cs10.my.salesforce.com/v1/adupdateuserservice/v50.0</callbackUrl>
-        <consumerKey>3MVG9_7ddP9KqTzdd8NcBbiXojajSlyVZoZwww.gnMt725ndVV77wngBPt.MdxwojZablAntxYL9vf2HhGzmM</consumerKey>
+        <consumerKey></consumerKey>
         <isAdminApproved>false</isAdminApproved>
         <isConsumerSecretOptional>false</isConsumerSecretOptional>
         <isIntrospectAllTokens>false</isIntrospectAllTokens>
