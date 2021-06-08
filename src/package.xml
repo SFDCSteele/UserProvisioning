@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
   <types>
-    <name>CustomApplication</name>
-    <members>AppBrand</members>
-    <members>Core_Functionality</members>
-  </types>
-  <types>
     <name>ApexClass</name>
     <members>ADGroupReceiveEvent</members>
     <members>ADGroupUpdateEventTriggerHandler</members>
@@ -20,10 +15,6 @@
     <members>PlatformEventTriggerHandler</members>
     <members>Views_CF_PBAddPublicGroupFromFlow</members>
     <members>Views_CF_PBRemovePublicGroupFromFlow</members>
-  </types>
-  <types>
-    <name>ConnectedApp</name>
-    <members>AUP_Event_Manager</members>
   </types>
   <types>
     <name>CustomPermission</name>
@@ -51,20 +42,6 @@
     <members>CF_User_When_the_Contact_is_Created</members>
     <members>CF_User_When_the_Contact_is_Created_Process</members>
     <members>CJTVALERI_activation</members>
-  </types>
-  <types>
-    <name>GlobalValueSet</name>
-    <members>States</members>
-  </types>
-  <types>
-    <name>Group</name>
-    <members>DTC_Helpdesk_ONLY</members>
-    <members>Employee_Group_1</members>
-    <members>Employee_Group_10</members>
-    <members>Employee_Group_2</members>
-    <members>FAST_Application_Access_Approvers</members>
-    <members>Squares_Super_Admin</members>
-    <members>VALERI_Super_Users</members>
   </types>
   <types>
     <name>Layout</name>
@@ -458,22 +435,10 @@
     <members>ChangeEvents_CF_Application_Access_ChangeEvent</members>
   </types>
   <types>
-    <name>Queue</name>
-    <members>Test_Queue_1</members>
-    <members>Tier_10_Queue</members>
-    <members>Tier_1_Queue</members>
-    <members>Tier_2_Queue</members>
-  </types>
-  <types>
     <name>QuickAction</name>
     <members>CF_Application_Access__c.Approve</members>
     <members>CF_Application_Access__c.Reject</members>
     <members>FeedItem.NewTaskFromFeedItem</members>
-  </types>
-  <types>
-    <name>RemoteSiteSetting</name>
-    <members>Dest_Org_1</members>
-    <members>Dest_Org_1_redirect</members>
   </types>
   <types>
     <name>ReportType</name>
