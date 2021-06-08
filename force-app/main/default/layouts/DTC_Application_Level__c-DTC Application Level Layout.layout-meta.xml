@@ -98,16 +98,6 @@
         <style>CustomLinks</style>
     </layoutSections>
     <relatedLists>
-        <relatedList>RelatedFileList</relatedList>
-    </relatedLists>
-    <relatedLists>
-        <fields>NAME</fields>
-        <fields>Access_Label_Name__c</fields>
-        <fields>Access_API_Name__c</fields>
-        <fields>Access_Type__c</fields>
-        <relatedList>CF_Application_Level_Access__c.DTC_Application_Level__c</relatedList>
-    </relatedLists>
-    <relatedLists>
         <fields>NAME</fields>
         <fields>Access_Type__c</fields>
         <fields>Application_Role__c</fields>
@@ -117,7 +107,23 @@
     </relatedLists>
     <relatedLists>
         <fields>NAME</fields>
+        <fields>DTC_Application__c</fields>
+        <fields>Contact__c</fields>
+        <fields>First_Name__c</fields>
+        <fields>Last_Name__c</fields>
+        <fields>VALERI_Contact_Email__c</fields>
+        <fields>Federation_Id__c</fields>
         <relatedList>CF_Application_Access__c.DTC_Application_Level__c</relatedList>
+    </relatedLists>
+    <relatedLists>
+        <relatedList>RelatedFileList</relatedList>
+    </relatedLists>
+    <relatedLists>
+        <fields>NAME</fields>
+        <fields>Access_Label_Name__c</fields>
+        <fields>Access_API_Name__c</fields>
+        <fields>Access_Type__c</fields>
+        <relatedList>CF_Application_Level_Access__c.DTC_Application_Level__c</relatedList>
     </relatedLists>
     <showEmailCheckbox>false</showEmailCheckbox>
     <showHighlightsPanel>false</showHighlightsPanel>
@@ -125,7 +131,7 @@
     <showRunAssignmentRulesCheckbox>false</showRunAssignmentRulesCheckbox>
     <showSubmitAndAttachButton>false</showSubmitAndAttachButton>
     <summaryLayout>
-        <masterLabel>00h0U000002bv8s</masterLabel>
+        <masterLabel>00h63000003gz5l</masterLabel>
         <sizeX>4</sizeX>
         <sizeY>0</sizeY>
         <summaryLayoutStyle>Default</summaryLayoutStyle>

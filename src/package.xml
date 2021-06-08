@@ -10,14 +10,20 @@
     <members>ADGroupReceiveEvent</members>
     <members>ADGroupUpdateEventTriggerHandler</members>
     <members>ADUpdateGroupService</members>
+    <members>ADUpdateUserService</members>
     <members>ADUserInactivationEventTriggerHandler</members>
     <members>ADUserReceiveEvent</members>
     <members>AUPJSONGenerator</members>
+    <members>AUPPublishDestinationEvent</members>
     <members>AppAccessChangeEventTriggerHandler</members>
     <members>ChangeEventTriggerHandler</members>
     <members>PlatformEventTriggerHandler</members>
     <members>Views_CF_PBAddPublicGroupFromFlow</members>
     <members>Views_CF_PBRemovePublicGroupFromFlow</members>
+  </types>
+  <types>
+    <name>ConnectedApp</name>
+    <members>AUP_Event_Manager</members>
   </types>
   <types>
     <name>CustomPermission</name>
@@ -53,6 +59,9 @@
   <types>
     <name>Group</name>
     <members>DTC_Helpdesk_ONLY</members>
+    <members>Employee_Group_1</members>
+    <members>Employee_Group_10</members>
+    <members>Employee_Group_2</members>
     <members>FAST_Application_Access_Approvers</members>
     <members>Squares_Super_Admin</members>
     <members>VALERI_Super_Users</members>
@@ -71,6 +80,7 @@
     <members>DTC_Application_Level__c-DTC Application Level Layout</members>
     <members>DTC_Application__c-DTC Application Layout</members>
     <members>DTC_User_Setup_Instructions__c-User Setup Instructions Layout</members>
+    <members>Destination_Org__c-Destination Org Layout</members>
     <members>User-User Layout</members>
   </types>
   <types>
@@ -89,6 +99,7 @@
     <members>DTC_Applications_Managed_Package__c</members>
     <members>DTC_Point_of_Contact__c</members>
     <members>DTC_User_Setup_Instructions__c</members>
+    <members>Destination_Org__c</members>
     <members>Managed_Package_Tracking__c</members>
   </types>
   <types>
@@ -295,12 +306,14 @@
     <members>DTC_Application__c.ContractIntegrator__c</members>
     <members>DTC_Application__c.Deploy_Merge_Branch__c</members>
     <members>DTC_Application__c.Deploy_Symbol__c</members>
+    <members>DTC_Application__c.Dest_Org_Ext__c</members>
     <members>DTC_Application__c.Focus_Area__c</members>
     <members>DTC_Application__c.Go_Live_Date_Projected__c</members>
     <members>DTC_Application__c.Go_Live_Date__c</members>
     <members>DTC_Application__c.Has_PII_PHI__c</members>
     <members>DTC_Application__c.Health__c</members>
     <members>DTC_Application__c.How_to_Create_User_to_give_Access__c</members>
+    <members>DTC_Application__c.Hub_Org_Ext__c</members>
     <members>DTC_Application__c.Implementation_Start_Date__c</members>
     <members>DTC_Application__c.Live_Status__c</members>
     <members>DTC_Application__c.No_of_Licenses_in_Use__c</members>
@@ -356,6 +369,12 @@
     <members>DTC_User_Setup_Instructions__c.Required_Fields_on_User_Record__c</members>
     <members>DTC_User_Setup_Instructions__c.Requires_ePAS__c</members>
     <members>DTC_User_Setup_Instructions__c.Role__c</members>
+    <members>Destination_Org__c.Dest_Client_Id__c</members>
+    <members>Destination_Org__c.Dest_Client_Secret__c</members>
+    <members>Destination_Org__c.Dest_Password__c</members>
+    <members>Destination_Org__c.Dest_Username__c</members>
+    <members>Destination_Org__c.Destination_End_Point__c</members>
+    <members>Destination_Org__c.Destination_Org__c</members>
     <members>Managed_Package_Tracking__c.Free_Licenses__c</members>
     <members>Managed_Package_Tracking__c.Licenses_Assigned_in_Sandboxes__c</members>
     <members>Managed_Package_Tracking__c.Special_Installation_Instructions__c</members>
@@ -378,6 +397,7 @@
     <members>CF_Application_Access__c.FAST_Application_User_Request_Queue</members>
     <members>CF_Application_Access__c.FEP_My_Pending_Fiduciary_Approvals</members>
     <members>CF_Application_Access__c.Orphan_SQUARES_Applications</members>
+    <members>Contact.All_Contacts</members>
     <members>DTC_Application__c.All</members>
     <members>DTC_Application__c.All_App_Owners</members>
     <members>DTC_Application__c.All_Apps</members>
@@ -390,6 +410,7 @@
     <members>DTC_Application__c.VA_app_View_All</members>
     <members>DTC_Point_of_Contact__c.All</members>
     <members>DTC_User_Setup_Instructions__c.All</members>
+    <members>Destination_Org__c.All</members>
     <members>Managed_Package_Tracking__c.All</members>
   </types>
   <types>
@@ -422,12 +443,26 @@
     <members>DTC_Application__c.Compact_Layout</members>
   </types>
   <types>
+    <name>PermissionSetGroup</name>
+    <members>User_Provisioning</members>
+  </types>
+  <types>
     <name>PermissionSet</name>
+    <members>Base_Platform_Permissions</members>
     <members>Core_Functionality</members>
+    <members>Employee_Permissions</members>
+    <members>Views_Permissions</members>
   </types>
   <types>
     <name>PlatformEventChannelMember</name>
     <members>ChangeEvents_CF_Application_Access_ChangeEvent</members>
+  </types>
+  <types>
+    <name>Queue</name>
+    <members>Test_Queue_1</members>
+    <members>Tier_10_Queue</members>
+    <members>Tier_1_Queue</members>
+    <members>Tier_2_Queue</members>
   </types>
   <types>
     <name>QuickAction</name>
@@ -436,12 +471,18 @@
     <members>FeedItem.NewTaskFromFeedItem</members>
   </types>
   <types>
+    <name>RemoteSiteSetting</name>
+    <members>Dest_Org_1</members>
+    <members>Dest_Org_1_redirect</members>
+  </types>
+  <types>
     <name>ReportType</name>
     <members>DTC_Applications_with_DTC_Application_Levels_with_Application_Access</members>
   </types>
   <types>
     <name>CustomTab</name>
     <members>DTC_Application__c</members>
+    <members>Destination_Org__c</members>
   </types>
   <types>
     <name>ApexTrigger</name>

@@ -547,6 +547,17 @@
         <unique>false</unique>
     </fields>
     <fields>
+        <fullName>Dest_Org_Ext__c</fullName>
+        <externalId>false</externalId>
+        <label>Dest Org Ext</label>
+        <length>10</length>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
         <fullName>Focus_Area__c</fullName>
         <externalId>false</externalId>
         <label>Focus Area</label>
@@ -679,6 +690,17 @@
         <trackTrending>false</trackTrending>
         <type>Html</type>
         <visibleLines>25</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Hub_Org_Ext__c</fullName>
+        <externalId>false</externalId>
+        <label>Hub Org Ext</label>
+        <length>10</length>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
     </fields>
     <fields>
         <fullName>Implementation_Start_Date__c</fullName>

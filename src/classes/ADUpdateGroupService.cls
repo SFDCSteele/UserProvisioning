@@ -13,6 +13,9 @@ public class ADUpdateGroupService {
     public String ParentADGroup {get;set;} 
     public String Status {get;set;} 
     
+    private static boolean insertOn = false;
+    private static boolean debugOn  = true;//false;
+    
     public ADUpdateGroupService(JSONParser parser) {
         while (parser.nextToken() != System.JSONToken.END_OBJECT) {
             if (parser.getCurrentToken() == System.JSONToken.FIELD_NAME) {
@@ -64,17 +67,15 @@ public class ADUpdateGroupService {
     }
     
     public static String execute (String messageRecived ) {
+        String debugSection = '000';
+        String debugMethod  = 'execute';
         ADUpdateGroupService r = ADUpdateGroupService.parse(messageRecived);
         String returnMessage = 'Success';
         
-        System.debug('ADUpdateGroupService:GroupName: '+r.GroupName);
-        System.debug('ADUpdateGroupService:EmailAddress: '+r.EmailAddress);
-        System.debug('ADUpdateGroupService:FederationId: '+r.FederationId);
-        System.debug('ADUpdateGroupService:SECID: '+r.SECID);
-        System.debug('ADUpdateGroupService:FirstName: '+r.FirstName);
-        System.debug('ADUpdateGroupService:LastName: '+r.LastName);
-        System.debug('ADUpdateGroupService:ParentADGroup: '+r.ParentADGroup);
-        System.debug('ADUpdateGroupService:Status: '+r.Status);
+        printDebug (debugMethod,debugSection,'\nGroupName: '+r.GroupName+
+                    '\nEmailAddress: '+r.EmailAddress+'\nFederationId: '+r.FederationId+
+                    '\nSECID: '+r.SECID+'\nFirstName: '+r.FirstName+'\nLastName: '+r.LastName+
+                    '\nParentADGroup: '+r.ParentADGroup+'\nStatus: '+r.Status);
         
         DTC_Application__c dtcApplication = new DTC_Application__c();
         DTC_Application_Level__c dtcApplicationLevel = new DTC_Application_Level__c();
@@ -84,7 +85,7 @@ public class ADUpdateGroupService {
         if ( dtcApplication.Id != null ) {
 			dtcApplicationLevel = getDTCApplicationLevel(dtcApplication.Id,r.GroupName);
 	        if ( dtcApplicationLevel.Id != null ) {
-                dtcApplicationLevelPermissions = getApplicationLevelPermissions(dtcApplication.Id,dtcApplicationLevel.Id,'Destination');
+                dtcApplicationLevelPermissions = getApplicationLevelPermissions(dtcApplication.Id,dtcApplicationLevel.Id,'Hub');//Destination');
 		        if ( dtcApplicationLevelPermissions.size() > 0 ) {
                     createContact(r,dtcApplication,dtcApplicationLevel);
                 }
@@ -96,7 +97,11 @@ public class ADUpdateGroupService {
         
     }
     
-    public static void createUser(List<Id> IdsToProcess) {
+    public static String createUser(List<Id> IdsToProcess) {
+        
+        String debugSection = '690';
+        String debugMethod  = 'createUser';
+        String returnString = '';
         
         List<User> newUsers = new List<User>();
         User newUser = new User();
@@ -121,10 +126,10 @@ public class ADUpdateGroupService {
         Contact cont = new Contact();
         Map<Id,Contact> contactMap = new Map<Id,Contact>();
         DTC_Application__c dtcApp  = new DTC_Application__c();
-        Map<Id,DTC_Application__c> DTCApplicationMap = new Map<Id,DTC_Application__c>();
+        Map<String,DTC_Application__c> DTCApplicationMap = new Map<String,DTC_Application__c>();
         DTC_Application_Level__c dtcAppLevel = new DTC_Application_Level__c();
         Map<String,CF_Application_Access__c> accessListMap = new Map<String,CF_Application_Access__c>();
-        Map<Id,DTC_Application_Level__c> DTCApplicationLevelMap = new Map<Id,DTC_Application_Level__c>();
+        Map<String,DTC_Application_Level__c> DTCApplicationLevelMap = new Map<String,DTC_Application_Level__c>();
         List<CF_Permission_Mapping__c> permissions = new List<CF_Permission_Mapping__c>();
         Map<String,List<CF_Permission_Mapping__c>> hubPermissionsMap = new Map<String,List<CF_Permission_Mapping__c>>();
         Map<String,List<CF_Permission_Mapping__c>> destPermissionsMap = new Map<String,List<CF_Permission_Mapping__c>>();
@@ -133,51 +138,56 @@ public class ADUpdateGroupService {
         List<CF_Application_Access__c> appAccessList = [SELECT Id, Account__c, Approval_Status__c, Approved_Checkbox__c, DTC_Application__c, 
                                                     Contact__c, Inactive__c, DTC_Application_Level__c FROM CF_Application_Access__c where Id =: IdsToProcess];
         
-        System.debug('600-10->>>>>>>>>>>>ADUpdateGroupService:createUser:records to process: '+appAccessList);
+        printDebug (debugMethod,debugSection,'-10:records to process: '+appAccessList);
         for (CF_Application_Access__c appAccess : appAccessList ) {
 
-	        System.debug('600-20->>>>>>>>>>>>ADUpdateGroupService:createUser:reading singular record: '+appAccess);
+	        printDebug (debugMethod,debugSection,'-20:reading singular record: '+appAccess);
             if (contactMap.isEmpty() || contactMap.get(appAccess.Contact__c) == null ) {
                 cont = getContact(appAccess.Contact__c);
                 contactMap.put(appAccess.Contact__c,cont); 
             } 
             secIdArr.add(cont.SECID__c);
-	        System.debug('600-30->>>>>>>>>>>>ADUpdateGroupService:createUser:updated contactMap: '+contactMap);
+	        printDebug (debugMethod,debugSection,'-30:updated contactMap: '+contactMap);
             if (accessListMap.isEmpty() || accessListMap.get(cont.SECID__c) == null ) {
                 accessListMap.put(cont.SECID__c,appAccess); 
             } 
-	        System.debug('600-35->>>>>>>>>>>>ADUpdateGroupService:createUser:updated accessListMap: '+accessListMap);
-            if (DTCApplicationMap.isEmpty() || DTCApplicationMap.get(appAccess.DTC_Application__c) == null ) {
+	        printDebug (debugMethod,debugSection,'-35:updated accessListMap: '+accessListMap);
+            //if (DTCApplicationMap.isEmpty() || DTCApplicationMap.get(appAccess.DTC_Application__c) == null ) {
+            if (DTCApplicationMap.isEmpty() || DTCApplicationMap.get(cont.SECID__c) == null ) {
                 dtcApp = getDTCApplication(appAccess.DTC_Application__c);
-                DTCApplicationMap.put(appAccess.DTC_Application__c,dtcApp); 
+		        printDebug (debugMethod,debugSection,'600-35.1-:returning from getDTCApplication with: '+dtcApp);
+                DTCApplicationMap.put(cont.SECID__c,dtcApp); 
             }
-	        System.debug('600-40->>>>>>>>>>>>ADUpdateGroupService:createUser:updated DTCApplicationMap: '+DTCApplicationMap);
-            if (DTCApplicationLevelMap.isEmpty() || DTCApplicationLevelMap.get(appAccess.DTC_Application_Level__c) == null ) {
+	        printDebug (debugMethod,debugSection,'-40:updated DTCApplicationMap: '+DTCApplicationMap);
+            //if (DTCApplicationLevelMap.isEmpty() || DTCApplicationLevelMap.get(appAccess.DTC_Application_Level__c) == null ) {
+            if (DTCApplicationLevelMap.isEmpty() || DTCApplicationLevelMap.get(cont.SECID__c) == null ) {
                 dtcAppLevel = getDTCApplicationLevel(appAccess.DTC_Application_Level__c);
-                DTCApplicationLevelMap.put(appAccess.DTC_Application_Level__c,dtcAppLevel); 
+                DTCApplicationLevelMap.put(cont.SECID__c,dtcAppLevel); 
             }
-	        System.debug('600-40->>>>>>>>>>>>ADUpdateGroupService:createUser:updated DTCApplicationLevelMap: '+DTCApplicationLevelMap);
-            if (hubPermissionsMap.isEmpty() || hubPermissionsMap.get((appAccess.DTC_Application__c+'|'+appAccess.DTC_Application_Level__c+'|hub')) == null ) {
+	        printDebug (debugMethod,debugSection,'-40:updated DTCApplicationLevelMap: '+DTCApplicationLevelMap);
+            //if (hubPermissionsMap.isEmpty() || hubPermissionsMap.get((appAccess.DTC_Application__c+'|'+appAccess.DTC_Application_Level__c+'|hub')) == null ) {
+            if (hubPermissionsMap.isEmpty() || hubPermissionsMap.get((cont.SECID__c+'|hub')) == null ) {
                 permissions = getApplicationLevelPermissions(appAccess.DTC_Application__c,appAccess.DTC_Application_Level__c,'Hub');
                 if ( permissions.size() > 0 ) {
-	                hubPermissionsMap.put((appAccess.DTC_Application__c+'|'+appAccess.DTC_Application_Level__c+'|hub'),permissions); 
+	                hubPermissionsMap.put((cont.SECID__c+'|hub'),permissions); 
                 } else {
-			        System.debug('600-45->>>>>>>>>>>>ADUpdateGroupService:createUser:did not find any HUB permissions');
+			        printDebug (debugMethod,debugSection,'600-45-:did not find any HUB permissions');
                 }
             }
-	        System.debug('600-50->>>>>>>>>>>>ADUpdateGroupService:createUser:updated hubPermissionsMap: '+hubPermissionsMap);
-            if (destPermissionsMap.isEmpty() || destPermissionsMap.get((appAccess.DTC_Application__c+'|'+appAccess.DTC_Application_Level__c+'|dest')) == null ) {
+	        printDebug (debugMethod,debugSection,'-50:updated hubPermissionsMap: '+hubPermissionsMap);
+            //if (destPermissionsMap.isEmpty() || destPermissionsMap.get((appAccess.DTC_Application__c+'|'+appAccess.DTC_Application_Level__c+'|dest')) == null ) {
+            if (destPermissionsMap.isEmpty() || destPermissionsMap.get((cont.SECID__c+'|dest')) == null ) {
                 permissions = getApplicationLevelPermissions(appAccess.DTC_Application__c,appAccess.DTC_Application_Level__c,'Destination');
                 if ( permissions.size() > 0 ) {
-	                destPermissionsMap.put((appAccess.DTC_Application__c+'|'+appAccess.DTC_Application_Level__c+'|dest'),permissions); 
+	                destPermissionsMap.put((cont.SECID__c+'|dest'),permissions); 
                 } else {
-			        System.debug('600-55->>>>>>>>>>>>ADUpdateGroupService:createUser:did not find any Destination permissions');
+			        printDebug (debugMethod,debugSection,'600-55-:did not find any Destination permissions');
                 }
             }
-	        System.debug('600-60->>>>>>>>>>>>ADUpdateGroupService:createUser:updated destPermissionsMap: '+destPermissionsMap);
-	        System.debug('600-62->>>>>>>>>>>>ADUpdateGroupService:createUser:looking for HUB profile: '+dtcAppLevel.Hub_Org_Profile__c);
+	        printDebug (debugMethod,debugSection,'-60:updated destPermissionsMap: '+destPermissionsMap);
+	        printDebug (debugMethod,debugSection,'-62:looking for HUB profile: '+dtcAppLevel.Hub_Org_Profile__c);
             hubProfileId = [Select Id From Profile Where Name =: dtcAppLevel.Hub_Org_Profile__c limit 1].Id;
-	        System.debug('600-64->>>>>>>>>>>>ADUpdateGroupService:createUser:looking for HUB roleId: '+dtcAppLevel.Hub_Org_Role__c);
+	        printDebug (debugMethod,debugSection,'-64:looking for HUB roleId: '+dtcAppLevel.Hub_Org_Role__c);
             if ( dtcAppLevel.Hub_Org_Role__c <> null ) {
 	            hubRoleId = [SELECT Id FROM UserRole where DeveloperName =: dtcAppLevel.Hub_Org_Role__c limit 1].Id;
             } else {
@@ -188,7 +198,7 @@ public class ADUpdateGroupService {
             destRole     = dtcAppLevel.Destination_Org_Role__c;
             destLicense  = dtcAppLevel.Destination_Org_License__c; 
 
-            newUser = new User(username=cont.Email,
+            newUser = new User(username=cont.Email+'.'+dtcApp.Hub_Org_Ext__c,
                                firstname=cont.FirstName,
                                lastname=cont.LastName,
                                email=cont.Email,
@@ -199,7 +209,7 @@ public class ADUpdateGroupService {
                                isactive=bIsActive,
                                languagelocalekey=sLanguagelocalekey,timezonesidkey=sTimezonesidkey,localesidkey=sLocalesidkey,emailencodingkey=sEmailencodingkey);
             newUsers.add(newUser);
-	        System.debug('600-70->>>>>>>>>>>>ADUpdateGroupService:createUser:Users to be created: '+newUsers);
+	        printDebug (debugMethod,debugSection,'-70:Users to be created: '+newUsers);
             //SELECT Id, AD_SEC_ID__c, Email_Address__c, Federation_Id__c, FirstName__c, LastName__c, Profile_Name__c, Role_Name__c, License_Name__c, Username__c, 
             //Alias__c, Permission_Set_Groups__c, Permission_Sets__c, Destination_Org__c, Groups__c, Queues__c, Permission_Set_Licenses__c 
             //FROM AUP_Destination_User_Event__e
@@ -212,112 +222,502 @@ public class ADUpdateGroupService {
                                                           Profile_Name__c=dtcAppLevel.Destination_Org_Profile__c, 
                                                           Role_Name__c=dtcAppLevel.Destination_Org_Role__c, 
                                                           License_Name__c=dtcAppLevel.Destination_Org_License__c, 
-                                                          Username__c=cont.Email, 
+                                                          Username__c=cont.Email+'.'+dtcApp.Dest_Org_Ext__c, 
                                                           Alias__c=cont.FirstName.substring(0, 2)+cont.LastName.substring(0,3), 
                                                           Permission_Set_Groups__c=appendString('Destination','Permission Set Groups',
-                                                                                                destPermissionsMap.get((appAccess.DTC_Application__c+'|'+appAccess.DTC_Application_Level__c+'|dest'))), 
+                                                                                                destPermissionsMap.get((cont.SECID__c+'|dest'))), 
                                                           Permission_Sets__c=appendString('Destination','Permission Sets',
-                                                                                          destPermissionsMap.get((appAccess.DTC_Application__c+'|'+appAccess.DTC_Application_Level__c+'|dest'))), 
+                                                                                          destPermissionsMap.get((cont.SECID__c+'|dest'))), 
                                                           Destination_Org__c=dtcApp.Org__c, 
                                                           Groups__c=appendString('Destination','Groups',
-                                                                                 destPermissionsMap.get((appAccess.DTC_Application__c+'|'+appAccess.DTC_Application_Level__c+'|dest'))), 
+                                                                                 destPermissionsMap.get((cont.SECID__c+'|dest'))), 
                                                           Queues__c=appendString('Destination','Queues',
-                                                                                 destPermissionsMap.get((appAccess.DTC_Application__c+'|'+appAccess.DTC_Application_Level__c+'|dest'))), 
+                                                                                 destPermissionsMap.get((cont.SECID__c+'|dest'))), 
                                                           Permission_Set_Licenses__c=appendString('Destination','Permission Set Licenses',
-                                                                                                  destPermissionsMap.get((appAccess.DTC_Application__c+'|'+appAccess.DTC_Application_Level__c+'|dest')))
+                                                                                                  destPermissionsMap.get((cont.SECID__c+'|dest')))
                                                          );
             userEvents.add(userEvent);
-	        System.debug('600-80->>>>>>>>>>>>ADUpdateGroupService:createUser:UserEvents to be published: '+userEvents);
+	        printDebug (debugMethod,debugSection,'-80:UserEvents to be published: '+userEvents);
 
             
         }
         
-        System.debug('600-90->>>>>>>>>>>>ADUpdateGroupService:createUser:returning from publishing events: '+
+        printDebug (debugMethod,debugSection,'-90:returning from publishing events: '+
                      publishUserEvents (userEvents ));
         
         Map<String,Id> existingUsers = getExistingUsers(secIdArr);
         List<User>     usersToAdd    = new List<User>();
         
-        for (User usr : usersToAdd) {
+        printDebug (debugMethod,debugSection,'-92:here are the new users: '+newUsers+'\nhere are the existing users: '+existingUsers);
+        for (User usr : newUsers) {
+	        printDebug (debugMethod,debugSection,'-94:looping through new users: '+usr+' checking against: '+existingUsers);
             if (existingUsers.isEmpty() || existingUsers.get(usr.SECID__c) == null ) {
                 usersToAdd.add(usr);
-            } 
+            } else {
+		        printDebug (debugMethod,debugSection,'-96:found new user: '+usr+' in existing users: '+existingUsers+'---SKIPPED!!!');
+            }
         }
+        printDebug (debugMethod,debugSection,'-98:ADDING new users: '+usersToAdd);
         
-        //insert usersToAdd;
+        try {
+            insert usersToAdd;
+        } catch (Exception e) {
+            System.debug(debugMethod+':'+debugSection+'--Exception while try to insert users: '+usersToAdd+' => '+e.getStackTraceString());
+        }
         
         //Lets get all the users we added as well as the users that already existed
         List<User> listOfUsers = [Select SECID__c,Id from User where SECID__c =: secIdArr];
+        //List<User> listOfUsers = [Select SECID__c,Id from User where SECID__c =: '000001'];
         for ( User usr : listOfUsers ) {
         
-            /*
+            //1. Read the user
+            //2. Find the 'hub' permission set groups using the SECID
+            //3. Find the 'hub' permission sets using the SECID
+            //4. Find the 'hub' groups using the SECID 
+            //5. Find the 'hub' queues using the SECID 
+            //
             //now we loop through each of the users and add 'Permissions'
-            CF_Permission_Mapping__c accessRecord = accessListMap.get(usr.SECID__c);
+            //List<CF_Permission_Mapping__c> permissionsRecord = destPermissionsMap.get(usr.SECID__c+'|hub');
+            List<CF_Permission_Mapping__c> permissionsRecord = destPermissionsMap.get(usr.SECID__c+'|hub');
             
             //Add permission Permission Set Groups
-            addPermissionSetGroups(usr.Id,hubPermissionsMap.get((appAccess.DTC_Application__c+'|'+appAccess.DTC_Application_Level__c+'|hub')))
+            addPermissionSetGroups(usr.Id,hubPermissionsMap.get(usr.SECID__c+'|hub'));
+            //addPermissionSetGroups(usr.Id,hubPermissionsMap.get('000009|hub'));
+            
             //Add permission sets
+            addPermissionSets(usr.Id,hubPermissionsMap.get(usr.SECID__c+'|hub'));
             
             //Add Permission Set Licenses
+            addPermissionSetLicenses(usr.Id,hubPermissionsMap.get(usr.SECID__c+'|hub'));
             
             
             //Add Groups
+            addGroups(usr.Id,hubPermissionsMap.get(usr.SECID__c+'|hub'));
             
             
             //Add Queues
+            addQueues(usr.Id,hubPermissionsMap.get(usr.SECID__c+'|hub'));
             
+            /*
             */                                        
+			returnString += '--Id: '+usr.Id;
         }
+        return returnString;
             
-                                                     
-			/* create user:
-
-                newUsers.add(new User(username=appAccess.Federation_Id__c,firstname=appAccess.Contact__r.FirstName,lastname=Contact__r.LastName,email=Contact__r.Email,federationidentifier=Contact__r.LastName,
-                alias=users.get(5),isactive=bIsActive,profileid=adminProfile.Id,languagelocalekey=sLanguagelocalekey,timezonesidkey=sTimezonesidkey,localesidkey=sLocalesidkey,emailencodingkey=sEmailencodingkey);
-
-				userValues.add(new List<String>{'arevankar@mulesoft.com ','Amit',' Revankar','arevankar@mulesoft.com','arevankar@mulesoft.com','arev','true','00et0000000QGuGAAW','en_US','America/New_York','en_US','UTF-8'});
-                userValues.add(new List<String>{'afelrice@salesforce.com','Andrew','Felrice','afelrice@salesforce.com','afelrice@salesforce.com','afeir','true','00et0000000QGuGAAW','en_US','America/New_York','en_US','UTF-8'});
-                userValues.add(new List<String>{'bryan.broome@va.gov','Bryan','Broome','bryan.broome@va.gov','bryan.broome@va.gov','bbro','true','00et0000000QGuGAAW','en_US','America/New_York','en_US','UTF-8},'});
-                userValues.add(new List<String>{'wsteele@salesforce.com','William','Steele','wsteele@salesforce.com','wsteele@salesforce.com','wstee','true','00et0000000QGuGAAW','en_US','America/New_York','en_US','UTF-8'});
-                
-                Integer cnt = 0;
-                for ( List<String> users : userValues) {
-                    System.debug('======================================================================');
-                    //newUsers.add(new User(username=users.get(0),firstname=users.get(1),lastname=users.get(2),email=users.get(3),federationidentifier=users.get(4),alias=users.get(5),isactive=Boolean.valueOf(users.get(6)),profileid=adminProfile.Id,languagelocalekey=users.get(8),timezonesidkey=users.get(9),localesidkey=users.get(10),emailencodingkey='UTF-8'));
-                    newUsers.add(new User(username=users.get(0),firstname=users.get(1),lastname=users.get(2),email=users.get(3),federationidentifier=users.get(4),alias=users.get(5),isactive=bIsActive,profileid=adminProfile.Id,languagelocalekey=sLanguagelocalekey,timezonesidkey=sTimezonesidkey,localesidkey=sLocalesidkey,emailencodingkey=sEmailencodingkey);
-                }
-                System.debug('======================================================================');
-                System.debug('users to be added: '+newUsers);
-                Insert newUsers;
-			 */
-
+    }
+    
+    private static void addQueues (Id usrId,List<CF_Permission_Mapping__c> hubPermissions ) {
         
+        String debugSection = '690';
+        String debugMethod  = 'addQueues';
+        printDebug (debugMethod,debugSection,'-00:inside:queues for user('+usrId+'): '+hubPermissions);
+        List<String> existingQueues         = new List<String>();
+        //Get the api names for all queues to be assigned
+        for ( CF_Permission_Mapping__c psq : hubPermissions ) {
+	        printDebug (debugMethod,debugSection,'-02:access type: '+psq.Access_Type__c+' api name: '+psq.Permission_Set_API_Name__c);
+            if ( psq.Access_Type__c.equals('Queues')) {
+		        //printDebug (debugMethod,debugSection,'-04:FOUND access type: '+psm.Access_Type__c+' api name: '+psm.Permission_Set_API_Name__c);
+                existingQueues.add(psq.Permission_Set_API_Name__c);
+            }
+        }        
+        printDebug (debugMethod,debugSection,'-10:permission sets for user('+usrId+'): '+existingQueues);
+        //Take the names and query the actual queue object to get the Ids
+        List<Group> queueList = [SELECT Id, Name, DeveloperName, Type, Email FROM Group where DeveloperName =: existingQueues AND Type = 'Queue' ];
+        Map<Id,Group> queueMap = new Map<Id,Group>();
+        Map<String,Group> existingQueueMap = new Map<String,Group>();
+        printDebug (debugMethod,debugSection,'-12:looking for groups based on the api names: '+queueList);
+        for (Group queue: queueList) {
+            queueMap.put(queue.Id,queue);                               
+            existingQueueMap.put(queue.DeveloperName,queue);
+		}
+        printDebug (debugMethod,debugSection,'-20:groups to be added: '+queueMap);
+        //there were groups part of the permission mapping that don't actually exist---lets add them
+        List<Group> newQueues = new List<Group>();
+        printDebug (debugMethod,debugSection,'-20.03:do we need to add groups-existing groups: '+queueList.size()+' permission groups: '+existingQueues.size());
+        if (queueList.size() < existingQueues.size() ) {
+            for ( String queue : existingQueues ) {
+	            if (existingQueueMap.isEmpty() || existingQueueMap.get(queue) == null ) {
+                    newQueues.add(new Group(Name=queue.replace('_',' '), DeveloperName=queue, Type='Queue'));
+                }
+            }
+            try {
+	            insert newQueues;
+            } catch (Exception e) {
+                System.debug(debugMethod+':'+debugSection+'--Exception while try to insert Queues: '+newQueues+' => '+e.getStackTraceString());
+            }
+            for ( Group newQueue : newQueues ) {
+                queueMap.put(newQueue.Id,newQueue);
+            }
+        }        
+        printDebug (debugMethod,debugSection,'-20.07:NEW Queues to be added: '+newQueues);
+        
+        //now, loop through the existing assignments for this user and save off the ones that don't already exist
+        List<GroupMember> newAssignments = new List<GroupMember>();
+        Map<Id,GroupMember> existingAssignmentMap = new Map<Id,GroupMember>();
+        for ( GroupMember queueM : [SELECT Id, GroupId, UserOrGroupId FROM GroupMember where UserOrGroupId =: usrId]) {
+            existingAssignmentMap.put(queueM.GroupId,queueM);
+        }
+        printDebug (debugMethod,debugSection,'-22:existing assignments: '+existingAssignmentMap);        
+		//I need to loop through my assignments and if I already have an assignment one of the permission sets I'm concerned about, I need to skip it
+		//If I don't have an assignment for one of my permission sets, I need to add it to the new assignments        
+        for (Group que: queueList) {
+           if ((existingAssignmentMap.isEmpty() || existingAssignmentMap.get(que.Id) == null) ) {
+                  newAssignments.add(new GroupMember(GroupId = que.Id,UserOrGroupId = usrId)); 
+           }
+		}
+
+		/*
+        List<GroupMember> newAssignments = new List<GroupMember>();
+        List<GroupMember> existingAssignments = [SELECT Id, GroupId, UserOrGroupId FROM GroupMember where UserOrGroupId =: usrId];
+        printDebug (debugMethod,debugSection,'-22:existing assignments: '+existingAssignments);        
+        for (GroupMember queuea  : existingAssignments ) {
+            if (queueMap.isEmpty() || queueMap.get(queuea.GroupId) == null ) {
+                if ( queuea.GroupId != null ) {
+                    printDebug (debugMethod,debugSection,'-23:extracting existing assignments: '+queuea);        
+                    newAssignments.add(new GroupMember(GroupId = queuea.GroupId,UserOrGroupId = usrId)); 
+                }
+            }
+		}
+		*/
+        //There weren't any existing assignments, so we'll add all the new ones
+        if ( newAssignments.size() <= 0 ) {
+            for (Group queue2: queueList) {
+		        printDebug (debugMethod,debugSection,'-24:looping through Queues: '+queue2);        
+	            newAssignments.add(new GroupMember(GroupId = queue2.Id,UserOrGroupId = usrId)); 
+            }
+        }
+        printDebug (debugMethod,debugSection,'-30:Queue assignments to be added: '+newAssignments);
+        
+       //now we know the ones that need to be added, lets load up the object and insert them
+        try {
+            insert newAssignments;
+        } catch (Exception e) {
+            System.debug(debugMethod+':'+debugSection+'--Exception while try to insert assignments: '+newAssignments+' => '+e.getStackTraceString());
+        }
+    }
+    
+    private static void addGroups (Id usrId,List<CF_Permission_Mapping__c> hubPermissions ) {
+        
+        String debugSection = '680';
+        String debugMethod  = 'addGroups';
+        printDebug (debugMethod,debugSection,'-00:inside:permission sets for user('+usrId+'): '+hubPermissions);
+        List<String> existingGrp         = new List<String>();
+        //Get the api names for all permission sets to be assigned
+        for ( CF_Permission_Mapping__c psg : hubPermissions ) {
+	        printDebug (debugMethod,debugSection,'-02:access type: '+psg.Access_Type__c+' api name: '+psg.Permission_Set_API_Name__c);
+            if ( psg.Access_Type__c.equals('Groups')) {
+		        //printDebug (debugMethod,debugSection,'-04:FOUND access type: '+psm.Access_Type__c+' api name: '+psm.Permission_Set_API_Name__c);
+                existingGrp.add(psg.Permission_Set_API_Name__c);
+            }
+        }        
+        printDebug (debugMethod,debugSection,'-10:permission sets for user('+usrId+'): '+existingGrp);
+        //Take the names and query the actual group object to get the Ids
+        List<Group> grpList = [SELECT Id, Name, DeveloperName, Type, Email FROM Group where DeveloperName =: existingGrp AND Type = 'Regular' ];
+        Map<Id,Group> grpMap = new Map<Id,Group>();
+        Map<String,Group> existingGrpMap = new Map<String,Group>();
+        printDebug (debugMethod,debugSection,'-12:looking for groups based on the api names: '+grpList);
+        for (Group grp: grpList) {
+            grpMap.put(grp.Id,grp);                               
+            existingGrpMap.put(grp.DeveloperName,grp);
+		}
+        printDebug (debugMethod,debugSection,'-20:groups to be added: '+grpMap);
+        //there were groups part of the permission mapping that don't actually exist---lets add them
+        List<Group> newGroups = new List<Group>();
+        printDebug (debugMethod,debugSection,'-20.03:do we need to add groups-existing groups: '+grpList.size()+' permission groups: '+existingGrp.size());
+        if (grpList.size() < existingGrp.size() ) {
+            for ( String grp : existingGrp ) {
+	            if (existingGrpMap.isEmpty() || existingGrpMap.get(grp) == null ) {
+                    newGroups.add(new Group(Name=grp.replace('_',' '), DeveloperName=grp, Type='Regular'));
+                }
+            }
+            try {
+                insert newGroups;
+            } catch (Exception e) {
+                System.debug(debugMethod+':'+debugSection+'--Exception while try to insert groups: '+newGroups+' => '+e.getStackTraceString());
+            }
+            for ( Group newGrp : newGroups ) {
+                grpMap.put(newGrp.Id,newGrp);
+            }
+        }        
+        printDebug (debugMethod,debugSection,'-20.07:NEW groups to be added: '+newGroups);
+        
+        //now, loop through the existing assignments for this user and save off the ones that don't already exist
+        List<GroupMember> newAssignments = new List<GroupMember>();
+        Map<Id,GroupMember> existingAssignmentMap = new Map<Id,GroupMember>();
+        for ( GroupMember grpM : [SELECT Id, GroupId, UserOrGroupId FROM GroupMember where UserOrGroupId =: usrId]) {
+            existingAssignmentMap.put(grpM.GroupId,grpM);
+        }
+        printDebug (debugMethod,debugSection,'-22:existing assignments: '+existingAssignmentMap);        
+		//I need to loop through my assignments and if I already have an assignment one of the permission sets I'm concerned about, I need to skip it
+		//If I don't have an assignment for one of my permission sets, I need to add it to the new assignments        
+        for (Group grp: grpList) {
+           if ((existingAssignmentMap.isEmpty() || existingAssignmentMap.get(grp.Id) == null) ) {
+                  newAssignments.add(new GroupMember(GroupId = grp.Id,UserOrGroupId = usrId)); 
+           }
+		}
+        /*
+        for (GroupMember grpa  : existingAssignments ) {
+            if (grpMap.isEmpty() || grpMap.get(grpa.GroupId) == null ) {
+                if ( grpa.GroupId != null ) {
+                    printDebug (debugMethod,debugSection,'-23:extracting existing assignments: '+grpa);        
+                    newAssignments.add(new GroupMember(GroupId = grpa.GroupId,UserOrGroupId = usrId)); 
+                }
+            }
+		}
+		*/
+        //There weren't any existing assignments, so we'll add all the new ones
+        if ( newAssignments.size() <= 0 ) {
+            for (Group grp2: grpList) {
+		        printDebug (debugMethod,debugSection,'-24:looping through PSLs: '+grp2);        
+	            newAssignments.add(new GroupMember(GroupId = grp2.Id,UserOrGroupId = usrId)); 
+            }
+        }
+        printDebug (debugMethod,debugSection,'-30:permission set group assignments to be added: '+newAssignments);
+        
+       //now we know the ones that need to be added, lets load up the object and insert them
+        try {
+            insert newAssignments;
+        } catch (Exception e) {
+            System.debug(debugMethod+':'+debugSection+'--Exception while try to insert assignments: '+newAssignments+' => '+e.getStackTraceString());
+        }
+    }
+    
+    private static void addPermissionSetLicenses (Id usrId,List<CF_Permission_Mapping__c> hubPermissions ) {
+        
+        String debugSection = '670';
+        String debugMethod  = 'addPermissionSetLiceenses';
+        printDebug (debugMethod,debugSection,'-00:inside:permission set licenses for user('+usrId+'): '+hubPermissions);
+        List<String> existingPsl = new List<String>();
+        //Get the api names for all permission sets to be assigned
+        for ( CF_Permission_Mapping__c psm : hubPermissions ) {
+	        printDebug (debugMethod,debugSection,'-02:access type: '+psm.Access_Type__c+' api name: '+psm.Permission_Set_API_Name__c);
+            if ( psm.Access_Type__c.equals('Permission Set Licenses')) {
+		        //printDebug (debugMethod,debugSection,'-04:FOUND access type: '+psm.Access_Type__c+' api name: '+psm.Permission_Set_API_Name__c);
+                existingPsl.add(psm.Permission_Set_API_Name__c);
+            }
+        }        
+        printDebug (debugMethod,debugSection,'-10:permission set licenses for user('+usrId+'): '+existingPsl);
+        //Take the names and query the actual permission set group object to get the Ids
+        List<PermissionSetLicense> pslList = [SELECT Id, DeveloperName, Language, MasterLabel, TotalLicenses, Status, ExpirationDate, UsedLicenses FROM PermissionSetLicense where DeveloperName =: existingPsl];
+        Map<Id,PermissionSetLicense> pslMap = new Map<Id,PermissionSetLicense>();
+        printDebug (debugMethod,debugSection,'-12:looking for permission set licenses based on the api names: '+pslList);
+        /*
+        for (PermissionSetLicense ps: pslList) {
+            pslMap.put(ps.Id,ps);                               
+		}
+        printDebug (debugMethod,debugSection,'-20:permission sets to be added: '+pslMap);        
+        */
+        //now, loop through the existing assignments for this user and save off the ones that don't already exist
+        List<PermissionSetLicenseAssign> newAssignments = new List<PermissionSetLicenseAssign>();
+        Map<Id,PermissionSetLicenseAssign> existingAssignmentMap = new Map<Id,PermissionSetLicenseAssign>();
+        for ( PermissionSetLicenseAssign psla :  [SELECT Id, PermissionSetLicenseId, AssigneeId FROM PermissionSetLicenseAssign where AssigneeId =: usrId]) {
+            existingAssignmentMap.put(psla.PermissionSetLicenseId,psla);
+        }
+        printDebug (debugMethod,debugSection,'-22:existing assignments: '+existingAssignmentMap);        
+		//I need to loop through my assignments and if I already have an assignment one of the permission sets I'm concerned about, I need to skip it
+		//If I don't have an assignment for one of my permission sets, I need to add it to the new assignments        
+        for (PermissionSetLicense psl: pslList) {
+           if ((existingAssignmentMap.isEmpty() || existingAssignmentMap.get(psl.Id) == null) ) {
+                  newAssignments.add(new PermissionSetLicenseAssign(PermissionSetLicenseId = psl.Id,AssigneeId = usrId)); 
+           }
+		}
+        /*
+
+        for (PermissionSetLicenseAssign psla  : existingAssignments ) {
+            if (pslMap.isEmpty() || pslMap.get(psla.PermissionSetLicenseId) == null ) {
+                if ( psla.PermissionSetLicenseId != null ) {
+                    printDebug (debugMethod,debugSection,'-23:extracting existing assignments: '+psla);        
+                    newAssignments.add(new PermissionSetLicenseAssign(PermissionSetLicenseId = psla.PermissionSetLicenseId,AssigneeId = usrId)); 
+                }
+            }
+		}*/
+        //There weren't any existing assignments, so we'll add all the new ones
+        if ( newAssignments.size() <= 0 ) {
+            for (PermissionSetLicense psl2: pslList) {
+		        printDebug (debugMethod,debugSection,'-24:looping through PSLs: '+psl2);        
+	            newAssignments.add(new PermissionSetLicenseAssign(PermissionSetLicenseId = psl2.Id,AssigneeId = usrId)); 
+            }
+        }
+        printDebug (debugMethod,debugSection,'-30:permission set license assignments to be added: '+newAssignments);
+        
+       //now we know the ones that need to be added, lets load up the object and insert them
+        try {
+            insert newAssignments;
+        } catch (Exception e) {
+            System.debug(debugMethod+':'+debugSection+'--Exception while try to insert assignments: '+newAssignments+' => '+e.getStackTraceString());
+        }
+    }
+    
+    private static void addPermissionSets (Id usrId,List<CF_Permission_Mapping__c> hubPermissions ) {
+        
+        String debugSection = '660';
+        String debugMethod  = 'addPermissionSets';
+        printDebug (debugMethod,debugSection,'-00:inside:permission sets for user('+usrId+'): '+hubPermissions);
+        List<String> existingPs = new List<String>();
+        //Get the api names for all permission sets to be assigned
+        for ( CF_Permission_Mapping__c psm : hubPermissions ) {
+	        //printDebug (debugMethod,debugSection,'-02:access type: '+psm.Access_Type__c+' api name: '+psm.Permission_Set_API_Name__c);
+            if ( psm.Access_Type__c.equals('Permission Sets')) {
+		        //printDebug (debugMethod,debugSection,'-04:FOUND access type: '+psm.Access_Type__c+' api name: '+psm.Permission_Set_API_Name__c);
+                existingPs.add(psm.Permission_Set_API_Name__c);
+            }
+        }        
+        printDebug (debugMethod,debugSection,'-10->>>>>>>>>>>>ADUpdateGroupService:addPermiaddPermissionSetsssionSetGroups:permission sets for user('+usrId+'): '+existingPs);
+        //Take the names and query the actual permission set group object to get the Ids
+        List<PermissionSet> psList = [SELECT Id, Name, Label, LicenseId, ProfileId, IsCustom, Description, Type, PermissionSetGroupId, NamespacePrefix, IsOwnedByProfile 
+                                       FROM PermissionSet where Name =: existingPs];
+        printDebug (debugMethod,debugSection,'-12:extracted permission sets based on the api names: '+psList);
+        /*
+        Map<Id,PermissionSet> psMap = new Map<Id,PermissionSet>();
+        for (PermissionSet ps: psList) {
+            psMap.put(ps.Id,ps);                               
+		}
+        printDebug (debugMethod,debugSection,'-20:permission sets to be added: '+psMap);        
+        */
+        /*
+         * 1. Need a List with the Id's of the permission sets the are supposed to get------psList
+         * 2. Neep a map with the Id's of the permission sets they already have-------------existingAssignmentMap
+         * 3. Loop through #1, for those that don't exist in #2, add an assignment record--- 
+        */
+        
+        //now, loop through the existing assignments for this user and save off the ones that don't already exist
+        List<PermissionSetAssignment> newAssignments = new List<PermissionSetAssignment>();
+        Map<Id,PermissionSetAssignment> existingAssignmentMap = new Map<Id,PermissionSetAssignment>();
+        for ( PermissionSetAssignment psa :  [SELECT Id, PermissionSetId, AssigneeId FROM PermissionSetAssignment where AssigneeId =: usrId]) {
+            //if ((existingAssignmentMap.isEmpty() || existingAssignmentMap.get(psa.PermissionSetId) == null) ) {
+                existingAssignmentMap.put(psa.PermissionSetId,psa);
+            //}           
+        }
+        //List<PermissionSetAssignment> existingAssignments = ;
+        printDebug (debugMethod,debugSection,'-22:existing assignments: '+existingAssignmentMap);
+		//I need to loop through my assignments and if I already have an assignment one of the permission sets I'm concerned about, I need to skip it
+		//If I don't have an assignment for one of my permission sets, I need to add it to the new assignments        
+        for (PermissionSet ps: psList) {
+           if ((existingAssignmentMap.isEmpty() || existingAssignmentMap.get(ps.Id) == null) ) {
+                  newAssignments.add(new PermissionSetAssignment(PermissionSetId = ps.Id,AssigneeId = usrId)); 
+           }
+		}
+        /*
+        for (PermissionSetAssignment psa  : existingAssignments ) {
+            if ((psMap.isEmpty() || psMap.get(psa.PermissionSetId) == null) ) {
+                if ( psa.PermissionSetId != null ) {
+                    printDebug (debugMethod,debugSection,'-23:extracting existing assignments: '+psa);        
+                    newAssignments.add(new PermissionSetAssignment(PermissionSetId = psa.PermissionSetId,AssigneeId = usrId)); 
+                }
+            }
+		}
+		*/
+        //There weren't any existing assignments, so we'll add all the new ones
+        if ( newAssignments.size() <= 0 ) {
+            for (PermissionSet ps2: psList) {
+		        printDebug (debugMethod,debugSection,'-24:looping through PSGs: '+ps2);        
+	            newAssignments.add(new PermissionSetAssignment(PermissionSetId = ps2.Id,AssigneeId = usrId)); 
+            }
+        }
+        printDebug (debugMethod,debugSection,'-30:permission set group assignments to be added: '+newAssignments);
+        
+       //now we know the ones that need to be added, lets load up the object and insert them
+        try {
+            insert newAssignments;
+        } catch (Exception e) {
+            System.debug(debugMethod+':'+debugSection+'--Exception while try to insert assignments: '+newAssignments+' => '+e.getStackTraceString());
+        }
+    }
+    
+    private static void addPermissionSetGroups (Id usrId,List<CF_Permission_Mapping__c> hubPermissions ) {
+        
+        String debugSection = '650';
+        String debugMethod  = 'addPermissionSetGroups';
+        printDebug (debugMethod,debugSection,'-00:inside:permission set groups for user('+usrId+'): '+hubPermissions);
+        List<String> existingPsgs = new List<String>();
+        //Get the api names for all permission set groups to be assigned
+        for ( CF_Permission_Mapping__c psm : hubPermissions ) {
+	        printDebug (debugMethod,debugSection,'-02:access type: '+psm.Access_Type__c+' api name: '+psm.Permission_Set_API_Name__c);
+            if ( psm.Access_Type__c.equals('Permission Set Groups')) {
+		        //printDebug (debugMethod,debugSection,'-04:FOUND access type: '+psm.Access_Type__c+' api name: '+psm.Permission_Set_API_Name__c);
+                existingPsgs.add(psm.Permission_Set_API_Name__c);
+            }
+        }        
+        printDebug (debugMethod,debugSection,'-10:permission set groups for user('+usrId+'): '+existingPsgs);
+        //Take the names and query the actual permission set group object to get the Ids
+        List<PermissionSetGroup> psgList = [SELECT Id, IsDeleted, DeveloperName, Language, MasterLabel, NamespacePrefix, Description, Status 
+                                       FROM PermissionSetGroup where DeveloperName =: existingPsgs];
+        /*
+        Map<Id,PermissionSetGroup> psgMap = new Map<Id,PermissionSetGroup>();
+        printDebug (debugMethod,debugSection,'-12:looking for permission set groups based on the api names: '+psgList);
+        for (PermissionSetGroup psg: psgList) {
+            psgMap.put(psg.Id,psg);                               
+		}
+        printDebug (debugMethod,debugSection,'-20:permission set groups to be added: '+psgMap);        
+        */
+        //now, loop through the existing assignments for this user and save off the ones that don't already exist
+        List<PermissionSetAssignment> newAssignments = new List<PermissionSetAssignment>();
+        Map<Id,PermissionSetAssignment> existingAssignmentMap = new Map<Id,PermissionSetAssignment>();
+        for ( PermissionSetAssignment psa :  [SELECT Id, PermissionSetId, PermissionSetGroupId, AssigneeId FROM PermissionSetAssignment where AssigneeId =: usrId]) {
+            existingAssignmentMap.put(psa.PermissionSetGroupId,psa);
+        }
+        //List<PermissionSetAssignment> existingAssignments = ;
+        printDebug (debugMethod,debugSection,'-22:existing assignments: '+existingAssignmentMap);        
+		//I need to loop through my assignments and if I already have an assignment one of the permission sets I'm concerned about, I need to skip it
+		//If I don't have an assignment for one of my permission sets, I need to add it to the new assignments        
+        for (PermissionSetGroup psg: psgList) {
+           if ((existingAssignmentMap.isEmpty() || existingAssignmentMap.get(psg.Id) == null) ) {
+                  newAssignments.add(new PermissionSetAssignment(PermissionSetGroupId = psg.Id,AssigneeId = usrId)); 
+           }
+		}
+        /*
+        for (PermissionSetAssignment psa  : existingAssignments ) {
+            if (psgMap.isEmpty() || psgMap.get(psa.PermissionSetGroupId) == null ) {
+                if ( psa.PermissionSetGroupId != null ) {
+                    printDebug (debugMethod,debugSection,'-23:extracting existing assignments: '+psa);        
+                    newAssignments.add(new PermissionSetAssignment(PermissionSetGroupId = psa.PermissionSetGroupId,AssigneeId = usrId)); 
+                }
+            }
+		}*/
+        //There weren't any existing assignments, so we'll add all the new ones
+        if ( newAssignments.size() <= 0 ) {
+            for (PermissionSetGroup psg2: psgList) {
+		        printDebug (debugMethod,debugSection,'-24:looping through PSGs: '+psg2);        
+	            newAssignments.add(new PermissionSetAssignment(PermissionSetGroupId = psg2.Id,AssigneeId = usrId)); 
+            }
+        }
+        printDebug (debugMethod,debugSection,'-30:permission set group assignments to be added: '+newAssignments);
+        
+       //now we know the ones that need to be added, lets load up the object and insert them
+        try {
+            insert newAssignments;
+        } catch (Exception e) {
+            System.debug(debugMethod+':'+debugSection+'--Exception while try to insert assignments: '+newAssignments+' => '+e.getStackTraceString());
+        }
     }
     
     private static boolean publishUserEvents (List<AUP_Destination_User_Event__e> userEvents ) {
         boolean returnStatus = false;
+        String debugSection = '700';
+        String debugMethod  = 'publishUserEvents';
    
-        System.debug('700.10-##############ADUpdateGroupService:publishUserEvents:Ready to published events: '+userEvents);
+        printDebug (debugMethod,debugSection,'-10:Ready to published events: '+userEvents);
         if ( userEvents.size() > 0 ) {
             // Call method to publish events
             List<Database.SaveResult> srs = EventBus.publish(userEvents);
             // Inspect publishing result
             for (Database.SaveResult sr: srs ) {
                 if (sr.isSuccess()) {
-                    System.debug('700.20-##############ADUpdateGroupService:publishUserEvents:Successfully published event: '+sr);
+                    printDebug (debugMethod,debugSection,'-20:Successfully published event: '+sr);
                     returnStatus = true;
                 } else {
                     for(Database.Error err : sr.getErrors()) {
-                        System.debug('Error returned: ' +
+                        printDebug (debugMethod,debugSection,'Error returned: ' +
                                      err.getStatusCode() +
                                      ' - ' +
                                      err.getMessage());
                     }
                 }
             }
-            System.debug('700.30-##############ADUpdateGroupService:publishUserEvents:FINISHING UP!');
+            printDebug (debugMethod,debugSection,'-30:FINISHING UP!');
         }
 
+        AUPPublishDestinationEvent.processUserEvents(userEvents);
         
         return returnStatus;
     }
@@ -325,40 +725,29 @@ public class ADUpdateGroupService {
     private static String appendString(String location, String type, List<CF_Permission_Mapping__c> permissions) {
         String returnString = '';
         
-        for ( CF_Permission_Mapping__c perm : permissions ) {
-            if ( perm.Permission_Location__c.equals(location) && perm.Access_Type__c.equals(type) ) {
-                returnString += perm.Name + '|';
-            }
-        }        
+        try {
+            for ( CF_Permission_Mapping__c perm : permissions ) {
+                if ( perm.Permission_Location__c.equals(location) && perm.Access_Type__c.equals(type) ) {
+                    returnString += perm.Permission_Set_API_Name__c + '|';
+                }
+            }        
+        } catch (Exception e) {
+            System.debug('Exception while tring to append: '+permissions+' to '+returnString+' => '+e.getStackTraceString());
+            //rtnDTCApplicationLevel = null;
+        }
         return returnString;
     }    
     
     private static Map<String,Id> getExistingUsers ( List<String> secIdArr ) {
         
+        String debugSection = '600';
+        String debugMethod  = 'getExistingUsers';
         Map<String,Id> existingUserMap = new Map<String,Id>();
         for ( User usr : [Select SECID__c,Id from User where SECID__c =: secIdArr]) {
             existingUserMap.put(usr.SECID__c,usr.Id);
         }
         
-            /*
-               return new User(
-                        Alias = 'instMgr',
-                        Email = (firstName + lastName + '@example.com').remove(' '),
-                        EmailEncodingKey = 'UTF-8',
-                        FederationIdentifier = generateRandomStringByLength(15),
-                        FirstName = firstName,
-                        LastName = lastName,
-                        LanguageLocaleKey = 'en_US',
-                        LocaleSidKey = 'en_US',
-                        ProfileId = testProfile.Id,
-                        TimeZoneSidKey = 'GMT',
-                        UserName = (firstName + lastName + '@testorg.com' + UserInfo.getOrganizationId()+String.valueOf(Datetime.now()).replace(' ','').replace(':','').replace('-','')).remove(' ')
-            if (existingUserMap.isEmpty() || existingUserMap.get(cont.SECID__c) == null ) {
-            } 
-	        }
-			*/
-        System.debug('600-70->>>>>>>>>>>>ADUpdateGroupService:createUser:existing Users: '+existingUserMap);
-        //insert returnUsers;
+        printDebug (debugMethod,debugSection,'-70:existing Users: '+existingUserMap);
         
         return existingUserMap;
     }
@@ -382,7 +771,7 @@ public class ADUpdateGroupService {
     private static DTC_Application__c getDTCApplication (Id DTCApplicationId) {
         DTC_Application__c rtnDTCApplication = new DTC_Application__c();
         try {
-            rtnDTCApplication = [select Id,Name,Application_Description__c,Org__c,Profile_ID__c, 
+            rtnDTCApplication = [select Id,Name,Application_Description__c,Org__c,Dest_Org_Ext__c,Hub_Org_Ext__c,Profile_ID__c, 
                                  Overall_User_Creation_Flow__c,Overall_User_Creation_Apex__c  
                                  FROM DTC_Application__c where Id =: DTCApplicationId];
         }
@@ -405,29 +794,27 @@ public class ADUpdateGroupService {
         return rtnContact;
     }
     
-    private static boolean createContact (ADUpdateGroupService grpEvent, DTC_Application__c dtcApplication, DTC_Application_Level__c dtcApplicationLevel) {
+    private static String createContact (ADUpdateGroupService grpEvent, DTC_Application__c dtcApplication, DTC_Application_Level__c dtcApplicationLevel) {
         
-        boolean returnStatus = false;
+        String debugSection = '400';
+        String debugMethod  = 'createContact';
+        String returnString = '';
         
         if ( !contactExists(grpEvent.SECID) && !applicationAccessExists(grpEvent.SECID,dtcApplication.Id,dtcApplicationLevel.Id) ) {
 
-            /*
-                System.debug('ADUpdateGroupService:GroupName: '+r.GroupName);
-                System.debug('ADUpdateGroupService:EmailAddress: '+r.EmailAddress);
-                System.debug('ADUpdateGroupService:FederationId: '+r.FederationId);
-                System.debug('ADUpdateGroupService:SECID: '+r.SECID);
-                System.debug('ADUpdateGroupService:FirstName: '+r.FirstName);
-                System.debug('ADUpdateGroupService:LastName: '+r.LastName);
-                System.debug('ADUpdateGroupService:ParentADGroup: '+r.ParentADGroup);
-                System.debug('ADUpdateGroupService:Status: '+r.Status);
-             */            
             try {
                 Contact newContact = new Contact(AccountId=dtcApplication.Account__c,
                                                  Email=grpEvent.EmailAddress,Federation_Id__c=grpEvent.FederationId,SECID__c=grpEvent.SECID,
                                                  FirstName=grpEvent.FirstName,LastName=grpEvent.LastName,
                                                  Description='AUP Created Contact');
-                insert newContact;
-		        System.debug('400-10->>>>>>>>>>>>ADUpdateGroupService:contactExists:createContact: newContact: '+newContact);
+                try {
+                    insert newContact;
+                    returnString += '-'+newContact.Id;
+                } catch (Exception e) {
+                    System.debug(debugMethod+':'+debugSection+'--Exception while try to insert contacts: '+newContact+' => '+e.getStackTraceString());
+                    returnString += 'FAILURE=1';
+                }
+		        printDebug (debugMethod,debugSection,'-10:newContact: '+newContact);
                 
                 CF_Application_Access__c newAccess = new CF_Application_Access__c(Account__c=newContact.AccountId,
                                                                                   Approval_Status__c='Approved',Approved_Checkbox__c=true,
@@ -436,10 +823,15 @@ public class ADUpdateGroupService {
                                                                                   Email_Id__c=grpEvent.EmailAddress,Federation_Id__c=grpEvent.FederationId,Inactive__c=false,
                                                                                   First_Name__c=grpEvent.FirstName,Last_Name__c=grpEvent.LastName,
                                                                                   Notes__c='AUP Created Application Access');
-                insert newAccess;
-		        System.debug('400-20->>>>>>>>>>>>ADUpdateGroupService:contactExists:create Application Access: newAccess: '+newAccess);
+                try {
+	                insert newAccess;
+                } catch (Exception e) {
+                    System.debug(debugMethod+':'+debugSection+'--Exception while try to insert Application Access: '+newAccess+' => '+e.getStackTraceString());
+                    returnString += 'FAILURE=2';
+                }
+		        printDebug (debugMethod,debugSection,'400-20:create Application Access: newAccess: '+newAccess);
                 
-                returnStatus = true;
+                //returnStatus = true;
                             
             }
             catch (Exception e) {
@@ -447,16 +839,18 @@ public class ADUpdateGroupService {
             }
 
         }
-        return returnStatus;
+        return returnString;
         
         
     }
     
     private static boolean contactExists (String passedSECID ) {
+        String debugSection = '300';
+        String debugMethod  = 'contactExists';
         boolean returnStatus = false;
         
         List<Contact> cnt = [Select Id,Name from Contact where SECID__c =: passedSECID];
-        System.debug('300-10->>>>>>>>>>>>ADUpdateGroupService:contactExists:lookin for contact: passedSECID: '+passedSECID+' found: '+cnt.size());
+        printDebug (debugMethod,debugSection,'-10:lookin for contact: passedSECID: '+passedSECID+' found: '+cnt.size());
         if (cnt.size() > 0 ) {
             returnStatus = true;
         }
@@ -465,13 +859,15 @@ public class ADUpdateGroupService {
     }
     
     private static boolean applicationAccessExists (String passedSECID, Id applicationId, Id applicationLevelId ) {
+        String debugSection = '310';
+        String debugMethod  = 'applicationAccessExists';
         boolean returnStatus = false;
         
     	List<CF_Application_Access__c> aa = [Select Id, Name, Approval_Status__c, Application_Name__c, DTC_Application_Level__r.Name, 
                                              Inactive__c, DTC_Application__r.Name, Contact__r.SECID__c FROM CF_Application_Access__c 
                                              where Contact__r.SECID__c =: passedSECID AND Inactive__c = true AND 
                                              DTC_Application__c =: applicationId AND DTC_Application_Level__c =: applicationLevelId];
-        System.debug('300-20->>>>>>>>>>>>ADUpdateGroupService:contactExists:lookin for applicationAccess: passedSECID: '+passedSECID+
+        printDebug (debugMethod,debugSection,'-20:lookin for applicationAccess: passedSECID: '+passedSECID+
                      ' application Id: '+applicationId+' application level id: '+applicationLevelId+
                      ' found: '+aa.size());
         if (aa.size() > 0 ) {
@@ -483,58 +879,70 @@ public class ADUpdateGroupService {
 
     
     private static DTC_Application__c getDTCApplication (String applicationName ) {
+        String debugSection = '200';
+        String debugMethod  = 'getDTCApplication';
         DTC_Application__c returnApplication = new DTC_Application__c();
         
-        System.debug('200-10->>>>>>>>>>>>ADUpdateGroupService:getDTCApplication:lookin for applicationName: '+applicationName);
+        printDebug (debugMethod,debugSection,'-10:lookin for applicationName: '+applicationName);
         try {
-            returnApplication = [select Id, Name, Account__c, Application_Description__c, Org__c, Profile_ID__c from DTC_Application__c where Name =: applicationName ];
+            returnApplication = [select Id, Name, Account__c, Application_Description__c, Org__c, Dest_Org_Ext__c, Hub_Org_Ext__c, Profile_ID__c from DTC_Application__c where Name =: applicationName ];
         } catch (Exception e) {
-            System.debug('ADUpdateGroupService:getDTCApplication:Exception: '+e.getStackTraceString());
+            printDebug (debugMethod,debugSection,'ADUpdateGroupService:getDTCApplication:Exception: '+e.getStackTraceString());
             returnApplication = null;
         }
-        System.debug('200-15->>>>>>>>>>>>ADUpdateGroupService:getDTCApplication:found application: '+returnApplication);
+        printDebug (debugMethod,debugSection,'-15:found application: '+returnApplication);
         
         return returnApplication;
         
     }
     
     private static DTC_Application_Level__c getDTCApplicationLevel (Id applicationId, String applicationLevelName ) {
+        String debugSection = '210';
+        String debugMethod  = 'getDTCApplicationLevel';
         DTC_Application_Level__c returnApplicationLevel = new DTC_Application_Level__c();
         
-        System.debug('210-10->>>>>>>>>>>>ADUpdateGroupService:getDTCApplicationLevel:lookin for applicationLevelName: '+applicationLevelName);
+        printDebug (debugMethod,debugSection,'-10:lookin for applicationLevelName: '+applicationLevelName);
         try {
             returnApplicationLevel = [select Id, Name, DTC_Application__c, Is_Active__c from DTC_Application_Level__c 
                                       where Name =: applicationLevelName AND DTC_Application__c =: applicationId];
         } catch (Exception e) {
-            System.debug('ADUpdateGroupService:getDTCApplicationLevel:Exception: '+e.getStackTraceString());
+            printDebug (debugMethod,debugSection,'ADUpdateGroupService:getDTCApplicationLevel:Exception: '+e.getStackTraceString());
             returnApplicationLevel = null;
         }
-        System.debug('210-15->>>>>>>>>>>>ADUpdateGroupService:getDTCApplicationLevel:found application Level: '+returnApplicationLevel);
+        printDebug (debugMethod,debugSection,'-15:found application Level: '+returnApplicationLevel);
         
         return returnApplicationLevel;
         
     }
      
     private static List<CF_Permission_Mapping__c> getApplicationLevelPermissions (Id applicationId, Id applicationLevelId,String permissionLocation ) {
+        String debugSection = '220';
+        String debugMethod  = 'getApplicationLevelPermissions';
         List<CF_Permission_Mapping__c> returnApplicationLevelPermissions = new List<CF_Permission_Mapping__c>();
         
-        System.debug('220-10->>>>>>>>>>>>ADUpdateGroupService:getApplicationLevelPermissions:lookin for applicationId: '+applicationId+
+        printDebug (debugMethod,debugSection,'-10:lookin for applicationId: '+applicationId+
                      ' applicationLevelId: '+applicationLevelId);
         try {
-            returnApplicationLevelPermissions = [select Id, Name, DTC_Application__c , DTC_Application_Level__c, Access_Type__c, Permission_Location__c    
+            returnApplicationLevelPermissions = [select Id, Name, DTC_Application__c , DTC_Application_Level__c, Access_Type__c, Permission_Location__c, Permission_Set_API_Name__c     
                                                  from CF_Permission_Mapping__c 
                                       where DTC_Application_Level__c =: applicationLevelId AND 
                                                  DTC_Application__c =: applicationId AND 
                                                  Permission_Location__c =: permissionLocation];
         } catch (Exception e) {
-            System.debug('ADUpdateGroupService:getApplicationLevelPermissions:Exception: '+e.getStackTraceString());
+            printDebug (debugMethod,debugSection,'ADUpdateGroupService:getApplicationLevelPermissions:Exception: '+e.getStackTraceString());
             returnApplicationLevelPermissions = null;
         }
-        System.debug('220-15->>>>>>>>>>>>ADUpdateGroupService:getApplicationLevelPermissions:found application Level permissions: '+returnApplicationLevelPermissions);
+        printDebug (debugMethod,debugSection,'-15:found application Level permissions: '+returnApplicationLevelPermissions);
        
         
         return returnApplicationLevelPermissions;
         
+    }
+    
+    private static void printDebug(String method, String section, String debugMessage) {
+        if ( debugOn ) {
+            System.debug('ADUpdateGroupService.11: '+method+': '+section+': >>>>>>>>>>>>>>>>>>>> '+debugMessage);
+        }  
     }
 
     

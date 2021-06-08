@@ -77,72 +77,58 @@ public class ADUpdateUserService {
             usr.profileid = newProfileId;
             inActivateUsers.add(usr);
             usrIds.add(usr.Id);
-            returnMessage += 'User Inactivated('+usr.SECID__c+')';
+            returnMessage += 'User Inactivated';
         }
         System.debug('ADUserReceiveEvent:preparing to update users: '+inActivateUsers);
         
         try {
-            //returnMessage += removePermissionSetLicenses(usrIds);
-            //returnMessage += removePermissionSets(usrIds);
-            //returnMessage += removeGroupsAndQueues(usrIds);
+            removePermissionSetLicenses(usrIds);
+            removePermissionSets(usrIds);
+            removeGroupsAndQueues(usrIds);
 	        update inActivateUsers;
-            returnMessage += '#Overall status: Successful#';
         } catch (Exception e) {
             System.debug('ADUserReceiveEvent:inactivateUser:Exception: '+e.getStackTraceString());
             //return e.getStackTraceString();
-            returnMessage += '#Overall status: exception #: '+e.getStackTraceString();
         }
         return returnMessage;
     }
     
-    private static String removePermissionSets (List<Id> usrIds ) {
-	    String returnMessage = ':';
+    private static void removePermissionSets (List<Id> usrIds ) {
         List<PermissionSetAssignment> delAssignments = new List<PermissionSetAssignment>();
         for ( PermissionSetAssignment dassgn :  [SELECT Id, PermissionSetId, AssigneeId FROM PermissionSetAssignment where AssigneeId =: usrIds]) {
             delAssignments.add(dassgn);
         }
         try {
 	        delete delAssignments;
-            returnMessage = 'permissionSetsRemoved@';
         } catch (Exception e) {
             System.debug('ADUpdateUserService:removePermissionSets:Exception: '+e.getStackTraceString());
-            returnMessage = 'permissionSets exception@d: '+e.getStackTraceString();
         }
-        return returnMessage;
         
     }
     
-    private static String removePermissionSetLicenses (List<Id> usrIds ) {
-	    String returnMessage = ':';
+    private static void removePermissionSetLicenses (List<Id> usrIds ) {
         List<PermissionSetLicenseAssign> delAssignments = new List<PermissionSetLicenseAssign>();
         for ( PermissionSetLicenseAssign dassgn :  [SELECT Id, PermissionSetLicenseId, AssigneeId FROM PermissionSetLicenseAssign where AssigneeId =: usrIds]) {
             delAssignments.add(dassgn);
         }
         try {
 	        delete delAssignments;
-            returnMessage = 'permissionSetsRemoved@';
         } catch (Exception e) {
             System.debug('ADUpdateUserService:removePermissionSetLicenses:Exception: '+e.getStackTraceString());
-            returnMessage = 'permissionSetsLicenses exception@d: '+e.getStackTraceString();
         }
-        return returnMessage;
         
     }
    
-    private static String removeGroupsAndQueues (List<Id> usrIds ) {
-	    String returnMessage = ':';
+    private static void removeGroupsAndQueues (List<Id> usrIds ) {
         List<GroupMember> delAssignments = new List<GroupMember>();
         for ( GroupMember dassgn :  [SELECT Id, GroupId, UserOrGroupId FROM GroupMember where UserOrGroupId =: usrIds]) {
             delAssignments.add(dassgn);
         }
         try {
 	        delete delAssignments;
-            returnMessage = 'permissionSetsRemoved@';
         } catch (Exception e) {
             System.debug('ADUpdateUserService:removeGroupsAndQueues:Exception: '+e.getStackTraceString());
-            returnMessage = 'Groups&Queues exception@d: '+e.getStackTraceString();
         }
-        return returnMessage;
         
     }
 

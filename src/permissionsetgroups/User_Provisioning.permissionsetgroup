@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PermissionSetGroup xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>User provisioning permission set group</description>
+    <label>User Provisioning</label>
+    <permissionSets>Core_Functionality</permissionSets>
+    <permissionSets>force__SurveyCreator</permissionSets>
+    <status>Updated</status>
+</PermissionSetGroup>
