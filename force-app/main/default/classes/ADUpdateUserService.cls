@@ -49,6 +49,11 @@ public class ADUpdateUserService {
 	}
 	
     public static String execute (String messageRecived ) {
+        String debugSection = '600';
+        String debugMethod  = 'execute';
+
+        List<AUP_Destination_User_Event__e> userEvents = new List<AUP_Destination_User_Event__e>();
+        AUP_Destination_User_Event__e userEvent = new AUP_Destination_User_Event__e();
         ADUpdateUserService r = ADUpdateUserService.parse(messageRecived);
 	    String returnMessage = 'Success';
 
@@ -58,7 +63,16 @@ public class ADUpdateUserService {
         
         if ( r.Status.equals('Inactive')) {
             returnMessage += inactivateUser(r.SECID);
+            userEvent = new AUP_Destination_User_Event__e(AD_SEC_ID__c=r.SECID, 
+                                                          Federation_Id__c=r.FederationId, 
+                                                          Destination_Org__c='VAEMPL', 
+                                                          Status__c=r.Status
+                                                         );
+            userEvents.add(userEvent);
         }
+        returnMessage += ADUpdateGroupService.publishUserEvents (userEvents );
+        ADUpdateGroupService.printDebug (debugMethod,debugSection,'-90:returning from publishing events: '+
+                     returnMessage);
         
         return returnMessage;
         
@@ -70,11 +84,12 @@ public class ADUpdateUserService {
         System.debug('ADUserReceiveEvent:looking for SECID: '+SECID);
 		List<User> inActivateUsers = new List<User>();
         List<Id>   usrIds          = new List<Id>();
-        Id newProfileId = [Select Id From Profile Where Name = 'Force.com - Free User' limit 1].Id;
+        Profile newProfile = [Select Id,UserLicenseId From Profile Where Name = 'Force.com - Free User' limit 1];
 
         for (User usr : [select Id, username, SECID__C,IsActive,profileid from User where SECID__c =: SECID]) {
             usr.IsActive = false;
-            usr.profileid = newProfileId;
+            usr.UserPermissionsSFContentUser = false;
+            usr.profileid = newProfile.Id;
             inActivateUsers.add(usr);
             usrIds.add(usr.Id);
             returnMessage += 'User Inactivated('+usr.SECID__c+')';
@@ -82,9 +97,9 @@ public class ADUpdateUserService {
         System.debug('ADUserReceiveEvent:preparing to update users: '+inActivateUsers);
         
         try {
-            //returnMessage += removePermissionSetLicenses(usrIds);
-            //returnMessage += removePermissionSets(usrIds);
-            //returnMessage += removeGroupsAndQueues(usrIds);
+            returnMessage += removePermissionSets(usrIds);
+            returnMessage += removeGroupsAndQueues(usrIds);
+            returnMessage += removePermissionSetLicenses(usrIds);
 	        update inActivateUsers;
             returnMessage += '#Overall status: Successful#';
         } catch (Exception e) {
@@ -98,7 +113,8 @@ public class ADUpdateUserService {
     private static String removePermissionSets (List<Id> usrIds ) {
 	    String returnMessage = ':';
         List<PermissionSetAssignment> delAssignments = new List<PermissionSetAssignment>();
-        for ( PermissionSetAssignment dassgn :  [SELECT Id, PermissionSetId, AssigneeId FROM PermissionSetAssignment where AssigneeId =: usrIds]) {
+        for ( PermissionSetAssignment dassgn :  [SELECT Id, PermissionSetId, AssigneeId FROM PermissionSetAssignment 
+                                                 where AssigneeId =: usrIds AND PermissionSet.Type != 'Profile' AND PermissionSet.IsOwnedByProfile = false]) {
             delAssignments.add(dassgn);
         }
         try {
