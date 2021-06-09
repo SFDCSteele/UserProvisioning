@@ -7,13 +7,28 @@ public class AUPDestinationUserService {
     public static void execute (List<AUP_Destination_User_Event__e> incomingMessages ) {
         String debugSection = '000';
         String debugMethod  = 'execute';
-        
+
+        List<AUP_Destination_User_Event__e> activateMessages = new List<AUP_Destination_User_Event__e>();
+        List<AUP_Destination_User_Event__e> inactivateMessages = new List<AUP_Destination_User_Event__e>();
         printDebug (debugMethod,debugSection,'incoming messages: '+incomingMessages);
         
         Map<String,Contact> createdContacts = new Map<String,Contact>();
         
+        for (AUP_Destination_User_Event__e msg : incomingMessages ) {
+            if ( msg.Status__c.equals('Active')) {
+                activateMessages.add(msg);				                
+            } else if ( msg.Status__c.equals('Inactive')) {
+                inactivateMessages.add(msg);
+            }
+            
+        }
         //createdContacts = createContacts(incomingMessages);
-        createUsers ( incomingMessages,createdContacts );
+        if ( activateMessages.size() > 0 ) {
+	        createUsers ( activateMessages,createdContacts );
+        }
+        if ( inactivateMessages.size() > 0 ) {
+	        inactivateUsers ( inactivateMessages );
+        }
                 
     }
     
@@ -733,5 +748,94 @@ public class AUPDestinationUserService {
         }  
     }
 
+
+    private static String inactivateUsers (List<AUP_Destination_User_Event__e> inactivateMessages) {
+        
+	    String returnMessage = ':';
+        System.debug('ADUserReceiveEvent:looking for inactivateMessages: '+inactivateMessages);
+		List<User> inActivateUsers = new List<User>();
+        List<Id>   usrIds          = new List<Id>();
+        List<String> secIdArr      = new List<String>();
+        Profile newProfile = [Select Id,UserLicenseId From Profile Where Name = 'Force.com - Free User' limit 1];
+        for (AUP_Destination_User_Event__e msg : inactivateMessages) {
+            secIdArr.add(msg.AD_SEC_ID__c);
+        }
+
+        for (User usr : [select Id, username, SECID__C,IsActive,profileid from User where SECID__c =: secIdArr]) {
+            usr.IsActive = false;
+            usr.UserPermissionsSFContentUser = false;
+            usr.profileid = newProfile.Id;
+            inActivateUsers.add(usr);
+            usrIds.add(usr.Id);
+            returnMessage += 'User Inactivated('+usr.SECID__c+')';
+        }
+        System.debug('ADUserReceiveEvent:preparing to update users: '+inActivateUsers);
+        
+        try {
+            returnMessage += removePermissionSets(usrIds);
+            returnMessage += removeGroupsAndQueues(usrIds);
+            returnMessage += removePermissionSetLicenses(usrIds);
+	        update inActivateUsers;
+            returnMessage += '#Overall status: Successful#';
+        } catch (Exception e) {
+            System.debug('ADUserReceiveEvent:inactivateUser:Exception: '+e.getStackTraceString());
+            //return e.getStackTraceString();
+            returnMessage += '#Overall status: exception #: '+e.getStackTraceString();
+        }
+        return returnMessage;
+    }
+    
+    private static String removePermissionSets (List<Id> usrIds ) {
+	    String returnMessage = ':';
+        List<PermissionSetAssignment> delAssignments = new List<PermissionSetAssignment>();
+        for ( PermissionSetAssignment dassgn :  [SELECT Id, PermissionSetId, AssigneeId FROM PermissionSetAssignment 
+                                                 where AssigneeId =: usrIds AND PermissionSet.Type != 'Profile' AND PermissionSet.IsOwnedByProfile = false]) {
+            delAssignments.add(dassgn);
+        }
+        try {
+	        delete delAssignments;
+            returnMessage = 'permissionSetsRemoved@';
+        } catch (Exception e) {
+            System.debug('ADUpdateUserService:removePermissionSets:Exception: '+e.getStackTraceString());
+            returnMessage = 'permissionSets exception@d: '+e.getStackTraceString();
+        }
+        return returnMessage;
+        
+    }
+    
+    private static String removePermissionSetLicenses (List<Id> usrIds ) {
+	    String returnMessage = ':';
+        List<PermissionSetLicenseAssign> delAssignments = new List<PermissionSetLicenseAssign>();
+        for ( PermissionSetLicenseAssign dassgn :  [SELECT Id, PermissionSetLicenseId, AssigneeId FROM PermissionSetLicenseAssign where AssigneeId =: usrIds]) {
+            delAssignments.add(dassgn);
+        }
+        try {
+	        delete delAssignments;
+            returnMessage = 'permissionSetsRemoved@';
+        } catch (Exception e) {
+            System.debug('ADUpdateUserService:removePermissionSetLicenses:Exception: '+e.getStackTraceString());
+            returnMessage = 'permissionSetsLicenses exception@d: '+e.getStackTraceString();
+        }
+        return returnMessage;
+        
+    }
+   
+    private static String removeGroupsAndQueues (List<Id> usrIds ) {
+	    String returnMessage = ':';
+        List<GroupMember> delAssignments = new List<GroupMember>();
+        for ( GroupMember dassgn :  [SELECT Id, GroupId, UserOrGroupId FROM GroupMember where UserOrGroupId =: usrIds]) {
+            delAssignments.add(dassgn);
+        }
+        try {
+	        delete delAssignments;
+            returnMessage = 'permissionSetsRemoved@';
+        } catch (Exception e) {
+            System.debug('ADUpdateUserService:removeGroupsAndQueues:Exception: '+e.getStackTraceString());
+            returnMessage = 'Groups&Queues exception@d: '+e.getStackTraceString();
+        }
+        return returnMessage;
+        
+    }
+    
     
 }
