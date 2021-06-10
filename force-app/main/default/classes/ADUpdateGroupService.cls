@@ -718,7 +718,7 @@ public class ADUpdateGroupService {
             printDebug (debugMethod,debugSection,'-30:FINISHING UP!');
         }
 
-        AUPPublishDestinationEvent.processUserEvents(userEvents);
+        //AUPPublishDestinationEvent.processUserEvents(userEvents);
         
         return returnStatus;
     }

@@ -70,6 +70,7 @@ public class ADUpdateUserService {
                                                          );
             userEvents.add(userEvent);
         }
+        //AUPPublishDestinationEvent.processUserEvents(userEvents);
         returnMessage += ADUpdateGroupService.publishUserEvents (userEvents );
         ADUpdateGroupService.printDebug (debugMethod,debugSection,'-90:returning from publishing events: '+
                      returnMessage);

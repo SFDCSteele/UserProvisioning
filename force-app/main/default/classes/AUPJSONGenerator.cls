@@ -7,7 +7,7 @@ public class AUPJSONGenerator{
         String pretty = '';
         String wStr   = '';
         List<String> destNames = new List<String>{'AD_SEC_ID__c','Email_Address__c','Federation_Id__c','FirstName__c','LastName__c','Profile_Name__c','Role_Name__c',
-            'License_Name__c','Username__c','Alias__c','Permission_Set_Groups__c','Permission_Sets__c','Destination_Org__c','Groups__c','Queues__c','Permission_Set_Licenses__c'};        
+            'License_Name__c','Username__c','Alias__c','Permission_Set_Groups__c','Permission_Sets__c','Destination_Org__c','Groups__c','Queues__c','Status__c','Permission_Set_Licenses__c'};        
         
         system.debug('3001000---$$$$$$$$$-AUPJSONGenerator:generateJSONContent:passed in message: '+eventMessage);
         // Write data to the JSON string.
