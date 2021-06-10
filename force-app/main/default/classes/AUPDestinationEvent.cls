@@ -20,6 +20,7 @@ public class AUPDestinationEvent {
 	public String Groups {get;set;} 
 	public String Queues {get;set;} 
 	public String Permission_Set_Licenses {get;set;} 
+	public String Status {get;set;} 
 
 	public AUPDestinationEvent(JSONParser parser) {
 		while (parser.nextToken() != System.JSONToken.END_OBJECT) {
@@ -56,6 +57,8 @@ public class AUPDestinationEvent {
 						Groups = parser.getText();
 					} else if (text == 'Queues__c') {
 						Queues = parser.getText();
+					} else if (text == 'Status__c') {
+						Status = parser.getText();
 					} else if (text == 'Permission_Set_Licenses__c') {
 						Permission_Set_Licenses = parser.getText();
 					} else {

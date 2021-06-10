@@ -53,6 +53,7 @@ global without sharing class AUPReceiveDestinationEvent {
                                                 Destination_Org__c=destEvent.Destination_Org, 
                                                 Groups__c=destEvent.Groups, 
                                                 Queues__c=destEvent.Queues, 
+                                                Status__c=destEvent.Status,
                                                 Permission_Set_Licenses__c=destEvent.Permission_Set_Licenses));
         
         return incomingMessages;

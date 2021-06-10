@@ -195,7 +195,13 @@ public class AUPDestinationUserService {
         String debugSection = '690';
         String debugMethod  = 'addQueues';
         printDebug (debugMethod,debugSection,'-00:inside:groups for user('+usrId+'): '+msgEvent);
-        List<String> existingQueues = msgEvent.Queues__c.split('\\|');
+        List<String> existingQueues = new List<String>();
+        try {
+	        existingQueues = msgEvent.Queues__c.split('\\|');
+        } catch (Exception e) {
+            System.debug(debugMethod+':'+debugSection+'--groups input is null or blank!!');
+            return;
+        }
         printDebug (debugMethod,debugSection,'-10:queues for user('+usrId+'): '+existingQueues);
         for ( String queName : existingQueues ) {
 	        printDebug (debugMethod,debugSection,'-11:looping through queues to show names: '+queName+'*');            
@@ -205,59 +211,61 @@ public class AUPDestinationUserService {
         Map<Id,Group> queueMap = new Map<Id,Group>();
         Map<String,Group> existingQueueMap = new Map<String,Group>();
         printDebug (debugMethod,debugSection,'-12:looking for groups based on the api names: '+queueList);
-        for (Group queue: queueList) {
-            queueMap.put(queue.Id,queue);                               
-            existingQueueMap.put(queue.DeveloperName,queue);
-		}
-        printDebug (debugMethod,debugSection,'-20:groups to be added: '+queueMap);
-        //there were groups part of the permission mapping that don't actually exist---lets add them
-        List<Group> newQueues = new List<Group>();
-        printDebug (debugMethod,debugSection,'-20.03:do we need to add groups-existing groups: '+queueList.size()+' permission groups: '+existingQueues.size());
-        if (queueList.size() < existingQueues.size() ) {
-            for ( String queue : existingQueues ) {
-	            if (existingQueueMap.isEmpty() || existingQueueMap.get(queue) == null ) {
-                    newQueues.add(new Group(Name=queue.replace('_',' '), DeveloperName=queue, Type='Queue'));
+        if ( queueList.size() > 0 ) {
+            for (Group queue: queueList) {
+                queueMap.put(queue.Id,queue);                               
+                existingQueueMap.put(queue.DeveloperName,queue);
+            }
+            printDebug (debugMethod,debugSection,'-20:groups to be added: '+queueMap);
+            //there were groups part of the permission mapping that don't actually exist---lets add them
+            List<Group> newQueues = new List<Group>();
+            printDebug (debugMethod,debugSection,'-20.03:do we need to add groups-existing groups: '+queueList.size()+' permission groups: '+existingQueues.size());
+            if (queueList.size() < existingQueues.size() ) {
+                for ( String queue : existingQueues ) {
+                    if (existingQueueMap.isEmpty() || existingQueueMap.get(queue) == null ) {
+                        newQueues.add(new Group(Name=queue.replace('_',' '), DeveloperName=queue, Type='Queue'));
+                    }
+                }
+                try {
+                    insert newQueues;
+                } catch (Exception e) {
+                    System.debug(debugMethod+':'+debugSection+'--Exception while try to insert Queues: '+newQueues+' => '+e.getStackTraceString());
+                }
+                for ( Group newQueue : newQueues ) {
+                    queueMap.put(newQueue.Id,newQueue);
+                }
+            }        
+            printDebug (debugMethod,debugSection,'-20.07:NEW Queues to be added: '+newQueues);
+            
+            //now, loop through the existing assignments for this user and save off the ones that don't already exist
+            List<GroupMember> newAssignments = new List<GroupMember>();
+            Map<Id,GroupMember> existingAssignmentMap = new Map<Id,GroupMember>();
+            for ( GroupMember queueM : [SELECT Id, GroupId, UserOrGroupId FROM GroupMember where UserOrGroupId =: usrId]) {
+                existingAssignmentMap.put(queueM.GroupId,queueM);
+            }
+            printDebug (debugMethod,debugSection,'-22:existing assignments: '+existingAssignmentMap);        
+            //I need to loop through my assignments and if I already have an assignment one of the permission sets I'm concerned about, I need to skip it
+            //If I don't have an assignment for one of my permission sets, I need to add it to the new assignments        
+            for (Group que: queueList) {
+               if ((existingAssignmentMap.isEmpty() || existingAssignmentMap.get(que.Id) == null)  && que.Id != null ) {
+                      newAssignments.add(new GroupMember(GroupId = que.Id,UserOrGroupId = usrId)); 
+               }
+            }
+            //There weren't any existing assignments, so we'll add all the new ones
+            if ( newAssignments.size() <= 0 ) {
+                for (Group queue2: queueList) {
+                    printDebug (debugMethod,debugSection,'-24:looping through Queues: '+queue2);        
+                    newAssignments.add(new GroupMember(GroupId = queue2.Id,UserOrGroupId = usrId)); 
                 }
             }
+            printDebug (debugMethod,debugSection,'-30:Queue assignments to be added: '+newAssignments);
+            
+           //now we know the ones that need to be added, lets load up the object and insert them
             try {
-	            insert newQueues;
+                insert newAssignments;
             } catch (Exception e) {
-                System.debug(debugMethod+':'+debugSection+'--Exception while try to insert Queues: '+newQueues+' => '+e.getStackTraceString());
+                System.debug(debugMethod+':'+debugSection+'--Exception while try to insert assignments: '+newAssignments+' => '+e.getStackTraceString());
             }
-            for ( Group newQueue : newQueues ) {
-                queueMap.put(newQueue.Id,newQueue);
-            }
-        }        
-        printDebug (debugMethod,debugSection,'-20.07:NEW Queues to be added: '+newQueues);
-        
-        //now, loop through the existing assignments for this user and save off the ones that don't already exist
-        List<GroupMember> newAssignments = new List<GroupMember>();
-        Map<Id,GroupMember> existingAssignmentMap = new Map<Id,GroupMember>();
-        for ( GroupMember queueM : [SELECT Id, GroupId, UserOrGroupId FROM GroupMember where UserOrGroupId =: usrId]) {
-            existingAssignmentMap.put(queueM.GroupId,queueM);
-        }
-        printDebug (debugMethod,debugSection,'-22:existing assignments: '+existingAssignmentMap);        
-		//I need to loop through my assignments and if I already have an assignment one of the permission sets I'm concerned about, I need to skip it
-		//If I don't have an assignment for one of my permission sets, I need to add it to the new assignments        
-        for (Group que: queueList) {
-           if ((existingAssignmentMap.isEmpty() || existingAssignmentMap.get(que.Id) == null)  && que.Id != null ) {
-                  newAssignments.add(new GroupMember(GroupId = que.Id,UserOrGroupId = usrId)); 
-           }
-		}
-        //There weren't any existing assignments, so we'll add all the new ones
-        if ( newAssignments.size() <= 0 ) {
-            for (Group queue2: queueList) {
-		        printDebug (debugMethod,debugSection,'-24:looping through Queues: '+queue2);        
-	            newAssignments.add(new GroupMember(GroupId = queue2.Id,UserOrGroupId = usrId)); 
-            }
-        }
-        printDebug (debugMethod,debugSection,'-30:Queue assignments to be added: '+newAssignments);
-        
-       //now we know the ones that need to be added, lets load up the object and insert them
-        try {
-            insert newAssignments;
-        } catch (Exception e) {
-            System.debug(debugMethod+':'+debugSection+'--Exception while try to insert assignments: '+newAssignments+' => '+e.getStackTraceString());
         }
     }
     
@@ -266,66 +274,74 @@ public class AUPDestinationUserService {
         String debugSection = '680';
         String debugMethod  = 'addGroups';
         printDebug (debugMethod,debugSection,'-00:inside:groups for user('+usrId+'): '+msgEvent);
-        List<String> existingGrp = msgEvent.Groups__c.split('\\|');
+        List<String> existingGrp = new List<String>();
+        try {
+	        existingGrp = msgEvent.Groups__c.split('\\|');
+        } catch (Exception e) {
+            System.debug(debugMethod+':'+debugSection+'--groups input is null or blank!!');
+            return;
+        }
         printDebug (debugMethod,debugSection,'-10:permission sets for user('+usrId+'): '+existingGrp);
         //Take the names and query the actual group object to get the Ids
         List<Group> grpList = [SELECT Id, Name, DeveloperName, Type, Email FROM Group where DeveloperName =: existingGrp AND Type = 'Regular' ];
         Map<Id,Group> grpMap = new Map<Id,Group>();
         Map<String,Group> existingGrpMap = new Map<String,Group>();
         printDebug (debugMethod,debugSection,'-12:looking for groups based on the api names: '+grpList);
-        for (Group grp: grpList) {
-            grpMap.put(grp.Id,grp);                               
-            existingGrpMap.put(grp.DeveloperName,grp);
-		}
-        printDebug (debugMethod,debugSection,'-20:groups to be added: '+grpMap);
-        //there were groups part of the permission mapping that don't actually exist---lets add them
-        List<Group> newGroups = new List<Group>();
-        printDebug (debugMethod,debugSection,'-20.03:do we need to add groups-existing groups: '+grpList.size()+' permission groups: '+existingGrp.size());
-        if (grpList.size() < existingGrp.size() ) {
-            for ( String grp : existingGrp ) {
-	            if (existingGrpMap.isEmpty() || existingGrpMap.get(grp) == null ) {
-                    newGroups.add(new Group(Name=grp.replace('_',' '), DeveloperName=grp, Type='Regular'));
+        if ( grpList.size() > 0 ) {
+            for (Group grp: grpList) {
+                grpMap.put(grp.Id,grp);                               
+                existingGrpMap.put(grp.DeveloperName,grp);
+            }
+            printDebug (debugMethod,debugSection,'-20:groups to be added: '+grpMap);
+            //there were groups part of the permission mapping that don't actually exist---lets add them
+            List<Group> newGroups = new List<Group>();
+            printDebug (debugMethod,debugSection,'-20.03:do we need to add groups-existing groups: '+grpList.size()+' permission groups: '+existingGrp.size());
+            if (grpList.size() < existingGrp.size() ) {
+                for ( String grp : existingGrp ) {
+                    if (existingGrpMap.isEmpty() || existingGrpMap.get(grp) == null ) {
+                        newGroups.add(new Group(Name=grp.replace('_',' '), DeveloperName=grp, Type='Regular'));
+                    }
+                }
+                try {
+                    insert newGroups;
+                } catch (Exception e) {
+                    System.debug(debugMethod+':'+debugSection+'--Exception while try to insert groups: '+newGroups+' => '+e.getStackTraceString());
+                }
+                for ( Group newGrp : newGroups ) {
+                    grpMap.put(newGrp.Id,newGrp);
+                }
+            }        
+            printDebug (debugMethod,debugSection,'-20.07:NEW groups to be added: '+newGroups);
+            
+            //now, loop through the existing assignments for this user and save off the ones that don't already exist
+            List<GroupMember> newAssignments = new List<GroupMember>();
+            Map<Id,GroupMember> existingAssignmentMap = new Map<Id,GroupMember>();
+            for ( GroupMember grpM : [SELECT Id, GroupId, UserOrGroupId FROM GroupMember where UserOrGroupId =: usrId]) {
+                existingAssignmentMap.put(grpM.GroupId,grpM);
+            }
+            printDebug (debugMethod,debugSection,'-22:existing assignments: '+existingAssignmentMap);        
+            //I need to loop through my assignments and if I already have an assignment one of the permission sets I'm concerned about, I need to skip it
+            //If I don't have an assignment for one of my permission sets, I need to add it to the new assignments        
+            for (Group grp: grpList) {
+               if ((existingAssignmentMap.isEmpty() || existingAssignmentMap.get(grp.Id) == null) && grp.Id != null ) {
+                      newAssignments.add(new GroupMember(GroupId = grp.Id,UserOrGroupId = usrId)); 
+               }
+            }
+            //There weren't any existing assignments, so we'll add all the new ones
+            if ( newAssignments.size() <= 0 ) {
+                for (Group grp2: grpList) {
+                    printDebug (debugMethod,debugSection,'-24:looping through PSLs: '+grp2);        
+                    newAssignments.add(new GroupMember(GroupId = grp2.Id,UserOrGroupId = usrId)); 
                 }
             }
+            printDebug (debugMethod,debugSection,'-30:permission set group assignments to be added: '+newAssignments);
+            
+           //now we know the ones that need to be added, lets load up the object and insert them
             try {
-                insert newGroups;
+                insert newAssignments;
             } catch (Exception e) {
-                System.debug(debugMethod+':'+debugSection+'--Exception while try to insert groups: '+newGroups+' => '+e.getStackTraceString());
+                System.debug(debugMethod+':'+debugSection+'--Exception while try to insert assignments: '+newAssignments+' => '+e.getStackTraceString());
             }
-            for ( Group newGrp : newGroups ) {
-                grpMap.put(newGrp.Id,newGrp);
-            }
-        }        
-        printDebug (debugMethod,debugSection,'-20.07:NEW groups to be added: '+newGroups);
-        
-        //now, loop through the existing assignments for this user and save off the ones that don't already exist
-        List<GroupMember> newAssignments = new List<GroupMember>();
-        Map<Id,GroupMember> existingAssignmentMap = new Map<Id,GroupMember>();
-        for ( GroupMember grpM : [SELECT Id, GroupId, UserOrGroupId FROM GroupMember where UserOrGroupId =: usrId]) {
-            existingAssignmentMap.put(grpM.GroupId,grpM);
-        }
-        printDebug (debugMethod,debugSection,'-22:existing assignments: '+existingAssignmentMap);        
-		//I need to loop through my assignments and if I already have an assignment one of the permission sets I'm concerned about, I need to skip it
-		//If I don't have an assignment for one of my permission sets, I need to add it to the new assignments        
-        for (Group grp: grpList) {
-           if ((existingAssignmentMap.isEmpty() || existingAssignmentMap.get(grp.Id) == null) && grp.Id != null ) {
-                  newAssignments.add(new GroupMember(GroupId = grp.Id,UserOrGroupId = usrId)); 
-           }
-		}
-        //There weren't any existing assignments, so we'll add all the new ones
-        if ( newAssignments.size() <= 0 ) {
-            for (Group grp2: grpList) {
-		        printDebug (debugMethod,debugSection,'-24:looping through PSLs: '+grp2);        
-	            newAssignments.add(new GroupMember(GroupId = grp2.Id,UserOrGroupId = usrId)); 
-            }
-        }
-        printDebug (debugMethod,debugSection,'-30:permission set group assignments to be added: '+newAssignments);
-        
-       //now we know the ones that need to be added, lets load up the object and insert them
-        try {
-            insert newAssignments;
-        } catch (Exception e) {
-            System.debug(debugMethod+':'+debugSection+'--Exception while try to insert assignments: '+newAssignments+' => '+e.getStackTraceString());
         }
     }
     
@@ -334,40 +350,48 @@ public class AUPDestinationUserService {
         String debugSection = '670';
         String debugMethod  = 'addPermissionSetLiceenses';
         printDebug (debugMethod,debugSection,'-00:inside:permission set groups for user('+usrId+'): '+msgEvent);
-        List<String> existingPsl = msgEvent.Permission_Set_Licenses__c.split('\\|');
+        List<String> existingPsl = new List<String>();
+        try {
+	        existingPsl = msgEvent.Permission_Set_Licenses__c.split('\\|');
+        } catch (Exception e) {
+            System.debug(debugMethod+':'+debugSection+'--permission set licenses input is null or blank!!');
+            return;
+        }
         printDebug (debugMethod,debugSection,'-10:permission sets for user('+usrId+'): '+existingPsl);
         //Take the names and query the actual permission set group object to get the Ids
         List<PermissionSetLicense> pslList = [SELECT Id, DeveloperName, Language, MasterLabel, TotalLicenses, Status, ExpirationDate, UsedLicenses FROM PermissionSetLicense where DeveloperName =: existingPsl];
         Map<Id,PermissionSetLicense> pslMap = new Map<Id,PermissionSetLicense>();
         printDebug (debugMethod,debugSection,'-12:looking for permission set licenses based on the api names: '+pslList);
-        //now, loop through the existing assignments for this user and save off the ones that don't already exist
-        List<PermissionSetLicenseAssign> newAssignments = new List<PermissionSetLicenseAssign>();
-        Map<Id,PermissionSetLicenseAssign> existingAssignmentMap = new Map<Id,PermissionSetLicenseAssign>();
-        for ( PermissionSetLicenseAssign psla :  [SELECT Id, PermissionSetLicenseId, AssigneeId FROM PermissionSetLicenseAssign where AssigneeId =: usrId]) {
-            existingAssignmentMap.put(psla.PermissionSetLicenseId,psla);
-        }
-        printDebug (debugMethod,debugSection,'-22:existing assignments: '+existingAssignmentMap);        
-		//I need to loop through my assignments and if I already have an assignment one of the permission sets I'm concerned about, I need to skip it
-		//If I don't have an assignment for one of my permission sets, I need to add it to the new assignments        
-        for (PermissionSetLicense psl: pslList) {
-           if ((existingAssignmentMap.isEmpty() || existingAssignmentMap.get(psl.Id) == null) && psl.Id != null ) {
-                  newAssignments.add(new PermissionSetLicenseAssign(PermissionSetLicenseId = psl.Id,AssigneeId = usrId)); 
-           }
-		}
-        //There weren't any existing assignments, so we'll add all the new ones
-        if ( newAssignments.size() <= 0 ) {
-            for (PermissionSetLicense psl2: pslList) {
-		        printDebug (debugMethod,debugSection,'-24:looping through PSLs: '+psl2);        
-	            newAssignments.add(new PermissionSetLicenseAssign(PermissionSetLicenseId = psl2.Id,AssigneeId = usrId)); 
+        if ( pslList.size() > 0 ) {
+            //now, loop through the existing assignments for this user and save off the ones that don't already exist
+            List<PermissionSetLicenseAssign> newAssignments = new List<PermissionSetLicenseAssign>();
+            Map<Id,PermissionSetLicenseAssign> existingAssignmentMap = new Map<Id,PermissionSetLicenseAssign>();
+            for ( PermissionSetLicenseAssign psla :  [SELECT Id, PermissionSetLicenseId, AssigneeId FROM PermissionSetLicenseAssign where AssigneeId =: usrId]) {
+                existingAssignmentMap.put(psla.PermissionSetLicenseId,psla);
             }
-        }
-        printDebug (debugMethod,debugSection,'-30:permission set license assignments to be added: '+newAssignments);
-        
-       //now we know the ones that need to be added, lets load up the object and insert them
-        try {
-            insert newAssignments;
-        } catch (Exception e) {
-            System.debug(debugMethod+':'+debugSection+'--Exception while try to insert assignments: '+newAssignments+' => '+e.getStackTraceString());
+            printDebug (debugMethod,debugSection,'-22:existing assignments: '+existingAssignmentMap);        
+            //I need to loop through my assignments and if I already have an assignment one of the permission sets I'm concerned about, I need to skip it
+            //If I don't have an assignment for one of my permission sets, I need to add it to the new assignments        
+            for (PermissionSetLicense psl: pslList) {
+               if ((existingAssignmentMap.isEmpty() || existingAssignmentMap.get(psl.Id) == null) && psl.Id != null ) {
+                      newAssignments.add(new PermissionSetLicenseAssign(PermissionSetLicenseId = psl.Id,AssigneeId = usrId)); 
+               }
+            }
+            //There weren't any existing assignments, so we'll add all the new ones
+            if ( newAssignments.size() <= 0 ) {
+                for (PermissionSetLicense psl2: pslList) {
+                    printDebug (debugMethod,debugSection,'-24:looping through PSLs: '+psl2);        
+                    newAssignments.add(new PermissionSetLicenseAssign(PermissionSetLicenseId = psl2.Id,AssigneeId = usrId)); 
+                }
+            }
+            printDebug (debugMethod,debugSection,'-30:permission set license assignments to be added: '+newAssignments);
+            
+           //now we know the ones that need to be added, lets load up the object and insert them
+            try {
+                insert newAssignments;
+            } catch (Exception e) {
+                System.debug(debugMethod+':'+debugSection+'--Exception while try to insert assignments: '+newAssignments+' => '+e.getStackTraceString());
+            }
         }
     }
     
@@ -376,42 +400,50 @@ public class AUPDestinationUserService {
         String debugSection = '660';
         String debugMethod  = 'addPermissionSets';
         printDebug (debugMethod,debugSection,'-00:inside:permission set groups for user('+usrId+'): '+msgEvent);
-        List<String> existingPs = msgEvent.Permission_Sets__c.split('\\|');
+        List<String> existingPs = new List<String>();
+        try {
+	        existingPs = msgEvent.Permission_Sets__c.split('\\|');
+        } catch (Exception e) {
+            System.debug(debugMethod+':'+debugSection+'--permission set group input is null or blank!!');
+            return;
+        }
         printDebug (debugMethod,debugSection,'-10:permission sets for user('+usrId+'): '+existingPs);
         //Take the names and query the actual permission set group object to get the Ids
         List<PermissionSet> psList = [SELECT Id, Name, Label, LicenseId, ProfileId, IsCustom, Description, Type, PermissionSetGroupId, NamespacePrefix, IsOwnedByProfile 
                                        FROM PermissionSet where Name =: existingPs];
         printDebug (debugMethod,debugSection,'-12:extracted permission sets based on the api names: '+psList);
-        //now, loop through the existing assignments for this user and save off the ones that don't already exist
-        List<PermissionSetAssignment> newAssignments = new List<PermissionSetAssignment>();
-        Map<Id,PermissionSetAssignment> existingAssignmentMap = new Map<Id,PermissionSetAssignment>();
-        for ( PermissionSetAssignment psa :  [SELECT Id, PermissionSetId, AssigneeId FROM PermissionSetAssignment where AssigneeId =: usrId]) {
-            //if ((existingAssignmentMap.isEmpty() || existingAssignmentMap.get(psa.PermissionSetId) == null) ) {
-                existingAssignmentMap.put(psa.PermissionSetId,psa);
-            //}           
-        }
-        printDebug (debugMethod,debugSection,'-22:existing assignments: '+existingAssignmentMap);
-		//I need to loop through my assignments and if I already have an assignment one of the permission sets I'm concerned about, I need to skip it
-		//If I don't have an assignment for one of my permission sets, I need to add it to the new assignments        
-        for (PermissionSet ps: psList) {
-           if ((existingAssignmentMap.isEmpty() || existingAssignmentMap.get(ps.Id) == null) && ps.Id != null ) {
-                  newAssignments.add(new PermissionSetAssignment(PermissionSetId = ps.Id,AssigneeId = usrId)); 
-           }
-		}
-        //There weren't any existing assignments, so we'll add all the new ones
-        if ( newAssignments.size() <= 0 ) {
-            for (PermissionSet ps2: psList) {
-		        printDebug (debugMethod,debugSection,'-24:looping through PSGs: '+ps2);        
-	            newAssignments.add(new PermissionSetAssignment(PermissionSetId = ps2.Id,AssigneeId = usrId)); 
+        if ( psList.size() > 0 ) {
+            //now, loop through the existing assignments for this user and save off the ones that don't already exist
+            List<PermissionSetAssignment> newAssignments = new List<PermissionSetAssignment>();
+            Map<Id,PermissionSetAssignment> existingAssignmentMap = new Map<Id,PermissionSetAssignment>();
+            for ( PermissionSetAssignment psa :  [SELECT Id, PermissionSetId, AssigneeId FROM PermissionSetAssignment where AssigneeId =: usrId]) {
+                //if ((existingAssignmentMap.isEmpty() || existingAssignmentMap.get(psa.PermissionSetId) == null) ) {
+                    existingAssignmentMap.put(psa.PermissionSetId,psa);
+                //}           
             }
-        }
-        printDebug (debugMethod,debugSection,'-30:permission set group assignments to be added: '+newAssignments);
-        
-       //now we know the ones that need to be added, lets load up the object and insert them
-        try {
-            insert newAssignments;
-        } catch (Exception e) {
-            System.debug(debugMethod+':'+debugSection+'--Exception while try to insert assignments: '+newAssignments+' => '+e.getStackTraceString());
+            printDebug (debugMethod,debugSection,'-22:existing assignments: '+existingAssignmentMap);
+            //I need to loop through my assignments and if I already have an assignment one of the permission sets I'm concerned about, I need to skip it
+            //If I don't have an assignment for one of my permission sets, I need to add it to the new assignments        
+            for (PermissionSet ps: psList) {
+               if ((existingAssignmentMap.isEmpty() || existingAssignmentMap.get(ps.Id) == null) && ps.Id != null ) {
+                      newAssignments.add(new PermissionSetAssignment(PermissionSetId = ps.Id,AssigneeId = usrId)); 
+               }
+            }
+            //There weren't any existing assignments, so we'll add all the new ones
+            if ( newAssignments.size() <= 0 ) {
+                for (PermissionSet ps2: psList) {
+                    printDebug (debugMethod,debugSection,'-24:looping through PSGs: '+ps2);        
+                    newAssignments.add(new PermissionSetAssignment(PermissionSetId = ps2.Id,AssigneeId = usrId)); 
+                }
+            }
+            printDebug (debugMethod,debugSection,'-30:permission set group assignments to be added: '+newAssignments);
+            
+           //now we know the ones that need to be added, lets load up the object and insert them
+            try {
+                insert newAssignments;
+            } catch (Exception e) {
+                System.debug(debugMethod+':'+debugSection+'--Exception while try to insert assignments: '+newAssignments+' => '+e.getStackTraceString());
+            }
         }
     }
     
@@ -420,40 +452,48 @@ public class AUPDestinationUserService {
         String debugSection = '650';
         String debugMethod  = 'addPermissionSetGroups';
         printDebug (debugMethod,debugSection,'-00:inside:permission set groups for user('+usrId+'): '+msgEvent);
-        List<String> existingPsgs = msgEvent.Permission_Set_Groups__c.split('\\|');
+        List<String> existingPsgs = new List<String>();
+        try {
+	        existingPsgs = msgEvent.Permission_Set_Groups__c.split('\\|');
+        } catch (Exception e) {
+            System.debug(debugMethod+':'+debugSection+'--permission set group input is null or blank!!');
+            return;
+        }
         printDebug (debugMethod,debugSection,'-10:permission set groups for user('+usrId+'): '+existingPsgs);
         //Take the names and query the actual permission set group object to get the Ids
         List<PermissionSetGroup> psgList = [SELECT Id, IsDeleted, DeveloperName, Language, MasterLabel, NamespacePrefix, Description, Status 
                                        FROM PermissionSetGroup where DeveloperName =: existingPsgs];
-        //now, loop through the existing assignments for this user and save off the ones that don't already exist
-        List<PermissionSetAssignment> newAssignments = new List<PermissionSetAssignment>();
-        Map<Id,PermissionSetAssignment> existingAssignmentMap = new Map<Id,PermissionSetAssignment>();
-        for ( PermissionSetAssignment psa :  [SELECT Id, PermissionSetId, PermissionSetGroupId, AssigneeId FROM PermissionSetAssignment where AssigneeId =: usrId]) {
-            existingAssignmentMap.put(psa.PermissionSetGroupId,psa);
-        }
-        //List<PermissionSetAssignment> existingAssignments = ;
-        printDebug (debugMethod,debugSection,'-22:existing assignments: '+existingAssignmentMap);        
-		//I need to loop through my assignments and if I already have an assignment one of the permission sets I'm concerned about, I need to skip it
-		//If I don't have an assignment for one of my permission sets, I need to add it to the new assignments        
-        for (PermissionSetGroup psg: psgList) {
-           if ((existingAssignmentMap.isEmpty() || existingAssignmentMap.get(psg.Id) == null) && psg.Id != null ) {
-                  newAssignments.add(new PermissionSetAssignment(PermissionSetGroupId = psg.Id,AssigneeId = usrId)); 
-           }
-		}
-        //There weren't any existing assignments, so we'll add all the new ones
-        if ( newAssignments.size() <= 0 ) {
-            for (PermissionSetGroup psg2: psgList) {
-		        printDebug (debugMethod,debugSection,'-24:looping through PSGs: '+psg2);        
-	            newAssignments.add(new PermissionSetAssignment(PermissionSetGroupId = psg2.Id,AssigneeId = usrId)); 
+        if ( psgList.size() > 0 ) {
+            //now, loop through the existing assignments for this user and save off the ones that don't already exist
+            List<PermissionSetAssignment> newAssignments = new List<PermissionSetAssignment>();
+            Map<Id,PermissionSetAssignment> existingAssignmentMap = new Map<Id,PermissionSetAssignment>();
+            for ( PermissionSetAssignment psa :  [SELECT Id, PermissionSetId, PermissionSetGroupId, AssigneeId FROM PermissionSetAssignment where AssigneeId =: usrId]) {
+                existingAssignmentMap.put(psa.PermissionSetGroupId,psa);
             }
-        }
-        printDebug (debugMethod,debugSection,'-30:permission set group assignments to be added: '+newAssignments);
-        
-       //now we know the ones that need to be added, lets load up the object and insert them
-        try {
-            insert newAssignments;
-        } catch (Exception e) {
-            System.debug(debugMethod+':'+debugSection+'--Exception while try to insert assignments: '+newAssignments+' => '+e.getStackTraceString());
+            //List<PermissionSetAssignment> existingAssignments = ;
+            printDebug (debugMethod,debugSection,'-22:existing assignments: '+existingAssignmentMap);        
+            //I need to loop through my assignments and if I already have an assignment one of the permission sets I'm concerned about, I need to skip it
+            //If I don't have an assignment for one of my permission sets, I need to add it to the new assignments        
+            for (PermissionSetGroup psg: psgList) {
+               if ((existingAssignmentMap.isEmpty() || existingAssignmentMap.get(psg.Id) == null) && psg.Id != null ) {
+                      newAssignments.add(new PermissionSetAssignment(PermissionSetGroupId = psg.Id,AssigneeId = usrId)); 
+               }
+            }
+            //There weren't any existing assignments, so we'll add all the new ones
+            if ( newAssignments.size() <= 0 ) {
+                for (PermissionSetGroup psg2: psgList) {
+                    printDebug (debugMethod,debugSection,'-24:looping through PSGs: '+psg2);        
+                    newAssignments.add(new PermissionSetAssignment(PermissionSetGroupId = psg2.Id,AssigneeId = usrId)); 
+                }
+            }
+            printDebug (debugMethod,debugSection,'-30:permission set group assignments to be added: '+newAssignments);
+            
+           //now we know the ones that need to be added, lets load up the object and insert them
+            try {
+                insert newAssignments;
+            } catch (Exception e) {
+                System.debug(debugMethod+':'+debugSection+'--Exception while try to insert assignments: '+newAssignments+' => '+e.getStackTraceString());
+            }
         }
     }
     /*
