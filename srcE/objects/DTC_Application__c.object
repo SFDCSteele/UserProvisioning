@@ -143,190 +143,245 @@
     <allowInChatterGroups>false</allowInChatterGroups>
     <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
     <deploymentStatus>Deployed</deploymentStatus>
+    <description>The DTC Application object contains information regarding each application supported by the VA Salesforce platform.  Including the system owner, responsible for approving new user requests.</description>
     <enableActivities>false</enableActivities>
     <enableBulkApi>true</enableBulkApi>
     <enableFeeds>false</enableFeeds>
-    <enableHistory>true</enableHistory>
+    <enableHistory>false</enableHistory>
     <enableLicensing>false</enableLicensing>
     <enableReports>true</enableReports>
     <enableSearch>true</enableSearch>
     <enableSharing>true</enableSharing>
     <enableStreamingApi>true</enableStreamingApi>
-    <externalSharingModel>ControlledByParent</externalSharingModel>
-    <label>User Setup Instructions</label>
-    <nameField>
-        <label>User Type</label>
-        <trackHistory>false</trackHistory>
-        <type>Text</type>
-    </nameField>
-    <pluralLabel>User Setup Instructions</pluralLabel>
-    <recordTypeTrackHistory>false</recordTypeTrackHistory>
-    <searchLayouts/>
-    <sharingModel>ControlledByParent</sharingModel>
-    <visibility>Public</visibility>
+    <externalSharingModel>ReadWrite</externalSharingModel>
     <fields>
-        <fullName>DTC_Application__c</fullName>
+        <fullName>Actual_Wave__c</fullName>
         <externalId>false</externalId>
-        <label>DTC Application</label>
-        <referenceTo>DTC_Application__c</referenceTo>
-        <relationshipLabel>User Setup Instructions</relationshipLabel>
-        <relationshipName>User_Setup_Instructions</relationshipName>
-        <relationshipOrder>0</relationshipOrder>
-        <reparentableMasterDetail>false</reparentableMasterDetail>
-        <trackHistory>false</trackHistory>
-        <trackTrending>false</trackTrending>
-        <type>MasterDetail</type>
-        <writeRequiresMasterRead>false</writeRequiresMasterRead>
-    </fields>
-    <fields>
-        <fullName>ID__c</fullName>
-        <description>Unique ID</description>
-        <externalId>false</externalId>
-        <label>ID</label>
-        <trackHistory>false</trackHistory>
-        <trackTrending>false</trackTrending>
-        <type>AutoNumber</type>
-    </fields>
-    <fields>
-        <fullName>Installed_Package_License__c</fullName>
-        <externalId>false</externalId>
-        <label>Installed Package License</label>
-        <length>100</length>
+        <label>Actual Wave</label>
+        <precision>18</precision>
         <required>false</required>
-        <trackHistory>false</trackHistory>
+        <scale>0</scale>
         <trackTrending>false</trackTrending>
-        <type>Text</type>
+        <type>Number</type>
         <unique>false</unique>
     </fields>
     <fields>
-        <fullName>License__c</fullName>
+        <fullName>Actual_community__c</fullName>
         <externalId>false</externalId>
-        <label>License Type</label>
-        <length>100</length>
+        <label>Actual community</label>
+        <precision>18</precision>
         <required>false</required>
-        <trackHistory>false</trackHistory>
+        <scale>0</scale>
         <trackTrending>false</trackTrending>
-        <type>Text</type>
+        <type>Number</type>
         <unique>false</unique>
     </fields>
     <fields>
-        <fullName>Need_Related_Contact_Record__c</fullName>
-        <defaultValue>false</defaultValue>
+        <fullName>Actual_force__c</fullName>
         <externalId>false</externalId>
-        <label>Need Related Contact Record?</label>
-        <trackHistory>false</trackHistory>
+        <label>Actual force</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
         <trackTrending>false</trackTrending>
-        <type>Checkbox</type>
+        <type>Number</type>
+        <unique>false</unique>
     </fields>
     <fields>
-        <fullName>Other_Contact_Information__c</fullName>
+        <fullName>Actual_service__c</fullName>
         <externalId>false</externalId>
-        <label>Other Contact Information</label>
-        <length>32768</length>
-        <trackHistory>false</trackHistory>
+        <label>Actual service</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
         <trackTrending>false</trackTrending>
-        <type>Html</type>
-        <visibleLines>25</visibleLines>
+        <type>Number</type>
+        <unique>false</unique>
     </fields>
     <fields>
-        <fullName>Other_Instructions__c</fullName>
+        <fullName>Actualcommunity_plus__c</fullName>
         <externalId>false</externalId>
-        <label>Other Instructions</label>
-        <length>32768</length>
-        <trackHistory>false</trackHistory>
+        <label>Actualcommunity plus</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
         <trackTrending>false</trackTrending>
-        <type>Html</type>
-        <visibleLines>25</visibleLines>
+        <type>Number</type>
+        <unique>false</unique>
     </fields>
     <fields>
-        <fullName>Permission_Sets__c</fullName>
+        <fullName>Application_Description__c</fullName>
+        <description>Textual description of the application</description>
+        <encryptionScheme>None</encryptionScheme>
         <externalId>false</externalId>
-        <label>Permission Sets</label>
+        <inlineHelpText>A brief description of the application</inlineHelpText>
+        <label>Application Description</label>
         <length>32768</length>
-        <trackHistory>false</trackHistory>
         <trackTrending>false</trackTrending>
         <type>LongTextArea</type>
-        <visibleLines>5</visibleLines>
+        <visibleLines>3</visibleLines>
     </fields>
     <fields>
-        <fullName>Profile__c</fullName>
+        <fullName>CF_Profile__c</fullName>
+        <encryptionScheme>None</encryptionScheme>
         <externalId>false</externalId>
         <label>Profile</label>
         <length>100</length>
-        <required>false</required>
-        <trackHistory>false</trackHistory>
+        <required>true</required>
         <trackTrending>false</trackTrending>
         <type>Text</type>
         <unique>false</unique>
     </fields>
     <fields>
-        <fullName>Public_Groups__c</fullName>
+        <fullName>How_to_Create_User_to_give_Access__c</fullName>
+        <encryptionScheme>None</encryptionScheme>
         <externalId>false</externalId>
-        <label>Public Groups</label>
+        <label>How to Create User to give Access</label>
         <length>32768</length>
-        <trackHistory>false</trackHistory>
         <trackTrending>false</trackTrending>
-        <type>LongTextArea</type>
-        <visibleLines>3</visibleLines>
+        <type>Html</type>
+        <visibleLines>25</visibleLines>
     </fields>
     <fields>
-        <fullName>Queues__c</fullName>
+        <fullName>No_of_Licenses_in_Use__c</fullName>
         <externalId>false</externalId>
-        <label>Queues</label>
-        <length>32768</length>
-        <trackHistory>false</trackHistory>
+        <label>No. of Licenses in Use</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
         <trackTrending>false</trackTrending>
-        <type>LongTextArea</type>
-        <visibleLines>3</visibleLines>
+        <type>Number</type>
+        <unique>false</unique>
     </fields>
     <fields>
-        <fullName>Required_Fields_On_Contact__c</fullName>
+        <fullName>Product_Owner__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <description>The owner associated with the application.  This person is responsible for the application and approving user requests to access</description>
         <externalId>false</externalId>
-        <label>Required Fields On Contact Record</label>
-        <length>1000</length>
-        <trackHistory>false</trackHistory>
+        <inlineHelpText>The owner associated with this application.  Responsible for approving new user requests.</inlineHelpText>
+        <label>Product Owner</label>
+        <referenceTo>User</referenceTo>
+        <relationshipName>VA_Applications</relationshipName>
+        <required>false</required>
         <trackTrending>false</trackTrending>
-        <type>LongTextArea</type>
-        <visibleLines>3</visibleLines>
+        <type>Lookup</type>
     </fields>
     <fields>
-        <fullName>Required_Fields_on_User_Record__c</fullName>
+        <fullName>Profile_ID__c</fullName>
+        <description>Used to assign the profile to the user, when we create the flow.</description>
+        <encryptionScheme>None</encryptionScheme>
         <externalId>false</externalId>
-        <label>Required Fields on User Record</label>
-        <length>1000</length>
-        <trackHistory>false</trackHistory>
-        <trackTrending>false</trackTrending>
-        <type>LongTextArea</type>
-        <visibleLines>3</visibleLines>
-    </fields>
-    <fields>
-        <fullName>Requires_ePAS__c</fullName>
-        <defaultValue>false</defaultValue>
-        <externalId>false</externalId>
-        <label>Requires ePAS?</label>
-        <trackHistory>false</trackHistory>
-        <trackTrending>false</trackTrending>
-        <type>Checkbox</type>
-    </fields>
-    <fields>
-        <fullName>Role__c</fullName>
-        <externalId>false</externalId>
-        <label>Role</label>
+        <label>Profile ID</label>
         <length>100</length>
         <required>false</required>
-        <trackHistory>false</trackHistory>
         <trackTrending>false</trackTrending>
         <type>Text</type>
         <unique>false</unique>
     </fields>
-    <recordTypes>
-        <fullName>DTC</fullName>
-        <active>true</active>
-        <label>DTC</label>
-    </recordTypes>
+    <fields>
+        <fullName>Projected_Wave__c</fullName>
+        <externalId>false</externalId>
+        <label>Projected Wave</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Projected_community__c</fullName>
+        <externalId>false</externalId>
+        <label>Projected community</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Projected_community_plus__c</fullName>
+        <externalId>false</externalId>
+        <label>Projected community plus</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Projected_force__c</fullName>
+        <externalId>false</externalId>
+        <label>Projected force</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Projected_service__c</fullName>
+        <externalId>false</externalId>
+        <label>Projected service</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <label>DTC Application</label>
     <listViews>
         <fullName>All</fullName>
         <filterScope>Everything</filterScope>
         <label>All</label>
     </listViews>
+    <listViews>
+        <fullName>All_App_Owners</fullName>
+        <columns>NAME</columns>
+        <columns>Product_Owner__c</columns>
+        <columns>How_to_Create_User_to_give_Access__c</columns>
+        <columns>No_of_Licenses_in_Use__c</columns>
+        <filterScope>Everything</filterScope>
+        <label>All App Owners</label>
+    </listViews>
+    <listViews>
+        <fullName>All_with_Owner</fullName>
+        <columns>NAME</columns>
+        <columns>Product_Owner__c</columns>
+        <columns>How_to_Create_User_to_give_Access__c</columns>
+        <filterScope>Everything</filterScope>
+        <label>All with Owner</label>
+    </listViews>
+    <listViews>
+        <fullName>VA_app_View_All</fullName>
+        <columns>NAME</columns>
+        <columns>OBJECT_ID</columns>
+        <columns>Application_Description__c</columns>
+        <columns>Product_Owner__c</columns>
+        <columns>How_to_Create_User_to_give_Access__c</columns>
+        <columns>OWNER.ALIAS</columns>
+        <columns>OWNER.FIRST_NAME</columns>
+        <columns>OWNER.LAST_NAME</columns>
+        <columns>CREATEDBY_USER.ALIAS</columns>
+        <columns>CREATEDBY_USER</columns>
+        <columns>CREATED_DATE</columns>
+        <columns>UPDATEDBY_USER.ALIAS</columns>
+        <columns>UPDATEDBY_USER</columns>
+        <columns>LAST_UPDATE</columns>
+        <filterScope>Everything</filterScope>
+        <label>VA app View All</label>
+    </listViews>
+    <nameField>
+        <encryptionScheme>None</encryptionScheme>
+        <label>Application Name</label>
+        <type>Text</type>
+    </nameField>
+    <pluralLabel>DTC Applications</pluralLabel>
+    <searchLayouts/>
+    <sharingModel>ReadWrite</sharingModel>
+    <visibility>Public</visibility>
 </CustomObject>

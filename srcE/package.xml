@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Package xmlns="http://soap.sforce.com/2006/04/metadata">
+    <types>
+        <members>DTC_Application__c.Actual_Wave__c</members>
+        <members>DTC_Application__c.Actual_community__c</members>
+        <members>DTC_Application__c.Actual_force__c</members>
+        <members>DTC_Application__c.Actual_service__c</members>
+        <members>DTC_Application__c.Actualcommunity_plus__c</members>
+        <members>DTC_Application__c.Application_Description__c</members>
+        <members>DTC_Application__c.CF_Profile__c</members>
+        <members>DTC_Application__c.How_to_Create_User_to_give_Access__c</members>
+        <members>DTC_Application__c.No_of_Licenses_in_Use__c</members>
+        <members>DTC_Application__c.Product_Owner__c</members>
+        <members>DTC_Application__c.Profile_ID__c</members>
+        <members>DTC_Application__c.Projected_Wave__c</members>
+        <members>DTC_Application__c.Projected_community__c</members>
+        <members>DTC_Application__c.Projected_community_plus__c</members>
+        <members>DTC_Application__c.Projected_force__c</members>
+        <members>DTC_Application__c.Projected_service__c</members>
+        <name>CustomField</name>
+    </types>
+    <types>
+        <members>DTC_Application__c</members>
+        <name>CustomObject</name>
+    </types>
+    <types>
+        <members>DTC_Application__c</members>
+        <name>CustomTab</name>
+    </types>
+    <types>
+        <members>DTC_Application__c-DTC Application Layout</members>
+        <name>Layout</name>
+    </types>
+    <types>
+        <members>DTC_Application__c.All</members>
+        <members>DTC_Application__c.All_App_Owners</members>
+        <members>DTC_Application__c.All_with_Owner</members>
+        <members>DTC_Application__c.VA_app_View_All</members>
+        <name>ListView</name>
+    </types>
+    <version>50.0</version>
+</Package>
