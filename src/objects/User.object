@@ -22,6 +22,10 @@
         <columns>CORE.PROFILE.NAME</columns>
         <columns>MANAGER</columns>
         <filterScope>Everything</filterScope>
+        <filters>
+            <field>SECID__c</field>
+            <operation>notEqual</operation>
+        </filters>
         <label>SECID</label>
     </listViews>
 </CustomObject>

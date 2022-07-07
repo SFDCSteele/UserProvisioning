@@ -153,17 +153,6 @@
     <enableSharing>true</enableSharing>
     <enableStreamingApi>true</enableStreamingApi>
     <externalSharingModel>Private</externalSharingModel>
-    <label>Destination Org</label>
-    <nameField>
-        <displayFormat>DO-{00000}</displayFormat>
-        <label>Destination Org Name</label>
-        <type>AutoNumber</type>
-    </nameField>
-    <pluralLabel>Destination Orgs</pluralLabel>
-    <searchLayouts/>
-    <sharingModel>ReadWrite</sharingModel>
-    <startsWith>Vowel</startsWith>
-    <visibility>Public</visibility>
     <fields>
         <fullName>Dest_Client_Id__c</fullName>
         <externalId>false</externalId>
@@ -224,4 +213,15 @@
         <type>Text</type>
         <unique>false</unique>
     </fields>
+    <label>Destination Org</label>
+    <nameField>
+        <displayFormat>DO-{00000}</displayFormat>
+        <label>Destination Org Name</label>
+        <type>AutoNumber</type>
+    </nameField>
+    <pluralLabel>Destination Orgs</pluralLabel>
+    <searchLayouts/>
+    <sharingModel>ReadWrite</sharingModel>
+    <startsWith>Vowel</startsWith>
+    <visibility>Public</visibility>
 </CustomObject>
