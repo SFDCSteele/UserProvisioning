@@ -849,8 +849,9 @@ public class ADUpdateGroupService {
         String debugMethod  = 'contactExists';
         boolean returnStatus = false;
         
+        printDebug (debugMethod,debugSection,'-10.2:lookin for contact: passedSECID: '+passedSECID);
         List<Contact> cnt = [Select Id,Name from Contact where SECID__c =: passedSECID];
-        printDebug (debugMethod,debugSection,'-10:lookin for contact: passedSECID: '+passedSECID+' found: '+cnt.size());
+        printDebug (debugMethod,debugSection,'-10.4:found contact: passedSECID: '+passedSECID+' found: '+cnt.size());
         if (cnt.size() > 0 ) {
             returnStatus = true;
         }

@@ -8,27 +8,18 @@
         <layoutColumns>
             <layoutItems>
                 <behavior>Required</behavior>
-                <field>Name</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Application_Description__c</field>
-            </layoutItems>
-        </layoutColumns>
-        <layoutColumns>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Live_Status__c</field>
+                <field>Managed_Package__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Required</behavior>
-                <field>CF_Profile__c</field>
+                <field>DTC_Application__c</field>
             </layoutItems>
             <layoutItems>
-                <behavior>Edit</behavior>
-                <field>OwnerId</field>
+                <behavior>Readonly</behavior>
+                <field>Name</field>
             </layoutItems>
         </layoutColumns>
+        <layoutColumns/>
         <style>TwoColumnsTopToBottom</style>
     </layoutSections>
     <layoutSections>
@@ -51,43 +42,21 @@
         <style>TwoColumnsTopToBottom</style>
     </layoutSections>
     <layoutSections>
-        <customLabel>true</customLabel>
+        <customLabel>false</customLabel>
         <detailHeading>false</detailHeading>
         <editHeading>true</editHeading>
-        <label>Custom Links</label>
         <layoutColumns/>
         <layoutColumns/>
         <layoutColumns/>
         <style>CustomLinks</style>
     </layoutSections>
     <miniLayout>
-        <fields>CF_Profile__c</fields>
+        <fields>Managed_Package__c</fields>
+        <fields>DTC_Application__c</fields>
     </miniLayout>
-    <relatedLists>
-        <fields>NAME</fields>
-        <fields>Destination_Org_License__c</fields>
-        <fields>Destination_Org_Profile__c</fields>
-        <fields>Destination_Org_Role__c</fields>
-        <fields>Is_Active__c</fields>
-        <relatedList>DTC_Application_Level__c.DTC_Application__c</relatedList>
-    </relatedLists>
-    <relatedLists>
-        <fields>NAME</fields>
-        <fields>DTC_Application_Level__c</fields>
-        <fields>Approval_Status__c</fields>
-        <fields>First_Name__c</fields>
-        <fields>Last_Name__c</fields>
-        <relatedList>CF_Application_Access__c.DTC_Application__c</relatedList>
-    </relatedLists>
     <showEmailCheckbox>false</showEmailCheckbox>
     <showHighlightsPanel>false</showHighlightsPanel>
     <showInteractionLogPanel>false</showInteractionLogPanel>
     <showRunAssignmentRulesCheckbox>false</showRunAssignmentRulesCheckbox>
     <showSubmitAndAttachButton>false</showSubmitAndAttachButton>
-    <summaryLayout>
-        <masterLabel>00h4x000005gN9p</masterLabel>
-        <sizeX>4</sizeX>
-        <sizeY>0</sizeY>
-        <summaryLayoutStyle>Default</summaryLayoutStyle>
-    </summaryLayout>
 </Layout>

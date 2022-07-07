@@ -4,15 +4,13 @@
         <headerColor>#0070D2</headerColor>
         <shouldOverrideOrgTheme>false</shouldOverrideOrgTheme>
     </brand>
-    <description>This app allows the building of Applications, application levels, and the application access records to create users</description>
     <formFactors>Small</formFactors>
     <formFactors>Large</formFactors>
     <isNavAutoTempTabsDisabled>false</isNavAutoTempTabsDisabled>
     <isNavPersonalizationDisabled>false</isNavPersonalizationDisabled>
     <isNavTabPersistenceDisabled>false</isNavTabPersistenceDisabled>
-    <label>Core Functionality</label>
+    <label>AppBrand</label>
     <navType>Standard</navType>
-    <tabs>DTC_Application__c</tabs>
     <uiType>Lightning</uiType>
-    <utilityBar>Core_Functionality_UtilityBar</utilityBar>
+    <utilityBar>AppBrand_UtilityBar</utilityBar>
 </CustomApplication>

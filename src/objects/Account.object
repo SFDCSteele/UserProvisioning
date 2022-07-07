@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fields>
+        <fullName>CF_ContactCount__c</fullName>
+        <externalId>false</externalId>
+        <label>No Of Employee</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>CF_Group_ID__c</fullName>
+        <externalId>true</externalId>
+        <label>VIEWS Group ID</label>
+        <length>18</length>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>CF_Group_Name__c</fullName>
+        <description>This is the Formal field for the text field</description>
+        <externalId>false</externalId>
+        <formula>LEFT(Name,40)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Group Queue Name</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>CF_Mail_Code__c</fullName>
+        <description>This field is used to generate a FOM</description>
+        <externalId>false</externalId>
+        <inlineHelpText>This is the code assigned to VA Organizations for routing mail.</inlineHelpText>
+        <label>Mail Code</label>
+        <length>20</length>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>true</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>CF_Nested_Group_ID__c</fullName>
+        <externalId>true</externalId>
+        <label>VIEWS Nested Group ID</label>
+        <length>18</length>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>CF_Office_Inactive__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Check the box to mark the office as inactive</description>
+        <externalId>false</externalId>
+        <label>Office Inactive</label>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>true</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>CF_Queue_ID__c</fullName>
+        <externalId>true</externalId>
+        <label>VIEWS Queue ID</label>
+        <length>18</length>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>CF_VIEWS_Account__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>This field is used to generate a FOM</description>
+        <externalId>false</externalId>
+        <label>VIEWS Account</label>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>true</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>VA_Organization_Acronym__c</fullName>
+        <description>This field is a picklist field that contains the 17 organization acronyms for the VA.  This field is visible and newer than the original that persists off the page layout, but is updated by this picklist field by workflow so it can continue to be used for referenced flows, code and processes.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The acronym of the VA Organization that is related to this record&apos;s Account name. 
+(E.g. OSVA-00 Office of the Secretary&apos;s VA organization acronym is OSVA.)</inlineHelpText>
+        <label>VA Organization Acronym</label>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <type>Picklist</type>
+        <valueSet>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>BVA</fullName>
+                    <default>false</default>
+                    <label>BVA</label>
+                </value>
+                <value>
+                    <fullName>HRA</fullName>
+                    <default>false</default>
+                    <label>HRA</label>
+                </value>
+                <value>
+                    <fullName>NCA</fullName>
+                    <default>false</default>
+                    <label>NCA</label>
+                </value>
+                <value>
+                    <fullName>OALC</fullName>
+                    <default>false</default>
+                    <label>OALC</label>
+                </value>
+                <value>
+                    <fullName>OAWP</fullName>
+                    <default>false</default>
+                    <label>OAWP</label>
+                </value>
+                <value>
+                    <fullName>OCLA</fullName>
+                    <default>false</default>
+                    <label>OCLA</label>
+                </value>
+                <value>
+                    <fullName>OEI</fullName>
+                    <default>false</default>
+                    <label>OEI</label>
+                </value>
+                <value>
+                    <fullName>OGC</fullName>
+                    <default>false</default>
+                    <label>OGC</label>
+                </value>
+                <value>
+                    <fullName>OI&amp;T</fullName>
+                    <default>false</default>
+                    <label>OIT</label>
+                </value>
+                <value>
+                    <fullName>OIG</fullName>
+                    <default>false</default>
+                    <label>OIG</label>
+                </value>
+                <value>
+                    <fullName>OM</fullName>
+                    <default>false</default>
+                    <label>OM</label>
+                </value>
+                <value>
+                    <fullName>OPIA</fullName>
+                    <default>false</default>
+                    <label>OPIA</label>
+                </value>
+                <value>
+                    <fullName>OSP</fullName>
+                    <default>false</default>
+                    <label>OSP</label>
+                </value>
+                <value>
+                    <fullName>OSVA</fullName>
+                    <default>false</default>
+                    <label>OSVA</label>
+                </value>
+                <value>
+                    <fullName>VBA</fullName>
+                    <default>false</default>
+                    <label>VBA</label>
+                </value>
+                <value>
+                    <fullName>VEO</fullName>
+                    <default>false</default>
+                    <label>VEO</label>
+                </value>
+                <value>
+                    <fullName>VHA</fullName>
+                    <default>false</default>
+                    <label>VHA</label>
+                </value>
+                <value>
+                    <fullName>GAL</fullName>
+                    <default>false</default>
+                    <label>GAL</label>
+                </value>
+                <value>
+                    <fullName>ADM</fullName>
+                    <default>false</default>
+                    <label>ADM</label>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>VIEWS_SpringCM_Group_Href__c</fullName>
+        <caseSensitive>false</caseSensitive>
+        <description>Href of the SpringCM Group associated to thi account</description>
+        <externalId>true</externalId>
+        <label>VIEWS SpringCM Group Href</label>
+        <length>255</length>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>true</unique>
+    </fields>
+</CustomObject>

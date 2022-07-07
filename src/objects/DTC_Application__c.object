@@ -128,14 +128,11 @@
     </actionOverrides>
     <actionOverrides>
         <actionName>View</actionName>
-        <comment>Action override created by Lightning App Builder during activation.</comment>
-        <content>DTC_Application</content>
-        <formFactor>Large</formFactor>
-        <skipRecordTypeSelect>false</skipRecordTypeSelect>
-        <type>Flexipage</type>
+        <type>Default</type>
     </actionOverrides>
     <actionOverrides>
         <actionName>View</actionName>
+        <formFactor>Large</formFactor>
         <type>Default</type>
     </actionOverrides>
     <actionOverrides>
@@ -144,62 +141,36 @@
         <type>Default</type>
     </actionOverrides>
     <allowInChatterGroups>false</allowInChatterGroups>
-    <compactLayoutAssignment>Compact_Layout</compactLayoutAssignment>
+    <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
+    <compactLayouts>
+        <fullName>Compact_Layout</fullName>
+        <fields>Name</fields>
+        <fields>Product_Owner__c</fields>
+        <fields>Live_Status__c</fields>
+        <fields>No_of_Licenses_in_Use__c</fields>
+        <fields>Go_Live_Date__c</fields>
+        <fields>Org__c</fields>
+        <fields>Has_PII_PHI__c</fields>
+        <fields>ContractIntegrator__c</fields>
+        <label>Compact Layout</label>
+    </compactLayouts>
     <deploymentStatus>Deployed</deploymentStatus>
-    <description>The DTC Module object contains information regarding each application supported by the VA Salesforce platform.  Including the system owner, responsible for approving new user requests.</description>
+    <description>The DTC Application object contains information regarding each application supported by the VA Salesforce platform.  Including the system owner, responsible for approving new user requests.</description>
     <enableActivities>false</enableActivities>
     <enableBulkApi>true</enableBulkApi>
-    <enableFeeds>true</enableFeeds>
+    <enableFeeds>false</enableFeeds>
     <enableHistory>false</enableHistory>
     <enableLicensing>false</enableLicensing>
     <enableReports>true</enableReports>
     <enableSearch>true</enableSearch>
     <enableSharing>true</enableSharing>
     <enableStreamingApi>true</enableStreamingApi>
-    <externalSharingModel>Private</externalSharingModel>
-    <label>DTC Application</label>
-    <nameField>
-        <label>Application Name</label>
-        <trackFeedHistory>false</trackFeedHistory>
-        <type>Text</type>
-    </nameField>
-    <pluralLabel>DTC Applications</pluralLabel>
-    <searchLayouts>
-        <customTabListAdditionalFields>Application_Description__c</customTabListAdditionalFields>
-        <customTabListAdditionalFields>Product_Owner__c</customTabListAdditionalFields>
-        <customTabListAdditionalFields>Org__c</customTabListAdditionalFields>
-        <customTabListAdditionalFields>Live_Status__c</customTabListAdditionalFields>
-        <customTabListAdditionalFields>ContractIntegrator__c</customTabListAdditionalFields>
-        <lookupDialogsAdditionalFields>Application_Description__c</lookupDialogsAdditionalFields>
-        <lookupDialogsAdditionalFields>Product_Owner__c</lookupDialogsAdditionalFields>
-        <lookupDialogsAdditionalFields>Org__c</lookupDialogsAdditionalFields>
-        <lookupDialogsAdditionalFields>Live_Status__c</lookupDialogsAdditionalFields>
-        <lookupDialogsAdditionalFields>ContractIntegrator__c</lookupDialogsAdditionalFields>
-        <lookupPhoneDialogsAdditionalFields>Application_Description__c</lookupPhoneDialogsAdditionalFields>
-        <lookupPhoneDialogsAdditionalFields>Product_Owner__c</lookupPhoneDialogsAdditionalFields>
-        <lookupPhoneDialogsAdditionalFields>Org__c</lookupPhoneDialogsAdditionalFields>
-        <lookupPhoneDialogsAdditionalFields>Live_Status__c</lookupPhoneDialogsAdditionalFields>
-        <lookupPhoneDialogsAdditionalFields>ContractIntegrator__c</lookupPhoneDialogsAdditionalFields>
-        <searchFilterFields>NAME</searchFilterFields>
-        <searchFilterFields>Product_Owner__c</searchFilterFields>
-        <searchFilterFields>Org__c</searchFilterFields>
-        <searchFilterFields>Live_Status__c</searchFilterFields>
-        <searchFilterFields>ContractIntegrator__c</searchFilterFields>
-        <searchResultsAdditionalFields>Application_Description__c</searchResultsAdditionalFields>
-        <searchResultsAdditionalFields>Product_Owner__c</searchResultsAdditionalFields>
-        <searchResultsAdditionalFields>Org__c</searchResultsAdditionalFields>
-        <searchResultsAdditionalFields>Live_Status__c</searchResultsAdditionalFields>
-        <searchResultsAdditionalFields>ContractIntegrator__c</searchResultsAdditionalFields>
-        <searchResultsAdditionalFields>UPDATEDBY_USER</searchResultsAdditionalFields>
-    </searchLayouts>
-    <sharingModel>ReadWrite</sharingModel>
-    <visibility>Public</visibility>
+    <externalSharingModel>ReadWrite</externalSharingModel>
     <fields>
         <fullName>AE_Lead_Email__c</fullName>
         <externalId>false</externalId>
         <label>AE Lead Email</label>
         <required>false</required>
-        <trackFeedHistory>false</trackFeedHistory>
         <trackTrending>false</trackTrending>
         <type>Email</type>
         <unique>false</unique>
@@ -210,7 +181,6 @@
         <label>AE Lead Name</label>
         <length>255</length>
         <required>false</required>
-        <trackFeedHistory>false</trackFeedHistory>
         <trackTrending>false</trackTrending>
         <type>Text</type>
         <unique>false</unique>
@@ -224,7 +194,6 @@
         <relationshipLabel>DTC Applications</relationshipLabel>
         <relationshipName>DTC_Applications</relationshipName>
         <required>false</required>
-        <trackFeedHistory>false</trackFeedHistory>
         <trackTrending>false</trackTrending>
         <type>Lookup</type>
     </fields>
@@ -235,7 +204,6 @@
         <precision>18</precision>
         <required>false</required>
         <scale>0</scale>
-        <trackFeedHistory>false</trackFeedHistory>
         <trackTrending>false</trackTrending>
         <type>Number</type>
         <unique>false</unique>
@@ -247,7 +215,6 @@
         <precision>18</precision>
         <required>false</required>
         <scale>0</scale>
-        <trackFeedHistory>false</trackFeedHistory>
         <trackTrending>false</trackTrending>
         <type>Number</type>
         <unique>false</unique>
@@ -259,7 +226,6 @@
         <precision>18</precision>
         <required>false</required>
         <scale>0</scale>
-        <trackFeedHistory>false</trackFeedHistory>
         <trackTrending>false</trackTrending>
         <type>Number</type>
         <unique>false</unique>
@@ -271,7 +237,6 @@
         <precision>18</precision>
         <required>false</required>
         <scale>0</scale>
-        <trackFeedHistory>false</trackFeedHistory>
         <trackTrending>false</trackTrending>
         <type>Number</type>
         <unique>false</unique>
@@ -283,7 +248,6 @@
         <precision>18</precision>
         <required>false</required>
         <scale>0</scale>
-        <trackFeedHistory>false</trackFeedHistory>
         <trackTrending>false</trackTrending>
         <type>Number</type>
         <unique>false</unique>
@@ -295,7 +259,6 @@
         <precision>18</precision>
         <required>false</required>
         <scale>0</scale>
-        <trackFeedHistory>false</trackFeedHistory>
         <trackTrending>false</trackTrending>
         <type>Number</type>
         <unique>false</unique>
@@ -308,7 +271,6 @@
         <precision>18</precision>
         <required>false</required>
         <scale>0</scale>
-        <trackFeedHistory>false</trackFeedHistory>
         <trackTrending>false</trackTrending>
         <type>Number</type>
         <unique>false</unique>
@@ -320,7 +282,6 @@
         <precision>18</precision>
         <required>false</required>
         <scale>0</scale>
-        <trackFeedHistory>false</trackFeedHistory>
         <trackTrending>false</trackTrending>
         <type>Number</type>
         <unique>false</unique>
@@ -333,7 +294,6 @@
         <precision>18</precision>
         <required>false</required>
         <scale>0</scale>
-        <trackFeedHistory>false</trackFeedHistory>
         <trackTrending>false</trackTrending>
         <type>Number</type>
         <unique>false</unique>
@@ -345,7 +305,17 @@
         <precision>18</precision>
         <required>false</required>
         <scale>0</scale>
-        <trackFeedHistory>false</trackFeedHistory>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Actual_Wave__c</fullName>
+        <externalId>false</externalId>
+        <label>Actual Wave</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
         <trackTrending>false</trackTrending>
         <type>Number</type>
         <unique>false</unique>
@@ -353,11 +323,10 @@
     <fields>
         <fullName>Actual_community__c</fullName>
         <externalId>false</externalId>
-        <label>Actual Community</label>
+        <label>Actual community</label>
         <precision>18</precision>
         <required>false</required>
         <scale>0</scale>
-        <trackFeedHistory>false</trackFeedHistory>
         <trackTrending>false</trackTrending>
         <type>Number</type>
         <unique>false</unique>
@@ -365,11 +334,10 @@
     <fields>
         <fullName>Actual_force__c</fullName>
         <externalId>false</externalId>
-        <label>Actual Platform</label>
+        <label>Actual force</label>
         <precision>18</precision>
         <required>false</required>
         <scale>0</scale>
-        <trackFeedHistory>false</trackFeedHistory>
         <trackTrending>false</trackTrending>
         <type>Number</type>
         <unique>false</unique>
@@ -377,11 +345,10 @@
     <fields>
         <fullName>Actual_service__c</fullName>
         <externalId>false</externalId>
-        <label>Actual Service Cloud</label>
+        <label>Actual service</label>
         <precision>18</precision>
         <required>false</required>
         <scale>0</scale>
-        <trackFeedHistory>false</trackFeedHistory>
         <trackTrending>false</trackTrending>
         <type>Number</type>
         <unique>false</unique>
@@ -389,11 +356,10 @@
     <fields>
         <fullName>Actualcommunity_plus__c</fullName>
         <externalId>false</externalId>
-        <label>Actual Community Plus</label>
+        <label>Actualcommunity plus</label>
         <precision>18</precision>
         <required>false</required>
         <scale>0</scale>
-        <trackFeedHistory>false</trackFeedHistory>
         <trackTrending>false</trackTrending>
         <type>Number</type>
         <unique>false</unique>
@@ -405,7 +371,6 @@
         <inlineHelpText>A brief description of the application</inlineHelpText>
         <label>Application Description</label>
         <length>32768</length>
-        <trackFeedHistory>false</trackFeedHistory>
         <trackTrending>false</trackTrending>
         <type>LongTextArea</type>
         <visibleLines>3</visibleLines>
@@ -418,7 +383,6 @@
         <referenceTo>User</referenceTo>
         <relationshipName>DTC_Applications6</relationshipName>
         <required>false</required>
-        <trackFeedHistory>true</trackFeedHistory>
         <trackTrending>false</trackTrending>
         <type>Lookup</type>
     </fields>
@@ -430,7 +394,6 @@
         <referenceTo>Contact</referenceTo>
         <relationshipName>DTC_Applications</relationshipName>
         <required>false</required>
-        <trackFeedHistory>true</trackFeedHistory>
         <trackTrending>false</trackTrending>
         <type>Lookup</type>
     </fields>
@@ -441,7 +404,6 @@
         <label>Business Line</label>
         <length>255</length>
         <required>false</required>
-        <trackFeedHistory>true</trackFeedHistory>
         <trackTrending>false</trackTrending>
         <type>Text</type>
         <unique>false</unique>
@@ -451,8 +413,7 @@
         <externalId>false</externalId>
         <label>Profile</label>
         <length>100</length>
-        <required>false</required>
-        <trackFeedHistory>true</trackFeedHistory>
+        <required>true</required>
         <trackTrending>false</trackTrending>
         <type>Text</type>
         <unique>false</unique>
@@ -462,7 +423,6 @@
         <externalId>false</externalId>
         <label>Contract/Integrator</label>
         <required>false</required>
-        <trackFeedHistory>true</trackFeedHistory>
         <trackTrending>false</trackTrending>
         <type>Picklist</type>
         <valueSet>
@@ -528,7 +488,6 @@
         <label>Deploy Merge Branch</label>
         <length>25</length>
         <required>false</required>
-        <trackFeedHistory>false</trackFeedHistory>
         <trackTrending>false</trackTrending>
         <type>Text</type>
         <unique>false</unique>
@@ -541,7 +500,6 @@
         <label>Deploy Symbol</label>
         <length>10</length>
         <required>false</required>
-        <trackFeedHistory>false</trackFeedHistory>
         <trackTrending>false</trackTrending>
         <type>Text</type>
         <unique>false</unique>
@@ -552,7 +510,6 @@
         <label>Dest Org Ext</label>
         <length>10</length>
         <required>false</required>
-        <trackFeedHistory>false</trackFeedHistory>
         <trackTrending>false</trackTrending>
         <type>Text</type>
         <unique>false</unique>
@@ -562,7 +519,6 @@
         <externalId>false</externalId>
         <label>Focus Area</label>
         <required>false</required>
-        <trackFeedHistory>true</trackFeedHistory>
         <trackTrending>false</trackTrending>
         <type>MultiselectPicklist</type>
         <valueSet>
@@ -608,7 +564,6 @@
         <externalId>false</externalId>
         <label>Go-Live Date Projected</label>
         <required>false</required>
-        <trackFeedHistory>true</trackFeedHistory>
         <trackTrending>false</trackTrending>
         <type>Date</type>
     </fields>
@@ -617,7 +572,6 @@
         <externalId>false</externalId>
         <label>Go Live Date</label>
         <required>false</required>
-        <trackFeedHistory>true</trackFeedHistory>
         <trackTrending>false</trackTrending>
         <type>Date</type>
     </fields>
@@ -626,7 +580,6 @@
         <externalId>false</externalId>
         <label>Has PII/PHI?</label>
         <required>false</required>
-        <trackFeedHistory>true</trackFeedHistory>
         <trackTrending>false</trackTrending>
         <type>Picklist</type>
         <valueSet>
@@ -651,7 +604,6 @@
         <externalId>false</externalId>
         <label>Health</label>
         <required>false</required>
-        <trackFeedHistory>false</trackFeedHistory>
         <trackTrending>false</trackTrending>
         <type>Picklist</type>
         <valueSet>
@@ -686,7 +638,6 @@
         <externalId>false</externalId>
         <label>How to Create User to give Access</label>
         <length>32768</length>
-        <trackFeedHistory>false</trackFeedHistory>
         <trackTrending>false</trackTrending>
         <type>Html</type>
         <visibleLines>25</visibleLines>
@@ -697,7 +648,6 @@
         <label>Hub Org Ext</label>
         <length>10</length>
         <required>false</required>
-        <trackFeedHistory>false</trackFeedHistory>
         <trackTrending>false</trackTrending>
         <type>Text</type>
         <unique>false</unique>
@@ -707,7 +657,6 @@
         <externalId>false</externalId>
         <label>Implementation Start Date</label>
         <required>false</required>
-        <trackFeedHistory>false</trackFeedHistory>
         <trackTrending>false</trackTrending>
         <type>Date</type>
     </fields>
@@ -716,7 +665,6 @@
         <externalId>false</externalId>
         <label>Status</label>
         <required>false</required>
-        <trackFeedHistory>false</trackFeedHistory>
         <trackTrending>false</trackTrending>
         <type>Picklist</type>
         <valueSet>
@@ -763,7 +711,6 @@
         <precision>18</precision>
         <required>false</required>
         <scale>0</scale>
-        <trackFeedHistory>false</trackFeedHistory>
         <trackTrending>false</trackTrending>
         <type>Number</type>
         <unique>false</unique>
@@ -773,7 +720,6 @@
         <externalId>false</externalId>
         <label>OI&amp;T PM Email</label>
         <required>false</required>
-        <trackFeedHistory>true</trackFeedHistory>
         <trackTrending>false</trackTrending>
         <type>Email</type>
         <unique>false</unique>
@@ -784,7 +730,6 @@
         <label>OI&amp;T PM Name</label>
         <length>255</length>
         <required>false</required>
-        <trackFeedHistory>true</trackFeedHistory>
         <trackTrending>false</trackTrending>
         <type>Text</type>
         <unique>false</unique>
@@ -794,7 +739,6 @@
         <externalId>false</externalId>
         <label>Org</label>
         <required>false</required>
-        <trackFeedHistory>false</trackFeedHistory>
         <trackTrending>false</trackTrending>
         <type>Picklist</type>
         <valueSet>
@@ -852,7 +796,6 @@
         <label>Overall User Creation Apex</label>
         <length>40</length>
         <required>false</required>
-        <trackFeedHistory>false</trackFeedHistory>
         <trackTrending>false</trackTrending>
         <type>Text</type>
         <unique>false</unique>
@@ -864,7 +807,6 @@
         <label>Overall User Creation Flow</label>
         <length>40</length>
         <required>false</required>
-        <trackFeedHistory>false</trackFeedHistory>
         <trackTrending>false</trackTrending>
         <type>Text</type>
         <unique>false</unique>
@@ -877,7 +819,6 @@
         <referenceTo>User</referenceTo>
         <relationshipName>DTC_Applications4</relationshipName>
         <required>false</required>
-        <trackFeedHistory>true</trackFeedHistory>
         <trackTrending>false</trackTrending>
         <type>Lookup</type>
     </fields>
@@ -889,7 +830,6 @@
         <referenceTo>User</referenceTo>
         <relationshipName>DTC_Applications5</relationshipName>
         <required>false</required>
-        <trackFeedHistory>true</trackFeedHistory>
         <trackTrending>false</trackTrending>
         <type>Lookup</type>
     </fields>
@@ -901,7 +841,6 @@
         <referenceTo>User</referenceTo>
         <relationshipName>DTC_Applications</relationshipName>
         <required>false</required>
-        <trackFeedHistory>false</trackFeedHistory>
         <trackTrending>false</trackTrending>
         <type>Lookup</type>
     </fields>
@@ -913,7 +852,6 @@
         <referenceTo>User</referenceTo>
         <relationshipName>DTC_Applications2</relationshipName>
         <required>false</required>
-        <trackFeedHistory>true</trackFeedHistory>
         <trackTrending>false</trackTrending>
         <type>Lookup</type>
     </fields>
@@ -922,7 +860,6 @@
         <externalId>false</externalId>
         <label>Priority</label>
         <required>false</required>
-        <trackFeedHistory>false</trackFeedHistory>
         <trackTrending>false</trackTrending>
         <type>Picklist</type>
         <valueSet>
@@ -955,14 +892,13 @@
     <fields>
         <fullName>Product_Owner__c</fullName>
         <deleteConstraint>SetNull</deleteConstraint>
-        <description>The VA approver associated with the application.  This person is responsible for the application and approving user requests to access</description>
+        <description>The owner associated with the application.  This person is responsible for the application and approving user requests to access</description>
         <externalId>false</externalId>
-        <inlineHelpText>The VA approver associated with this application.  Responsible for approving new user requests.</inlineHelpText>
-        <label>Primary Approver</label>
+        <inlineHelpText>The owner associated with this application.  Responsible for approving new user requests.</inlineHelpText>
+        <label>Product Owner</label>
         <referenceTo>User</referenceTo>
         <relationshipName>VA_Applications</relationshipName>
         <required>false</required>
-        <trackFeedHistory>true</trackFeedHistory>
         <trackTrending>false</trackTrending>
         <type>Lookup</type>
     </fields>
@@ -973,7 +909,6 @@
         <label>Profile ID</label>
         <length>100</length>
         <required>false</required>
-        <trackFeedHistory>false</trackFeedHistory>
         <trackTrending>false</trackTrending>
         <type>Text</type>
         <unique>false</unique>
@@ -985,7 +920,6 @@
         <precision>18</precision>
         <required>false</required>
         <scale>0</scale>
-        <trackFeedHistory>false</trackFeedHistory>
         <trackTrending>false</trackTrending>
         <type>Number</type>
         <unique>false</unique>
@@ -997,7 +931,6 @@
         <precision>18</precision>
         <required>false</required>
         <scale>0</scale>
-        <trackFeedHistory>false</trackFeedHistory>
         <trackTrending>false</trackTrending>
         <type>Number</type>
         <unique>false</unique>
@@ -1009,7 +942,6 @@
         <precision>18</precision>
         <required>false</required>
         <scale>0</scale>
-        <trackFeedHistory>false</trackFeedHistory>
         <trackTrending>false</trackTrending>
         <type>Number</type>
         <unique>false</unique>
@@ -1021,7 +953,6 @@
         <precision>18</precision>
         <required>false</required>
         <scale>0</scale>
-        <trackFeedHistory>false</trackFeedHistory>
         <trackTrending>false</trackTrending>
         <type>Number</type>
         <unique>false</unique>
@@ -1033,7 +964,6 @@
         <precision>18</precision>
         <required>false</required>
         <scale>0</scale>
-        <trackFeedHistory>false</trackFeedHistory>
         <trackTrending>false</trackTrending>
         <type>Number</type>
         <unique>false</unique>
@@ -1045,7 +975,6 @@
         <precision>18</precision>
         <required>false</required>
         <scale>0</scale>
-        <trackFeedHistory>false</trackFeedHistory>
         <trackTrending>false</trackTrending>
         <type>Number</type>
         <unique>false</unique>
@@ -1057,7 +986,6 @@
         <precision>18</precision>
         <required>false</required>
         <scale>0</scale>
-        <trackFeedHistory>false</trackFeedHistory>
         <trackTrending>false</trackTrending>
         <type>Number</type>
         <unique>false</unique>
@@ -1069,7 +997,6 @@
         <precision>18</precision>
         <required>false</required>
         <scale>0</scale>
-        <trackFeedHistory>false</trackFeedHistory>
         <trackTrending>false</trackTrending>
         <type>Number</type>
         <unique>false</unique>
@@ -1081,7 +1008,17 @@
         <precision>18</precision>
         <required>false</required>
         <scale>0</scale>
-        <trackFeedHistory>false</trackFeedHistory>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Projected_Wave__c</fullName>
+        <externalId>false</externalId>
+        <label>Projected Wave</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
         <trackTrending>false</trackTrending>
         <type>Number</type>
         <unique>false</unique>
@@ -1089,11 +1026,10 @@
     <fields>
         <fullName>Projected_community__c</fullName>
         <externalId>false</externalId>
-        <label>Projected Community</label>
+        <label>Projected community</label>
         <precision>18</precision>
         <required>false</required>
         <scale>0</scale>
-        <trackFeedHistory>false</trackFeedHistory>
         <trackTrending>false</trackTrending>
         <type>Number</type>
         <unique>false</unique>
@@ -1101,11 +1037,32 @@
     <fields>
         <fullName>Projected_community_plus__c</fullName>
         <externalId>false</externalId>
-        <label>Projected Community Plus</label>
+        <label>Projected community plus</label>
         <precision>18</precision>
         <required>false</required>
         <scale>0</scale>
-        <trackFeedHistory>false</trackFeedHistory>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Projected_force__c</fullName>
+        <externalId>false</externalId>
+        <label>Projected force</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Projected_service__c</fullName>
+        <externalId>false</externalId>
+        <label>Projected service</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
         <trackTrending>false</trackTrending>
         <type>Number</type>
         <unique>false</unique>
@@ -1117,7 +1074,6 @@
         <precision>18</precision>
         <required>false</required>
         <scale>0</scale>
-        <trackFeedHistory>false</trackFeedHistory>
         <trackTrending>false</trackTrending>
         <type>Number</type>
         <unique>false</unique>
@@ -1127,7 +1083,6 @@
         <externalId>false</externalId>
         <label>ROI Details</label>
         <length>32768</length>
-        <trackFeedHistory>false</trackFeedHistory>
         <trackTrending>false</trackTrending>
         <type>Html</type>
         <visibleLines>25</visibleLines>
@@ -1142,7 +1097,6 @@
         <relationshipLabel>DTC Applications (Secondary Approver)</relationshipLabel>
         <relationshipName>DTC_Applications1</relationshipName>
         <required>false</required>
-        <trackFeedHistory>false</trackFeedHistory>
         <trackTrending>false</trackTrending>
         <type>Lookup</type>
     </fields>
@@ -1154,7 +1108,6 @@
         <referenceTo>User</referenceTo>
         <relationshipName>DTC_Applications1</relationshipName>
         <required>false</required>
-        <trackFeedHistory>true</trackFeedHistory>
         <trackTrending>false</trackTrending>
         <type>Lookup</type>
     </fields>
@@ -1166,7 +1119,6 @@
         <referenceTo>User</referenceTo>
         <relationshipName>DTC_Applications3</relationshipName>
         <required>false</required>
-        <trackFeedHistory>true</trackFeedHistory>
         <trackTrending>false</trackTrending>
         <type>Lookup</type>
     </fields>
@@ -1175,7 +1127,6 @@
         <externalId>false</externalId>
         <label>Size</label>
         <required>false</required>
-        <trackFeedHistory>false</trackFeedHistory>
         <trackTrending>false</trackTrending>
         <type>Picklist</type>
         <valueSet>
@@ -1210,7 +1161,6 @@
         <externalId>false</externalId>
         <label>UI Format</label>
         <required>false</required>
-        <trackFeedHistory>false</trackFeedHistory>
         <trackTrending>false</trackTrending>
         <type>Picklist</type>
         <valueSet>
@@ -1240,32 +1190,26 @@
             </valueSetDefinition>
         </valueSet>
     </fields>
-    <compactLayouts>
-        <fullName>Compact_Layout</fullName>
-        <fields>Name</fields>
-        <fields>Product_Owner__c</fields>
-        <fields>Live_Status__c</fields>
-        <fields>No_of_Licenses_in_Use__c</fields>
-        <fields>Go_Live_Date__c</fields>
-        <fields>Org__c</fields>
-        <fields>Has_PII_PHI__c</fields>
-        <fields>ContractIntegrator__c</fields>
-        <label>Compact Layout</label>
-    </compactLayouts>
+    <label>DTC Application</label>
     <listViews>
         <fullName>All</fullName>
+        <columns>NAME</columns>
+        <columns>Application_Description__c</columns>
+        <columns>Business_Line__c</columns>
+        <columns>Business_Line_POC__c</columns>
+        <columns>ContractIntegrator__c</columns>
+        <columns>Go_Live_Date_Projected__c</columns>
+        <columns>Org__c</columns>
+        <columns>Live_Status__c</columns>
         <filterScope>Everything</filterScope>
         <label>All</label>
     </listViews>
     <listViews>
         <fullName>All_App_Owners</fullName>
         <columns>NAME</columns>
-        <columns>Org__c</columns>
-        <columns>Go_Live_Date__c</columns>
-        <columns>Go_Live_Date_Projected__c</columns>
-        <columns>Live_Status__c</columns>
-        <columns>Focus_Area__c</columns>
         <columns>Product_Owner__c</columns>
+        <columns>How_to_Create_User_to_give_Access__c</columns>
+        <columns>No_of_Licenses_in_Use__c</columns>
         <filterScope>Everything</filterScope>
         <label>All App Owners</label>
     </listViews>
@@ -1313,21 +1257,9 @@
     </listViews>
     <listViews>
         <fullName>All_with_Owner</fullName>
-        <columns>Business_Line__c</columns>
         <columns>NAME</columns>
-        <columns>Business_Line_POC__c</columns>
-        <columns>ContractIntegrator__c</columns>
-        <columns>OI_T_PM_Email__c</columns>
-        <columns>OI_T_PM_Name__c</columns>
-        <columns>PSF_Primary_POC__c</columns>
-        <columns>PSF_Secondary_POC__c</columns>
-        <columns>Architect_Primary_POC__c</columns>
-        <columns>Primary_DTC_Deployment_Lead__c</columns>
-        <columns>Primary_DTC_End_User_Support_Lead__c</columns>
-        <columns>Secondary_DTC_Deployment_Lead__c</columns>
-        <columns>Secondary_DTC_End_User_Support_Lead__c</columns>
-        <columns>AE_Lead_Email__c</columns>
-        <columns>AE_Lead_Name__c</columns>
+        <columns>Product_Owner__c</columns>
+        <columns>How_to_Create_User_to_give_Access__c</columns>
         <filterScope>Everything</filterScope>
         <label>All with Owner</label>
     </listViews>
@@ -1437,21 +1369,28 @@
     <listViews>
         <fullName>VA_app_View_All</fullName>
         <columns>NAME</columns>
-        <columns>Live_Status__c</columns>
         <columns>OBJECT_ID</columns>
-        <columns>Org__c</columns>
-        <columns>Deploy_Symbol__c</columns>
-        <columns>Deploy_Merge_Branch__c</columns>
         <columns>Application_Description__c</columns>
         <columns>Product_Owner__c</columns>
         <columns>How_to_Create_User_to_give_Access__c</columns>
         <columns>OWNER.ALIAS</columns>
         <columns>OWNER.FIRST_NAME</columns>
         <columns>OWNER.LAST_NAME</columns>
+        <columns>CREATEDBY_USER.ALIAS</columns>
+        <columns>CREATEDBY_USER</columns>
+        <columns>CREATED_DATE</columns>
+        <columns>UPDATEDBY_USER.ALIAS</columns>
         <columns>UPDATEDBY_USER</columns>
         <columns>LAST_UPDATE</columns>
-        <columns>ROI_Details__c</columns>
         <filterScope>Everything</filterScope>
         <label>VA app View All</label>
     </listViews>
+    <nameField>
+        <label>Application Name</label>
+        <type>Text</type>
+    </nameField>
+    <pluralLabel>DTC Applications</pluralLabel>
+    <searchLayouts/>
+    <sharingModel>ReadWrite</sharingModel>
+    <visibility>Public</visibility>
 </CustomObject>
