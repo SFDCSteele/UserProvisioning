@@ -229,7 +229,6 @@ public class ADUpdateGroupService {
                                                           Permission_Sets__c=appendString('Destination','Permission Sets',
                                                                                           destPermissionsMap.get((cont.SECID__c+'|dest'))), 
                                                           Destination_Org__c=dtcApp.Org__c, 
-                                                          Status__c='Active',
                                                           Groups__c=appendString('Destination','Groups',
                                                                                  destPermissionsMap.get((cont.SECID__c+'|dest'))), 
                                                           Queues__c=appendString('Destination','Queues',
@@ -692,7 +691,7 @@ public class ADUpdateGroupService {
         }
     }
     
-    public static boolean publishUserEvents (List<AUP_Destination_User_Event__e> userEvents ) {
+    private static boolean publishUserEvents (List<AUP_Destination_User_Event__e> userEvents ) {
         boolean returnStatus = false;
         String debugSection = '700';
         String debugMethod  = 'publishUserEvents';
@@ -718,7 +717,7 @@ public class ADUpdateGroupService {
             printDebug (debugMethod,debugSection,'-30:FINISHING UP!');
         }
 
-        //AUPPublishDestinationEvent.processUserEvents(userEvents);
+        AUPPublishDestinationEvent.processUserEvents(userEvents);
         
         return returnStatus;
     }
@@ -940,7 +939,7 @@ public class ADUpdateGroupService {
         
     }
     
-    public static void printDebug(String method, String section, String debugMessage) {
+    private static void printDebug(String method, String section, String debugMessage) {
         if ( debugOn ) {
             System.debug('ADUpdateGroupService.11: '+method+': '+section+': >>>>>>>>>>>>>>>>>>>> '+debugMessage);
         }  

@@ -12,58 +12,34 @@
                 <field>Name</field>
             </layoutItems>
             <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Application_Role__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Permission_Set_API_Name__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Permission_Set_ID__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Access_Type__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Permission_Location__c</field>
+            </layoutItems>
+            <layoutItems>
                 <behavior>Required</behavior>
-                <field>DTC_Application__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Required</behavior>
-                <field>Profile_Name__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Destination_Org_License__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Destination_Org_Profile__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Destination_Org_Role__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Hub_Org_License__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Hub_Org_Profile__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Hub_Org_Role__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Application_Level_User_Creation_Flow__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Application_Level_User_Creation_Apex__c</field>
+                <field>DTC_Application_Level__c</field>
             </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Is_Active__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Elevated_Access__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Other_Setup_Info__c</field>
+                <behavior>Required</behavior>
+                <field>DTC_Application__c</field>
             </layoutItems>
         </layoutColumns>
         <style>TwoColumnsTopToBottom</style>
@@ -99,31 +75,10 @@
     </layoutSections>
     <relatedLists>
         <fields>NAME</fields>
-        <fields>Access_Type__c</fields>
-        <fields>Application_Role__c</fields>
-        <fields>Permission_Set_API_Name__c</fields>
-        <fields>Permission_Location__c</fields>
-        <relatedList>CF_Permission_Mapping__c.DTC_Application_Level__c</relatedList>
-    </relatedLists>
-    <relatedLists>
-        <fields>NAME</fields>
+        <fields>Application_Level__c</fields>
         <fields>DTC_Application__c</fields>
-        <fields>Contact__c</fields>
-        <fields>First_Name__c</fields>
-        <fields>Last_Name__c</fields>
-        <fields>VALERI_Contact_Email__c</fields>
-        <fields>Federation_Id__c</fields>
-        <relatedList>CF_Application_Access__c.DTC_Application_Level__c</relatedList>
-    </relatedLists>
-    <relatedLists>
-        <relatedList>RelatedFileList</relatedList>
-    </relatedLists>
-    <relatedLists>
-        <fields>NAME</fields>
-        <fields>Access_Label_Name__c</fields>
-        <fields>Access_API_Name__c</fields>
-        <fields>Access_Type__c</fields>
-        <relatedList>CF_Application_Level_Access__c.DTC_Application_Level__c</relatedList>
+        <fields>CREATED_DATE</fields>
+        <relatedList>CF_Application_Access__c.Permission_Set_ID__c</relatedList>
     </relatedLists>
     <showEmailCheckbox>false</showEmailCheckbox>
     <showHighlightsPanel>false</showHighlightsPanel>
@@ -131,7 +86,7 @@
     <showRunAssignmentRulesCheckbox>false</showRunAssignmentRulesCheckbox>
     <showSubmitAndAttachButton>false</showSubmitAndAttachButton>
     <summaryLayout>
-        <masterLabel>00h63000003gz5l</masterLabel>
+        <masterLabel>00h0U000002bv8r</masterLabel>
         <sizeX>4</sizeX>
         <sizeY>0</sizeY>
         <summaryLayoutStyle>Default</summaryLayoutStyle>
